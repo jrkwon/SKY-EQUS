@@ -1,0 +1,103 @@
+;======================================================================================
+;                                     INIT.CMM
+; 
+; Initialize Lauterbach in-circuit emulator for ARM processor target emulation.
+;
+; Copyright (c) 1998, 1999 by QUALCOMM, Incorporated.  All Rights Reserved.
+;======================================================================================
+
+; -------------------------------------------------------------------------------------
+;                               Emulator System Settings
+; -------------------------------------------------------------------------------------
+
+; Resets all parameters to their original position
+  System.reset
+
+; Address Lines - 32-bit mode (vs. 24-bit mode)
+  System.Option PreMap on
+
+; Using fixed mapping from EPLD - Not applicable to our setup
+  System.Option FixMap off
+
+; Static CPU Inputs - The following 4 options are required only for stand alone mode
+  System.Option APE on
+  System.Option ALE on
+  System.Option ISYNC on
+  System.Option BigEndian off
+
+; Tracking Mode - Not using tracking emulation
+  System.Option TrackMode off
+ 
+; SW Emulation of DBGRQ - Switch off if DBGRQ line of the ARM core is available
+  System.Option SWREQ off
+
+; SW Emulation of DBGACK - Switch off if DBGACK line of the ARM core is available
+  System.Option SWACK off
+
+; Turbo mode of debug state accesses - CPU makes no checks of memory access in debug mode
+  System.Option TURBO off
+
+; Usage of TRST in system - Must be off if reset tied to trst.
+  System.Option.ResBreak on
+
+; Disable target core - this enable the EEBE, TBE, & DISREQ lines
+  System.Option ONCE on
+
+; Memory interface timing - TRAN[] lines become valid with falling edge of MCLK
+  System.Option LATEACC off
+
+; Test CPU clock - Checks if CPU clock is available but want to turn off because it generates 'CPU
+; Clock Fail' if the clock is below approx. 1MHz
+  System.Option TestClock off
+
+; Run emulation memory with one wait state
+  System.Option WAIT 1
+
+; Disassembler selection - Automatically selects correct one.
+  System.Option DisMode Auto
+ 
+; Dual-port access mode
+; The ClkSteal mode disables the CPU clock during a dual-port access in active mode
+; The Denied mode doesn't allow dual-port accesses.
+  System.Access Denied
+
+; Use external clock and signals
+  System.mode EmulExt
+
+; -------------------------------------------------------------------------------------
+;                             Exception Control Settings
+; -------------------------------------------------------------------------------------
+
+  Exception.Enable  off
+
+; -------------------------------------------------------------------------------------
+;                                 Analyzer Settings
+; -------------------------------------------------------------------------------------
+
+  Analyzer.reset
+
+  Analyzer.AutoArm on
+  Analyzer.mode.slave on
+  Analyzer.mode.prepost off
+
+; -------------------------------------------------------------------------------------
+;                                Environment Settings
+; -------------------------------------------------------------------------------------
+
+  Symbol.AsmFrame on
+  Symbol.CutLine 3
+  Symbol.case off
+
+  setup.breakdef Program
+  setup.StepInt on
+  setup.StepBreak on
+  setup.IMaskHLL on
+  setup.IMaskAsm on
+  setup.symbol 32 32 off
+
+  setup.dis 0 12 10
+  setup.var %Multiline %Compact %hex %Symbol %location
+  setup.alist cpu l.task l.mix l.label l.Queue l.comment l.nofetch MODE 
+
+enddo
+

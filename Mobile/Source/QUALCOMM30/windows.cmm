@@ -1,0 +1,40 @@
+;======================================================================================
+;                                     WINDOWS.CMM
+;
+; Sets up default windows configuration for MSM3000 development environment.
+;
+; Copyright (c) 1998, 1999 by QUALCOMM, Incorporated.  All Rights Reserved.
+;======================================================================================
+ E::
+ 
+ TOOLBAR ON
+ STATUSBAR ON
+ WINPAGE.RESET
+ 
+ WINPAGE.CREATE MAIN     
+ 
+ WINCLEAR
+ WINPOS 0.0 34.3846 85. 5. 0. 0. W003
+ E::area
+ 
+ WINPOS 93.5714 31.3846 48. 10. 5. 0. W002
+ E::Var.Frame
+ 
+ WINPOS 93.7143 0.0 48. 10. 0. 0. W001
+ E::r
+ 
+ WINPOS 0.0 0.0 85. 29. 17. 1. W000
+ E::data.list
+ 
+ WINPAGE.CREATE ANALYZER 
+ 
+ WINCLEAR
+ WINPOS 0.0 0.0 72. 15. 0. 0. W004
+ E::Analyzer
+ 
+ WINPOS 0.0 25.2308 80. 8. 0. 0. W005
+ E::Analyzer.Program
+ 
+ WINPAGE.SELECT MAIN     
+ 
+ ENDDO

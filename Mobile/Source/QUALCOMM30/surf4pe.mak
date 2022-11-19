@@ -1,0 +1,9558 @@
+#============================================================================
+#  Name:
+#    SURF4PE.MAK
+#
+#  Description:
+#    Makefile to build the DMSS software for the SURF (Subscriber Unit
+#    Reference Design) using the MSM5000 (ARM) ASIC.
+#    This is a PCS build with IS95B, NV Item Manager and Embedded
+#    File System.
+#
+#   The following nmake targets are available in this makefile:
+#
+#     all           - make .elf and .hex image files (default)
+#     clean         - delete object directory and image files
+#     depend        - update makefile dependencies
+#     test          - list flags for assembler, compiler and linker
+#     tools         - list ARM SDT tool versions
+#     filename.mix  - make mixed source / assembly file
+#     filename.o    - make object file
+#
+#   The above targets can be made with the following command:
+#
+#     nmake /f surf4pe.mak [target]
+#
+# Assumptions:
+#   1. The ARM SDT 2.50 tools are installed in the c:\apps\arm250 directory.
+#   2. Perl is available either locally or via the environment path.
+#
+# Copyright (c) 1994, 1995 by QUALCOMM, Incorporated.  All Rights Reserved.
+# Copyright (c) 1996, 1997 by QUALCOMM, Incorporated.  All Rights Reserved.
+# Copyright (c) 1998, 1999 by QUALCOMM, Incorporated.  All Rights Reserved.
+#----------------------------------------------------------------------------
+#============================================================================
+#
+#                        EDIT HISTORY FOR MODULE
+#
+# $Header:   L:/src/asw/MSM5000/VCS/surf4pe.mav   1.2.1.0   19 Jan 2000 19:45:38   lchan  $
+#
+# when       who     what, where, why
+# -------    ---     --------------------------------------------------------
+# 01/19/00   lcc     Removed TEMP_HACKS_FOR_TIGER.  Added atmr (commented).
+#                    Updated dependency.
+# 11/04/99   lcc     Change compiler flag from ASSERT_WARN to ASSERT_FATAL
+#                    Added support for the sdevmap.c file.
+#                    Applied TIMETEST to all compiler flags.
+# 09/16/99   lcc     Initial release with MSM5000 support. Based on GV4015
+#                    surf4p.mak and t2surf4c.mak from PLT archive.
+#
+#============================================================================
+
+
+#-------------------------------------------------------------------------------
+# Target file name and type definitions
+#-------------------------------------------------------------------------------
+
+TARGET     = SURF4PE            # Target name for output files and object dir
+CUSTNAME   = 4SPE
+TARGETID   = T_G                # Target ID defined on compile line
+EXETYPE    = elf                # Target image file format
+SCLFILE    = msm5000.scl        # Target scatter load file for ARM SDT linker
+CUSTFILE   = CUST$(CUSTNAME).H  # Target feature definition include file
+MAKE_TARGET= SURF4PE             # Target Makefile name
+
+#-------------------------------------------------------------------------------
+# Target compile time symbol definitions
+#-------------------------------------------------------------------------------
+
+TG      = -DTG=$(TARGETID)              # Target identifier definition
+CUSTH   = -DCUST_H=\"$(CUSTFILE)\"      # Feature include file definition
+ARM_ASM = -D_ARM_ASM_                   # ARM assembly language selection
+ARM     = -DT_ARM                       # ARM processor target
+MSM     = -DT_MSM3 -DT_MSM5000
+SURF    = -DT_SURF                      # SURF card target
+
+#-------------------------------------------------------------------------------
+# Diagnostic support options (default = no diagnostics support)
+#-------------------------------------------------------------------------------
+
+TIMETEST     =                          # Disable TIMETEST profiling support
+#TIMETEST     = -DTIMETEST              # Enable TIMETEST profiling support
+SHOW_STAT    = -DSHOW_STAT              # Force LOCALs to visible global scope
+
+ASSERT_FATAL = -DASSERT=ASSERT_FATAL    # Invoke ERR_FATAL for ASSERT
+ASSERT_WARN  = -DASSERT=ASSERT_WARN     # Invoke ERR for ASSERT
+
+#-------------------------------------------------------------------------------
+# Diagnostic message options (default = no diagnostics messages)
+#-------------------------------------------------------------------------------
+
+MSG_LVL_LOW   = -DMSG_LEVEL=MSG_LVL_LOW         # ALL message priority levels
+MSG_LVL_MED   = -DMSG_LEVEL=MSG_LVL_MED         # MED priority level and above
+MSG_LVL_HIGH  = -DMSG_LEVEL=MSG_LVL_HIGH        # HIGH priority level and above
+MSG_LVL_ERROR = -DMSG_LEVEL=MSG_LVL_ERROR       # ERROR priority level and above
+MSG_LVL_NONE  = -DMSG_LEVEL=MSG_LVL_NONE        # NO messages
+
+#-------------------------------------------------------------------------------
+# Compiler symbol definitions
+#-------------------------------------------------------------------------------
+
+# Default definitions
+DMSS_CFLAGS = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(ASSERT_FATAL) $(MSG_LVL_ERROR) $(TIMETEST)
+
+# Module specific definitions
+DMSS_CFLAGS_DS   = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED)
+DMSS_CFLAGS_MC   = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED) $(TIMETEST)
+DMSS_CFLAGS_MOB  = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST)
+DMSS_CFLAGS_NONE = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_NONE)
+DMSS_CFLAGS_NV   = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_ERROR)
+DMSS_CFLAGS_RXTX = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_HIGH)
+DMSS_CFLAGS_SND  = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_ERROR)
+DMSS_CFLAGS_SRCH = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED) $(TIMETEST)
+DMSS_CFLAGS_UI   = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED)
+DMSS_CFLAGS_CM   = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED)
+DMSS_CFLAGS_VOC  = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_HIGH)
+DMSS_CFLAGS_SIO  = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_ERROR)
+DMSS_CFLAGS_DEC = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED) $(TIMETEST)
+DMSS_CFLAGS_ENC = $(ARM) $(MSM) $(SURF) $(TG) $(CUSTH) $(SHOW_STAT) $(TIMETEST) $(ASSERT_FATAL) $(MSG_LVL_MED)
+
+#-------------------------------------------------------------------------------
+# Assembler symbol definitions
+#-------------------------------------------------------------------------------
+
+DMSS_AFLAGS = $(ARM) $(MSM) $(TG) $(CUSTH) $(ARM_ASM) $(TIMETEST)
+
+#===============================================================================
+#                         TARGET OBJECT FILE LIST
+#===============================================================================
+
+# The following is an alphabetically sorted list of all objects required to
+# build the target image file and hex file.  The following objects are built
+# according to the module specific rules and default suffix rules defined in
+# this makefile.
+
+OBJECTS =       $(TARGET)\adcg.o \
+                $(TARGET)\acpwbm2.o \
+#               $(TARGET)\atmr.o \
+#               $(TARGET)\auth.o \
+                $(TARGET)\bbdiagp.o \
+                $(TARGET)\bbsndtab.o \
+                $(TARGET)\bch.o \
+                $(TARGET)\bio.o \
+                $(TARGET)\bit.o \
+                $(TARGET)\boot_trap.o \
+                $(TARGET)\bootapp.o \
+                $(TARGET)\bootdata.o \
+                $(TARGET)\boothw.o \
+                $(TARGET)\bootmem.o \
+                $(TARGET)\bootsys.o \
+                $(TARGET)\caix.o \
+#               $(TARGET)\cave.o \
+                $(TARGET)\clk.o \
+                $(TARGET)\clkjul.o \
+                $(TARGET)\clkm2p.o \
+                $(TARGET)\clkregim.o \
+                $(TARGET)\cm.o \
+                $(TARGET)\cmcall.o \
+                $(TARGET)\cmclient.o \
+                $(TARGET)\cmd.o \
+                $(TARGET)\cminband.o \
+                $(TARGET)\cmnv.o \
+                $(TARGET)\cmph.o \
+                $(TARGET)\cmsms.o \
+                $(TARGET)\cmss.o \
+                $(TARGET)\crc.o \
+                $(TARGET)\db.o \
+                $(TARGET)\dec5000.o \
+                $(TARGET)\deint.o \
+                $(TARGET)\diag.o \
+                $(TARGET)\diagfs.o \
+                $(TARGET)\diagp.o \
+                $(TARGET)\distreg.o \
+                $(TARGET)\dloadarm.o \
+                $(TARGET)\dloadpoll.o \
+                $(TARGET)\dloaduart.o \
+                $(TARGET)\dmdimage.o \
+                $(TARGET)\dmddown.o \
+                $(TARGET)\dmod.o \
+                $(TARGET)\dog.o \
+                $(TARGET)\ds_snoop.o \
+                $(TARGET)\dsatcop.o \
+                $(TARGET)\dsatdat.o \
+                $(TARGET)\dsatps.o \
+                $(TARGET)\dsatsio.o \
+                $(TARGET)\dsctl.o \
+                $(TARGET)\dsm.o \
+                $(TARGET)\dsmgr.o \
+                $(TARGET)\dsnetmdl.o \
+                $(TARGET)\dssdorm.o \
+                $(TARGET)\dssnet.o \
+                $(TARGET)\dssocfg.o \
+                $(TARGET)\dssocket.o \
+                $(TARGET)\dssocki.o \
+                $(TARGET)\dssoctl.o \
+                $(TARGET)\dsstcp.o \
+                $(TARGET)\dssudp.o \
+                $(TARGET)\enc.o \
+                $(TARGET)\err.o \
+                $(TARGET)\feature.o \
+                $(TARGET)\fs.o \
+                $(TARGET)\fs_alloc.o \
+                $(TARGET)\fs_dev.o \
+                $(TARGET)\fs_dir.o \
+                $(TARGET)\fs_ops.o \
+                $(TARGET)\fs_udir.o \
+                $(TARGET)\hsg.o \
+                $(TARGET)\hw.o \
+                $(TARGET)\icmp.o \
+                $(TARGET)\ip.o \
+                $(TARGET)\iphdr.o \
+                $(TARGET)\lcd.o \
+                $(TARGET)\lifetstg.o \
+                $(TARGET)\log.o \
+                $(TARGET)\loopback.o \
+                $(TARGET)\mar.o \
+                $(TARGET)\martable.o \
+                $(TARGET)\mc.o \
+                $(TARGET)\mccccl.o \
+                $(TARGET)\mccdma.o \
+                $(TARGET)\mccidl.o \
+                $(TARGET)\mccini.o \
+                $(TARGET)\mccreg.o \
+                $(TARGET)\mccrx.o \
+                $(TARGET)\mccrxtx.o \
+                $(TARGET)\mccsa.o \
+                $(TARGET)\mccscm.o \
+                $(TARGET)\mccsrch.o \
+                $(TARGET)\mccsup.o \
+                $(TARGET)\mccsyobj.o \
+                $(TARGET)\mcctc.o \
+                $(TARGET)\mcctcho.o \
+                $(TARGET)\mcctcsup.o \
+                $(TARGET)\mcscript.o \
+                $(TARGET)\mcsysci.o \
+                $(TARGET)\mcsyspr.o \
+                $(TARGET)\mcsyspra.o \
+                $(TARGET)\mcsysprd.o \
+                $(TARGET)\mcsyssup.o \
+                $(TARGET)\mdrrlp.o \
+                $(TARGET)\misc.o \
+                $(TARGET)\mobile.o \
+                $(TARGET)\msg.o \
+                $(TARGET)\msm5_init.o \
+                $(TARGET)\nvim.o \
+                $(TARGET)\nvimnv.o \
+                $(TARGET)\nvimio.o \
+                $(TARGET)\nvimr.o \
+                $(TARGET)\nvimw.o \
+                $(TARGET)\otasp.o \
+                $(TARGET)\otaspx.o \
+                $(TARGET)\parm.o \
+                $(TARGET)\pnmask.o \
+                $(TARGET)\ppp.o \
+                $(TARGET)\pppfsm.o \
+                $(TARGET)\pppipcp.o \
+                $(TARGET)\ppplcp.o \
+                $(TARGET)\prl.o \
+                $(TARGET)\psctl.o \
+                $(TARGET)\psmgr.o \
+                $(TARGET)\psmisc.o \
+                $(TARGET)\queue.o \
+                $(TARGET)\qw.o \
+                $(TARGET)\ran.o \
+                $(TARGET)\rex.o \
+                $(TARGET)\rexarm.o \
+                $(TARGET)\rfcs.o \
+                $(TARGET)\rfmsm.o \
+                $(TARGET)\rfnv.o \
+                $(TARGET)\ring.o \
+                $(TARGET)\rlp.o \
+                $(TARGET)\rx.o \
+                $(TARGET)\rxc.o \
+                $(TARGET)\rxtx.o \
+                $(TARGET)\sbi.o \
+                $(TARGET)\sdevmap.o \
+                $(TARGET)\sio.o \
+                $(TARGET)\siog2.o \
+                $(TARGET)\siors232.o \
+                $(TARGET)\sleep.o \
+                $(TARGET)\slhc.o \
+                $(TARGET)\snd.o \
+                $(TARGET)\sndhwg2.o \
+                $(TARGET)\snditab.o \
+                $(TARGET)\snm.o \
+                $(TARGET)\srch.o \
+                $(TARGET)\srchaq.o \
+                $(TARGET)\srchcd.o \
+                $(TARGET)\srchdrv.o \
+                $(TARGET)\srchdz.o \
+                $(TARGET)\srchint.o \
+                $(TARGET)\srchpc.o \
+                $(TARGET)\srchsc.o \
+                $(TARGET)\srchsl.o \
+                $(TARGET)\srchst.o \
+                $(TARGET)\srchtc.o \
+                $(TARGET)\srchtri.o \
+                $(TARGET)\srchun.o \
+                $(TARGET)\srchzz.o \
+                $(TARGET)\srv.o \
+                $(TARGET)\task.o \
+                $(TARGET)\tcphdr.o \
+                $(TARGET)\tcpin.o \
+                $(TARGET)\tcpout.o \
+                $(TARGET)\tcpshell.o \
+                $(TARGET)\tcpsubr.o \
+                $(TARGET)\tcptimer.o \
+                $(TARGET)\therm.o \
+                $(TARGET)\tmsi.o \
+                $(TARGET)\trampm3.o \
+                $(TARGET)\ts.o \
+                $(TARGET)\tx.o \
+                $(TARGET)\txc.o \
+                $(TARGET)\uasms.o \
+                $(TARGET)\uasmsx.o \
+                $(TARGET)\udp.o \
+                $(TARGET)\ui.o \
+                $(TARGET)\uihcbt.o \
+                $(TARGET)\uihcmd.o \
+                $(TARGET)\uihkey.o \
+                $(TARGET)\uihsig.o \
+                $(TARGET)\uisalph.o \
+                $(TARGET)\uiscall.o \
+                $(TARGET)\uiscli.o \
+                $(TARGET)\uiscode.o \
+                $(TARGET)\uishelp.o \
+                $(TARGET)\uisidle.o \
+                $(TARGET)\uisinfo.o \
+                $(TARGET)\uislist.o \
+                $(TARGET)\uislock.o \
+                $(TARGET)\uislpm.o \
+                $(TARGET)\uismenu.o \
+                $(TARGET)\uismsg.o \
+                $(TARGET)\uisnum.o \
+                $(TARGET)\uisoff.o \
+                $(TARGET)\uisrcl.o \
+                $(TARGET)\uisserv.o \
+                $(TARGET)\uissms.o \
+                $(TARGET)\uisstrt.o \
+                $(TARGET)\uissto.o \
+                $(TARGET)\uistate.o \
+                $(TARGET)\uisview.o \
+                $(TARGET)\uiudata.o \
+                $(TARGET)\uiumenu.o \
+                $(TARGET)\uiusmsd.o \
+                $(TARGET)\uiusmsl.o \
+                $(TARGET)\uiutstmn.o \
+                $(TARGET)\uiutxt.o \
+                $(TARGET)\uixcm.o \
+                $(TARGET)\uixnv.o \
+                $(TARGET)\uixscrn.o \
+                $(TARGET)\uixsnd.o \
+                $(TARGET)\uixuasms.o \
+                $(TARGET)\ulpn.o \
+                $(TARGET)\vbatt.o \
+                $(TARGET)\vocdown.o \
+                $(TARGET)\vocimags.o \
+                $(TARGET)\vocm2.o \
+                $(TARGET)\vocmux.o \
+                $(TARGET)\vocsup.o
+
+#===============================================================================
+#                             TOOL DEFINITIONS
+#===============================================================================
+# The following environment variables must be defined prior to using this make
+# file: ARMBIN, ARMLIB, and ARMINC. In addition the PATH must be updated for
+# the ARM tools.
+
+#-------------------------------------------------------------------------------
+# Software tool and environment definitions
+#-------------------------------------------------------------------------------
+CC         = tcc                # ARM SDT Thumb 16-bit inst. set ANSI C compiler
+ARMCC      = armcc              # ARM SDT ARM 32-bit inst. set ANSI C compiler
+ASM        = armasm             # ARM SDT assembler
+LD         = armlink            # ARM SDT linker
+HEXTOOL    = fromelf            # ARM SDT utility to create hex file from image
+
+OBJ_CMD    = -o                 # Command line option to specify output filename
+DIRTCC     = dirtcc             # Utility to include directory name in mobile.o
+ASM_SCRIPT = asm.pl             # Perl script to include .h files in assembly
+CAT_SCRIPT = cat.pl             # Perl script to print output for assembly files
+ERRLOG     = errorlog.exe       # Tool extracting only warning, error, and
+                                # serious errors from log file.
+
+#-------------------------------------------------------------------------------
+# Processor architecture options
+#-------------------------------------------------------------------------------
+
+CPU = -cpu ARM7TDMI             # ARM7TDMI target processor
+
+#-------------------------------------------------------------------------------
+# ARM Procedure Call Standard (APCS) options
+#-------------------------------------------------------------------------------
+
+PCSZ     = 32bit                # Program counter (PC) size
+STACKCHK = noswst               # No software stack checking support
+FRAMEPTR = nofp                 # No frame pointer
+FLOATPNT = softfp               # Use software floating point library
+INTRWORK = nointerwork          # No ARM/Thumb interworking support
+NARROW   = narrow               # Use caller parameter narrowing
+REENTRNT = nonreentrant         # No support for re-entrancy
+
+APCS = -apcs /$(STACKCHK)/$(INTRWORK)/$(FLOATPNT)/$(NARROW)
+
+# NOTE:
+# If software stack checking support is enabled, FEATURE_STACK_CHECK must be
+# #defined in the cust*.h file to enable the required common services support.
+#
+# The following APCS options are obsolete in the ARM SDT 2.50 tools:
+#   PCSZ
+#   FRAMEPTR
+#   REENTRNT
+
+#-------------------------------------------------------------------------------
+# Compiler output options
+#-------------------------------------------------------------------------------
+
+OUT = -c                        # Object file output only
+
+#-------------------------------------------------------------------------------
+# Compiler/assembler debug options
+#-------------------------------------------------------------------------------
+
+DBG = -g+ -dwarf2               # Enable DWARF2 format debug tables
+
+#-------------------------------------------------------------------------------
+# Compiler optimization options
+#-------------------------------------------------------------------------------
+
+OPT = -Ospace -O2               # Full compiler optimization for space
+
+#-------------------------------------------------------------------------------
+# Compiler code generation options
+#-------------------------------------------------------------------------------
+
+END = -littleend                # Compile for little endian memory architecture
+ZA  = -za1                      # LDR may only access 32-bit aligned addresses
+ZAS = -zas4                     # Min byte alignment for structures
+ZAP = -zap0                     # Struct ptrs NOT assumed to be aligned per -zas
+ZAT = -zat1                     # Min byte alignment for top-level static objects
+ZZT = -zzt0                     # Force uninitialized variables to ZI data area
+
+CODE = $(END) $(ZA) $(ZAS) $(ZAP) $(ZAT)
+
+# NOTE:
+# The -zap0 option is required due to a known ARM 2.50 compiler bug with
+# pointers to struct sub-fields within __packed structs
+
+#-------------------------------------------------------------------------------
+# Include file search path options
+#-------------------------------------------------------------------------------
+
+INC = -I. -I$(ARMINC)           # Search local dir, then ARM SDT \include dir
+
+# NOTE:
+# The -I. option allows memory.h to be found in the current directory when
+# included using #include <memory.h>
+
+#-------------------------------------------------------------------------------
+# Compiler pragma emulation options
+#-------------------------------------------------------------------------------
+
+#PRAGMA = -zpcontinue_after_hash_error
+
+# NOTE:
+# The -zpcontinue_after_hash_error allows the compiler to continue when a
+# #error statement is encountered.  This option also allows the compiler to
+# continue when any other Error condition is encountered at compile time.
+#        ** This option should be removed as soon as possible **
+
+#-------------------------------------------------------------------------------
+# Compiler error and warning message control options
+#-------------------------------------------------------------------------------
+
+MSG =                           # No additional message control
+
+#-------------------------------------------------------------------------------
+# Additional compile time error checking options
+#-------------------------------------------------------------------------------
+
+CHK = -fa                       # Check for data flow anomolies
+
+#-------------------------------------------------------------------------------
+# Linker options
+#-------------------------------------------------------------------------------
+
+MAP  = -map                             # Memory map of all object file areas
+INFO = -info sizes,totals,interwork     # Info on object size and interworking
+XREF = -xref                            # List cross-references between files
+VERB = -verbose                         # Print verbose output messages
+LIST = -list $(TARGET).map              # Direct map and info output to file
+SYM  = -symbols $(TARGET).sym           # Direct symbol table to file
+LINK = -scatter $(SCLFILE)              # Use scatter load description file
+
+#-------------------------------------------------------------------------------
+# Linker library options
+#-------------------------------------------------------------------------------
+
+CLIB  = $(ARMLIB)\armlib.16l            # ARM embedded ANSI C library
+
+LIBS = $(CLIB)
+
+#-------------------------------------------------------------------------------
+# Compiler flag definitions
+#-------------------------------------------------------------------------------
+
+CFLAGS0 = $(OUT) $(INC) $(CPU) $(APCS) $(CODE) $(PRAGMA) $(CHK) $(DBG) $(MSG)
+CFLAGS  = $(CFLAGS0) $(OPT)
+
+#-------------------------------------------------------------------------------
+# Assembler flag definitions
+#-------------------------------------------------------------------------------
+
+AFLAGS = $(CPU) $(APCS) $(DBG)
+
+#-------------------------------------------------------------------------------
+# Linker flag definitions
+#-------------------------------------------------------------------------------
+
+LFLAGS = $(MAP) $(INFO) $(LIST) $(SYM) $(LINK)
+
+#===============================================================================
+#                               TARGET RULES
+#===============================================================================
+
+# The following are the target rules supported by this makefile with the
+# exception of the 'depend' target which is located at the end of this file.
+
+#-------------------------------------------------------------------------------
+# Default target
+#-------------------------------------------------------------------------------
+
+# The default target lists the tool versions, creates an object subdirectory
+# if required, and builds the target image file and hex file.  The mobile
+# object includes the compile date and time and is deleted after each build
+# to ensure that it will always be rebuilt to include accurate build date and
+# time information.
+
+all : tools $(TARGET)\exist $(TARGET).$(EXETYPE)
+         @-del $(TARGET)\mobile.o
+
+#-------------------------------------------------------------------------------
+# Object directory target
+#-------------------------------------------------------------------------------
+
+# The object subdirectoy is created if it does not already exist.
+
+$(TARGET)\exist :
+         @-if not exist $(TARGET)\exist mkdir $(TARGET)
+         @echo Building $(TARGET) > $(TARGET)\exist
+
+#-------------------------------------------------------------------------------
+# Image file target
+#-------------------------------------------------------------------------------
+
+# The target image file is produced by the linker in the selected image format,
+# and then a hex file is created from the target image file.
+
+# Image file
+$(TARGET).$(EXETYPE) : $(OBJECTS)
+        @echo ---------------------------------------------------------------
+        @echo TARGET $@
+        $(LD) -$(EXETYPE) $(LFLAGS) $(OBJ_CMD) $@ $(LIBS) -VIA <<
+        $(OBJECTS)
+<<
+
+# Hex file
+        @echo
+        @echo TARGET $(TARGET).hex
+        $(HEXTOOL) -nozeropad $(TARGET).$(EXETYPE) -i32 $(TARGET).hex
+        @echo ---------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Clean target
+#-------------------------------------------------------------------------------
+
+# The object subdirectory, target image file, and target hex file are deleted.
+
+clean :
+        @echo ---------------------------------------------------------------
+        @echo CLEAN
+        -if exist $(TARGET) rmdir /s/q $(TARGET)
+        -if exist $(TARGET).$(EXETYPE) del /f $(TARGET).$(EXETYPE)
+        -if exist $(TARGET).hex del /f $(TARGET).hex
+        @echo ---------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Test target
+#-------------------------------------------------------------------------------
+
+# The flags and symbol definitions for the compiler, assembler and linker are
+# listed for makefile test purposes.
+
+test :
+        @echo ------------------------------------------------------------------
+        @echo AFLAGS : $(AFLAGS)
+        @echo ------------------------------------------------------------------
+        @echo DMSS_AFLAGS : $(DMSS_AFLAGS)
+        @echo ------------------------------------------------------------------
+        @echo CFLAGS : $(CFLAGS)
+        @echo ------------------------------------------------------------------
+        @echo DMSS_CFLAGS : $(DMSS_CFLAGS)
+        @echo ------------------------------------------------------------------
+        @echo LFLAGS : $(LFLAGS)
+        @echo ------------------------------------------------------------------
+        @echo LIBS : $(LIBS)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Tools target
+#-------------------------------------------------------------------------------
+
+# The ARM SDT 2.50 tool versions are listed.
+
+tools :
+        @echo ------------------------------------------------------------------
+        @echo ARM SDT 2.50 TOOLS
+        @$(ARMCC) -vsn
+        @$(CC)    -vsn
+        @$(ASM)   -vsn
+        @$(LD)    -vsn
+        @echo ------------------------------------------------------------------
+
+#===============================================================================
+#                           DEFAULT SUFFIX RULES
+#===============================================================================
+
+# The following are the default suffix rules used to compile all objects that
+# are not specifically included in one of the module specific rules defined
+# in the next section.
+
+# The following macros are used to specify the output object file, MSG_FILE
+# symbol definition and input source file on the compile line in the rules
+# defined below.
+
+SRC_FILE = $(@F:.o=.c)                  # Input source file specification
+OBJ_FILE = $(OBJ_CMD) $(TARGET)\$(@F)   # Output object file specification
+MSG_FILE = -DMSG_FILE=\"$(@F:.o=.c)\"   # MSG_FILE symbol definition
+
+#-------------------------------------------------------------------------------
+# C code inference rules
+#-------------------------------------------------------------------------------
+
+.c.o:
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+.c{$(TARGET)}.o:
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Assembly code inference rules
+#-------------------------------------------------------------------------------
+
+.s.o:
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) -E $(DMSS_AFLAGS) < $< | perl $(ASM_SCRIPT) - > $(TARGET)/$*.i
+        $(ASM) $(AFLAGS) -list $(TARGET)\$*.lst $*.i $(OBJ_CMD) $(TARGET)\$@
+        @echo ------------------------------------------------------------------
+
+.s{$(TARGET)}.o:
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) -E $(DMSS_AFLAGS) < $< | perl $(ASM_SCRIPT) - > $*.i
+        $(ASM) $(AFLAGS) -list $*.lst $*.i $(OBJ_CMD) $@
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Mixed source/assembly inference rule
+#-------------------------------------------------------------------------------
+
+.c.mix:
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) -S -fs $(CFLAGS) $(DMSS_CFLAGS) -DMSG_FILE=\"$<\" $(OBJ_CMD) $@ $<
+        @echo ------------------------------------------------------------------
+
+#===============================================================================
+#                           MODULE SPECIFIC RULES
+#===============================================================================
+
+# The following module specific rules allow sets of objects to be compiled
+# with compiler flags other than the defaults used in the suffix rules defined
+# above.  The following rules use the module specific compiler flags defined
+# at the beginning of this file.  New objects can be added to any of the
+# following rules by modifying the corresponding list of objects.
+
+
+#-------------------------------------------------------------------------------
+# Mobile object
+#-------------------------------------------------------------------------------
+
+# Invoke dirtcc.exe to include the current working directory in the mobile
+# object.  The mobile object also includes the compile date and time and is
+# built every time to ensure that the date and time information is accurate.
+
+$(TARGET)\mobile.o :
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        -$(DIRTCC) $(CFLAGS) $(DMSS_CFLAGS_MOB) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Feature query
+#-------------------------------------------------------------------------------
+
+# Update the feature.c and feature.h files with any new features in target
+# cust*.h feature definition header file.
+
+#feature.h : $(CUSTFILE)
+#        @echo ------------------------------------------------------------------
+#        @echo OBJECT $(@F)
+#        -perl fqupdate.pl $(CUSTFILE)
+#        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Boot code
+#-------------------------------------------------------------------------------
+
+# Compile the boot code with no compiler optimization to avoid insertion of
+# stack push and pop instructions in functions that are called before target
+# RAM has been initialized.
+
+BOOT_OBJS = $(TARGET)\boot_trap.o \
+            $(TARGET)\bootdata.o \
+            $(TARGET)\boothw.o \
+            $(TARGET)\bootmem.o \
+            $(TARGET)\dloadarm.o \
+            $(TARGET)\dloaduart.o
+
+$(BOOT_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS0) $(DMSS_CFLAGS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# PRL object
+#-------------------------------------------------------------------------------
+
+# Compile the PRL object without optimization to avoid an ARM SDT 2.50 optimizer
+# problem.
+
+$(TARGET)\prl.o : prl.c
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS0) $(DMSS_CFLAGS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Debug Message Processing Files
+#-------------------------------------------------------------------------------
+
+MSG_OBJS = $(TARGET)\err.o \
+           $(TARGET)\log.o
+
+$(MSG_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_NONE) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Clock Files requiring no MSG level.
+#-------------------------------------------------------------------------------
+
+MSG_OBJS = $(TARGET)\clkjul.o \
+           $(TARGET)\clkm2p.o \
+           $(TARGET)\clkregim.o
+
+$(MSG_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_NONE) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# DEINTERLEAVER AND DECODER UNIT
+#-------------------------------------------------------------------------------
+
+DEC_OBJS = $(TARGET)\dec5000.o \
+           $(TARGET)\deint.o
+
+$(DEC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_DEC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# ENCODER
+#-------------------------------------------------------------------------------
+
+ENC_OBJS = $(TARGET)\enc.o
+
+$(ENC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_ENC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# CDMA call processing
+#-------------------------------------------------------------------------------
+
+MC_OBJS = $(TARGET)\caix.o \
+          $(TARGET)\mc.o \
+          $(TARGET)\mccccl.o \
+          $(TARGET)\mccdma.o \
+          $(TARGET)\mccidl.o \
+          $(TARGET)\mccini.o \
+          $(TARGET)\mccreg.o \
+          $(TARGET)\mccrx.o \
+          $(TARGET)\mccrxtx.o \
+          $(TARGET)\mccsa.o \
+          $(TARGET)\mccscm.o \
+          $(TARGET)\mccsrch.o \
+          $(TARGET)\mccsup.o \
+          $(TARGET)\mccsyobj.o \
+          $(TARGET)\mcctc.o \
+          $(TARGET)\mcctcho.o \
+          $(TARGET)\mcctcsup.o \
+          $(TARGET)\mcscript.o \
+          $(TARGET)\mcsysci.o \
+          $(TARGET)\mcsyspr.o \
+          $(TARGET)\mcsyspra.o \
+          $(TARGET)\mcsysprd.o \
+          $(TARGET)\mcsyssup.o \
+          $(TARGET)\otasp.o \
+          $(TARGET)\otaspx.o \
+          $(TARGET)\parm.o \
+          $(TARGET)\snm.o \
+          $(TARGET)\tmsi.o
+
+$(MC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_MC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Receive and transmit call processing
+#-------------------------------------------------------------------------------
+
+RXTX_OBJS = $(TARGET)\rx.o \
+            $(TARGET)\rxc.o \
+            $(TARGET)\rxtx.o \
+            $(TARGET)\tx.o \
+            $(TARGET)\txc.o
+
+$(RXTX_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_RXTX) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Data services
+#-------------------------------------------------------------------------------
+
+DS_OBJS = $(TARGET)\ds_snoop.o \
+          $(TARGET)\dsatcop.o \
+          $(TARGET)\dsatdat.o \
+          $(TARGET)\dsatps.o \
+          $(TARGET)\dsatsio.o \
+          $(TARGET)\dsctl.o \
+          $(TARGET)\dsm.o \
+          $(TARGET)\dsmgr.o \
+          $(TARGET)\dsnetmdl.o \
+          $(TARGET)\dssdorm.o \
+          $(TARGET)\dssnet.o \
+          $(TARGET)\dssocfg.o \
+          $(TARGET)\dssocket.o \
+          $(TARGET)\dssocki.o \
+          $(TARGET)\dssoctl.o \
+          $(TARGET)\dsstcp.o \
+          $(TARGET)\dssudp.o \
+          $(TARGET)\ip.o \
+          $(TARGET)\iphdr.o \
+          $(TARGET)\mdrrlp.o \
+          $(TARGET)\ppp.o \
+          $(TARGET)\pppfsm.o \
+          $(TARGET)\pppipcp.o \
+          $(TARGET)\ppplcp.o \
+          $(TARGET)\psctl.o \
+          $(TARGET)\psmgr.o \
+          $(TARGET)\psmisc.o \
+          $(TARGET)\rlp.o \
+          $(TARGET)\slhc.o \
+          $(TARGET)\tcphdr.o \
+          $(TARGET)\tcpin.o \
+          $(TARGET)\tcpout.o \
+          $(TARGET)\tcpshell.o \
+          $(TARGET)\tcpsubr.o \
+          $(TARGET)\tcptimer.o \
+          $(TARGET)\udp.o
+
+$(DS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_DS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# NV driver
+#-------------------------------------------------------------------------------
+
+NV_OBJS = $(TARGET)\nvim.o \
+          $(TARGET)\nvimnv.o \
+          $(TARGET)\nvimio.o \
+          $(TARGET)\nvimr.o \
+          $(TARGET)\nvimw.o
+
+$(NV_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_NV) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Embedded File System
+#-------------------------------------------------------------------------------
+
+FS_OBJS = $(TARGET)\fs.o \
+          $(TARGET)\fs_alloc.o \
+          $(TARGET)\fs_dev.o \
+          $(TARGET)\fs_dir.o \
+          $(TARGET)\fs_ops.o \
+          $(TARGET)\fs_udir.o
+
+$(FS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_NV) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SIO
+#-------------------------------------------------------------------------------
+
+SIO_OBJS = $(TARGET)\siors232.o \
+           $(TARGET)\sio.o \
+           $(TARGET)\sdevmap.o
+
+$(SIO_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SIO) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Sound
+#-------------------------------------------------------------------------------
+
+SND_OBJS = $(TARGET)\bbsndtab.o \
+           $(TARGET)\snd.o \
+           $(TARGET)\sndhwg2.o \
+           $(TARGET)\snditab.o
+
+$(SND_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SND) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Searcher
+#-------------------------------------------------------------------------------
+
+SRCH_OBJS = $(TARGET)\dmdimage.o \
+            $(TARGET)\dmddown.o \
+            $(TARGET)\dmod.o \
+            $(TARGET)\pnmask.o \
+            $(TARGET)\sleep.o \
+            $(TARGET)\srch.o \
+            $(TARGET)\srchaq.o \
+            $(TARGET)\srchcd.o \
+            $(TARGET)\srchdrv.o \
+            $(TARGET)\srchdz.o \
+            $(TARGET)\srchint.o \
+            $(TARGET)\srchpc.o \
+            $(TARGET)\srchsc.o \
+            $(TARGET)\srchsl.o \
+            $(TARGET)\srchst.o \
+            $(TARGET)\srchtc.o \
+            $(TARGET)\srchtri.o \
+            $(TARGET)\srchun.o \
+            $(TARGET)\srchzz.o \
+            $(TARGET)\ulpn.o
+
+$(SRCH_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SRCH) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# User interface
+#-------------------------------------------------------------------------------
+
+UI_OBJS = $(TARGET)\ui.o \
+          $(TARGET)\uihcbt.o \
+          $(TARGET)\uihcmd.o \
+          $(TARGET)\uihkey.o \
+          $(TARGET)\uihsig.o \
+          $(TARGET)\uisalph.o \
+          $(TARGET)\uiscall.o \
+          $(TARGET)\uiscli.o \
+          $(TARGET)\uiscode.o \
+          $(TARGET)\uishelp.o \
+          $(TARGET)\uisidle.o \
+          $(TARGET)\uisinfo.o \
+          $(TARGET)\uislist.o \
+          $(TARGET)\uislock.o \
+          $(TARGET)\uislpm.o \
+          $(TARGET)\uismenu.o \
+          $(TARGET)\uismsg.o \
+          $(TARGET)\uisnum.o \
+          $(TARGET)\uisoff.o \
+          $(TARGET)\uisrcl.o \
+          $(TARGET)\uisserv.o \
+          $(TARGET)\uissms.o \
+          $(TARGET)\uisstrt.o \
+          $(TARGET)\uissto.o \
+          $(TARGET)\uistate.o \
+          $(TARGET)\uisview.o \
+          $(TARGET)\uiudata.o \
+          $(TARGET)\uiumenu.o \
+          $(TARGET)\uiusmsd.o \
+          $(TARGET)\uiusmsl.o \
+          $(TARGET)\uiutstmn.o \
+          $(TARGET)\uiutxt.o \
+          $(TARGET)\uixcm.o \
+          $(TARGET)\uixnv.o \
+          $(TARGET)\uixscrn.o \
+          $(TARGET)\uixsnd.o \
+          $(TARGET)\uixuasms.o
+
+$(UI_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_UI) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Call Manager
+#-------------------------------------------------------------------------------
+
+CM_OBJS = $(TARGET)\cm.o \
+          $(TARGET)\cmcall.o \
+          $(TARGET)\cmclient.o \
+          $(TARGET)\cmd.o \
+          $(TARGET)\cminband.o \
+          $(TARGET)\cmnv.o \
+          $(TARGET)\cmph.o \
+          $(TARGET)\cmsms.o \
+          $(TARGET)\cmss.o \
+          $(TARGET)\uasms.o \
+          $(TARGET)\uasmsx.o
+
+$(CM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_CM) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Vocoding
+#-------------------------------------------------------------------------------
+
+VOC_OBJS = $(TARGET)\vocdown.o \
+           $(TARGET)\vocimags.o \
+           $(TARGET)\vocm2.o \
+           $(TARGET)\vocmux.o \
+           $(TARGET)\vocsup.o
+
+$(VOC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_VOC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#===============================================================================
+#                               DEPENDENCIES
+#===============================================================================
+
+# The dependencies listed at the end of this makefile can be automatically
+# updated by making the 'depend' target to invoke the following rules.
+
+#MAKEFILE_NAME   = $(TARGET).mak
+#MAKEFILE_BACKUP = $(TARGET).bak
+
+MAKEFILE_NAME   = $(MAKE_TARGET).mak
+MAKEFILE_BACKUP = $(MAKE_TARGET).bak
+
+.SUFFIXES: .s .o .c .dep
+
+GETDEP_SCRIPT  = getdep.pl
+MDEPEND_SCRIPT = mdepend.pl
+
+.c{$(TARGET)}.dep:
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS) -E < $< | \
+          perl $(GETDEP_SCRIPT) $*.o $< > $*.de_
+        -del $@
+        move $*.de_ $@
+
+.s{$(TARGET)}.dep:
+        $(CC) $(CFLAGS) $(DMSS_AFLAGS) $(DMSS_CFLAGS) -E < $< | \
+          perl $(GETDEP_SCRIPT) $*.o $< > $*.de_
+        -del $@
+        move $*.de_ $@
+
+depend: $(TARGET)\exist $(OBJECTS:.o=.dep) force.frc
+        perl $(MDEPEND_SCRIPT) $(MAKEFILE_NAME) $(TARGET) > makefile.tmp
+        -del $(MAKEFILE_BACKUP)
+        move $(MAKEFILE_NAME) $(MAKEFILE_BACKUP)
+        move makefile.tmp $(MAKEFILE_NAME)
+
+force.frc:
+
+# ------------------------------
+# DO NOT EDIT BELOW THIS LINE
+
+$(TARGET)\acpwbm2.o: CUST4SPE.H
+$(TARGET)\acpwbm2.o: acp553.h
+$(TARGET)\acpwbm2.o: acpcmdef.h
+$(TARGET)\acpwbm2.o: acpwb.h
+$(TARGET)\acpwbm2.o: acpwbm2.c
+$(TARGET)\acpwbm2.o: addrdefs.h
+$(TARGET)\acpwbm2.o: arm.h
+$(TARGET)\acpwbm2.o: clk.h
+$(TARGET)\acpwbm2.o: comdef.h
+$(TARGET)\acpwbm2.o: customer.h
+$(TARGET)\acpwbm2.o: dfm.h
+$(TARGET)\acpwbm2.o: msm.h
+$(TARGET)\acpwbm2.o: msm50reg.h
+$(TARGET)\acpwbm2.o: nv.h
+$(TARGET)\acpwbm2.o: processor.h
+$(TARGET)\acpwbm2.o: queue.h
+$(TARGET)\acpwbm2.o: qw.h
+$(TARGET)\acpwbm2.o: rex.h
+$(TARGET)\acpwbm2.o: target.h
+$(TARGET)\acpwbm2.o: targetg.h
+$(TARGET)\acpwbm2.o: tramp.h
+$(TARGET)\acpwbm2.o: voc_core.h
+
+$(TARGET)\adcg.o: CUST4SPE.H
+$(TARGET)\adcg.o: adc.h
+$(TARGET)\adcg.o: adcg.c
+$(TARGET)\adcg.o: addrdefs.h
+$(TARGET)\adcg.o: arm.h
+$(TARGET)\adcg.o: bio.h
+$(TARGET)\adcg.o: biog.h
+$(TARGET)\adcg.o: clk.h
+$(TARGET)\adcg.o: comdef.h
+$(TARGET)\adcg.o: customer.h
+$(TARGET)\adcg.o: deci.h
+$(TARGET)\adcg.o: dmod.h
+$(TARGET)\adcg.o: enci.h
+$(TARGET)\adcg.o: msm.h
+$(TARGET)\adcg.o: msm50reg.h
+$(TARGET)\adcg.o: processor.h
+$(TARGET)\adcg.o: queue.h
+$(TARGET)\adcg.o: qw.h
+$(TARGET)\adcg.o: rex.h
+$(TARGET)\adcg.o: sbi.h
+$(TARGET)\adcg.o: target.h
+$(TARGET)\adcg.o: targetg.h
+$(TARGET)\adcg.o: tramp.h
+
+$(TARGET)\bbdiagp.o: CUST4SPE.H
+$(TARGET)\bbdiagp.o: addrdefs.h
+$(TARGET)\bbdiagp.o: arm.h
+$(TARGET)\bbdiagp.o: bbdiagp.c
+$(TARGET)\bbdiagp.o: cai.h
+$(TARGET)\bbdiagp.o: clk.h
+$(TARGET)\bbdiagp.o: cm.h
+$(TARGET)\bbdiagp.o: cmd.h
+$(TARGET)\bbdiagp.o: comdef.h
+$(TARGET)\bbdiagp.o: customer.h
+$(TARGET)\bbdiagp.o: db.h
+$(TARGET)\bbdiagp.o: dec.h
+$(TARGET)\bbdiagp.o: dec5000.h
+$(TARGET)\bbdiagp.o: deint.h
+$(TARGET)\bbdiagp.o: diagcmd.h
+$(TARGET)\bbdiagp.o: diagi.h
+$(TARGET)\bbdiagp.o: diagpkt.h
+$(TARGET)\bbdiagp.o: diagt.h
+$(TARGET)\bbdiagp.o: dog.h
+$(TARGET)\bbdiagp.o: ds.h
+$(TARGET)\bbdiagp.o: dsm.h
+$(TARGET)\bbdiagp.o: dsnetmdl.h
+$(TARGET)\bbdiagp.o: dssocket.h
+$(TARGET)\bbdiagp.o: dssocki.h
+$(TARGET)\bbdiagp.o: enc.h
+$(TARGET)\bbdiagp.o: feature.h
+$(TARGET)\bbdiagp.o: hs.h
+$(TARGET)\bbdiagp.o: iface.h
+$(TARGET)\bbdiagp.o: internet.h
+$(TARGET)\bbdiagp.o: ip.h
+$(TARGET)\bbdiagp.o: log.h
+$(TARGET)\bbdiagp.o: mc.h
+$(TARGET)\bbdiagp.o: mdrrlp.h
+$(TARGET)\bbdiagp.o: memory.h
+$(TARGET)\bbdiagp.o: msm.h
+$(TARGET)\bbdiagp.o: msm50reg.h
+$(TARGET)\bbdiagp.o: netuser.h
+$(TARGET)\bbdiagp.o: nv.h
+$(TARGET)\bbdiagp.o: pppfsm.h
+$(TARGET)\bbdiagp.o: processor.h
+$(TARGET)\bbdiagp.o: psglobal.h
+$(TARGET)\bbdiagp.o: queue.h
+$(TARGET)\bbdiagp.o: qw.h
+$(TARGET)\bbdiagp.o: rex.h
+$(TARGET)\bbdiagp.o: rxc.h
+$(TARGET)\bbdiagp.o: sio.h
+$(TARGET)\bbdiagp.o: smsi.h
+$(TARGET)\bbdiagp.o: snd.h
+$(TARGET)\bbdiagp.o: srch.h
+$(TARGET)\bbdiagp.o: target.h
+$(TARGET)\bbdiagp.o: targetg.h
+$(TARGET)\bbdiagp.o: task.h
+$(TARGET)\bbdiagp.o: tcp.h
+$(TARGET)\bbdiagp.o: tramp.h
+$(TARGET)\bbdiagp.o: uapi.h
+$(TARGET)\bbdiagp.o: uasms.h
+$(TARGET)\bbdiagp.o: ui.h
+$(TARGET)\bbdiagp.o: ulpn.h
+
+$(TARGET)\bbsndtab.o: CUST4SPE.H
+$(TARGET)\bbsndtab.o: addrdefs.h
+$(TARGET)\bbsndtab.o: arm.h
+$(TARGET)\bbsndtab.o: bbsndtab.c
+$(TARGET)\bbsndtab.o: bio.h
+$(TARGET)\bbsndtab.o: biog.h
+$(TARGET)\bbsndtab.o: cai.h
+$(TARGET)\bbsndtab.o: clk.h
+$(TARGET)\bbsndtab.o: cmd.h
+$(TARGET)\bbsndtab.o: comdef.h
+$(TARGET)\bbsndtab.o: customer.h
+$(TARGET)\bbsndtab.o: deci.h
+$(TARGET)\bbsndtab.o: dmod.h
+$(TARGET)\bbsndtab.o: dog.h
+$(TARGET)\bbsndtab.o: enc.h
+$(TARGET)\bbsndtab.o: enci.h
+$(TARGET)\bbsndtab.o: mc.h
+$(TARGET)\bbsndtab.o: msm.h
+$(TARGET)\bbsndtab.o: msm50reg.h
+$(TARGET)\bbsndtab.o: nv.h
+$(TARGET)\bbsndtab.o: processor.h
+$(TARGET)\bbsndtab.o: queue.h
+$(TARGET)\bbsndtab.o: qw.h
+$(TARGET)\bbsndtab.o: rex.h
+$(TARGET)\bbsndtab.o: rf.h
+$(TARGET)\bbsndtab.o: rfc.h
+$(TARGET)\bbsndtab.o: rficap.h
+$(TARGET)\bbsndtab.o: sleep.h
+$(TARGET)\bbsndtab.o: snd.h
+$(TARGET)\bbsndtab.o: sndi.h
+$(TARGET)\bbsndtab.o: srch.h
+$(TARGET)\bbsndtab.o: target.h
+$(TARGET)\bbsndtab.o: targetg.h
+$(TARGET)\bbsndtab.o: task.h
+$(TARGET)\bbsndtab.o: tramp.h
+$(TARGET)\bbsndtab.o: ulpn.h
+
+$(TARGET)\bch.o: CUST4SPE.H
+$(TARGET)\bch.o: acp553.h
+$(TARGET)\bch.o: acpcmdef.h
+$(TARGET)\bch.o: acpfm.h
+$(TARGET)\bch.o: bch.c
+$(TARGET)\bch.o: comdef.h
+$(TARGET)\bch.o: customer.h
+$(TARGET)\bch.o: nv.h
+$(TARGET)\bch.o: queue.h
+$(TARGET)\bch.o: qw.h
+$(TARGET)\bch.o: rex.h
+$(TARGET)\bch.o: target.h
+$(TARGET)\bch.o: targetg.h
+
+$(TARGET)\bio.o: CUST4SPE.H
+$(TARGET)\bio.o: addrdefs.h
+$(TARGET)\bio.o: arm.h
+$(TARGET)\bio.o: bio.c
+$(TARGET)\bio.o: bio.h
+$(TARGET)\bio.o: biog.h
+$(TARGET)\bio.o: comdef.h
+$(TARGET)\bio.o: customer.h
+$(TARGET)\bio.o: deci.h
+$(TARGET)\bio.o: dmod.h
+$(TARGET)\bio.o: enci.h
+$(TARGET)\bio.o: msm.h
+$(TARGET)\bio.o: msm50reg.h
+$(TARGET)\bio.o: processor.h
+$(TARGET)\bio.o: rex.h
+$(TARGET)\bio.o: target.h
+$(TARGET)\bio.o: targetg.h
+
+$(TARGET)\bit.o: CUST4SPE.H
+$(TARGET)\bit.o: bit.c
+$(TARGET)\bit.o: bit.h
+$(TARGET)\bit.o: comdef.h
+$(TARGET)\bit.o: customer.h
+$(TARGET)\bit.o: qw.h
+$(TARGET)\bit.o: rex.h
+$(TARGET)\bit.o: target.h
+$(TARGET)\bit.o: targetg.h
+
+$(TARGET)\boot_trap.o: CUST4SPE.H
+$(TARGET)\boot_trap.o: arm.h
+$(TARGET)\boot_trap.o: armasm.h
+$(TARGET)\boot_trap.o: boot_trap.c
+$(TARGET)\boot_trap.o: boot_trap.h
+$(TARGET)\boot_trap.o: comdef.h
+$(TARGET)\boot_trap.o: customer.h
+$(TARGET)\boot_trap.o: rex.h
+$(TARGET)\boot_trap.o: target.h
+$(TARGET)\boot_trap.o: targetg.h
+
+$(TARGET)\bootapp.o: CUST4SPE.H
+$(TARGET)\bootapp.o: armasm.h
+$(TARGET)\bootapp.o: bootapp.s
+$(TARGET)\bootapp.o: customer.h
+$(TARGET)\bootapp.o: target.h
+$(TARGET)\bootapp.o: targetg.h
+
+$(TARGET)\bootdata.o: CUST4SPE.H
+$(TARGET)\bootdata.o: bootdata.c
+$(TARGET)\bootdata.o: comdef.h
+$(TARGET)\bootdata.o: customer.h
+$(TARGET)\bootdata.o: rex.h
+$(TARGET)\bootdata.o: target.h
+$(TARGET)\bootdata.o: targetg.h
+
+$(TARGET)\boothw.o: CUST4SPE.H
+$(TARGET)\boothw.o: addrdefs.h
+$(TARGET)\boothw.o: arm.h
+$(TARGET)\boothw.o: boothw.c
+$(TARGET)\boothw.o: boothw.h
+$(TARGET)\boothw.o: clk.h
+$(TARGET)\boothw.o: comdef.h
+$(TARGET)\boothw.o: customer.h
+$(TARGET)\boothw.o: msm.h
+$(TARGET)\boothw.o: msm50reg.h
+$(TARGET)\boothw.o: processor.h
+$(TARGET)\boothw.o: queue.h
+$(TARGET)\boothw.o: qw.h
+$(TARGET)\boothw.o: rex.h
+$(TARGET)\boothw.o: sbi.h
+$(TARGET)\boothw.o: target.h
+$(TARGET)\boothw.o: targetg.h
+$(TARGET)\boothw.o: tramp.h
+
+$(TARGET)\bootmem.o: CUST4SPE.H
+$(TARGET)\bootmem.o: addrdefs.h
+$(TARGET)\bootmem.o: armasm.h
+$(TARGET)\bootmem.o: boothw.h
+$(TARGET)\bootmem.o: bootmem.c
+$(TARGET)\bootmem.o: comdef.h
+$(TARGET)\bootmem.o: customer.h
+$(TARGET)\bootmem.o: msm.h
+$(TARGET)\bootmem.o: msm50reg.h
+$(TARGET)\bootmem.o: rex.h
+$(TARGET)\bootmem.o: target.h
+$(TARGET)\bootmem.o: targetg.h
+
+$(TARGET)\bootsys.o: CUST4SPE.H
+$(TARGET)\bootsys.o: addrdefs.h
+$(TARGET)\bootsys.o: armasm.h
+$(TARGET)\bootsys.o: boot_trap.h
+$(TARGET)\bootsys.o: bootsys.s
+$(TARGET)\bootsys.o: customer.h
+$(TARGET)\bootsys.o: msm50reg.h
+$(TARGET)\bootsys.o: rexarm.h
+$(TARGET)\bootsys.o: target.h
+$(TARGET)\bootsys.o: targetg.h
+
+$(TARGET)\caix.o: CUST4SPE.H
+$(TARGET)\caix.o: acpmc.h
+$(TARGET)\caix.o: addrdefs.h
+$(TARGET)\caix.o: bit.h
+$(TARGET)\caix.o: cai.h
+$(TARGET)\caix.o: caii.h
+$(TARGET)\caix.o: caix.c
+$(TARGET)\caix.o: caix.h
+$(TARGET)\caix.o: clk.h
+$(TARGET)\caix.o: cm.h
+$(TARGET)\caix.o: cmd.h
+$(TARGET)\caix.o: cmmc.h
+$(TARGET)\caix.o: comdef.h
+$(TARGET)\caix.o: customer.h
+$(TARGET)\caix.o: db.h
+$(TARGET)\caix.o: dec.h
+$(TARGET)\caix.o: dec5000.h
+$(TARGET)\caix.o: deint.h
+$(TARGET)\caix.o: dog.h
+$(TARGET)\caix.o: ds.h
+$(TARGET)\caix.o: dsm.h
+$(TARGET)\caix.o: dsnetmdl.h
+$(TARGET)\caix.o: dssocket.h
+$(TARGET)\caix.o: dssocki.h
+$(TARGET)\caix.o: enc.h
+$(TARGET)\caix.o: iface.h
+$(TARGET)\caix.o: internet.h
+$(TARGET)\caix.o: ip.h
+$(TARGET)\caix.o: mc.h
+$(TARGET)\caix.o: mcc.h
+$(TARGET)\caix.o: mccdma.h
+$(TARGET)\caix.o: mccsrch.h
+$(TARGET)\caix.o: mdrrlp.h
+$(TARGET)\caix.o: msg.h
+$(TARGET)\caix.o: msm.h
+$(TARGET)\caix.o: msm50reg.h
+$(TARGET)\caix.o: netuser.h
+$(TARGET)\caix.o: nv.h
+$(TARGET)\caix.o: otaspi.h
+$(TARGET)\caix.o: pppfsm.h
+$(TARGET)\caix.o: psglobal.h
+$(TARGET)\caix.o: queue.h
+$(TARGET)\caix.o: qw.h
+$(TARGET)\caix.o: rex.h
+$(TARGET)\caix.o: rxc.h
+$(TARGET)\caix.o: rxtx.h
+$(TARGET)\caix.o: srch.h
+$(TARGET)\caix.o: target.h
+$(TARGET)\caix.o: targetg.h
+$(TARGET)\caix.o: task.h
+$(TARGET)\caix.o: tcp.h
+$(TARGET)\caix.o: tmsi.h
+$(TARGET)\caix.o: tramp.h
+$(TARGET)\caix.o: txc.h
+$(TARGET)\caix.o: uapi.h
+$(TARGET)\caix.o: uasms.h
+$(TARGET)\caix.o: uasmsi.h
+$(TARGET)\caix.o: ulpn.h
+$(TARGET)\caix.o: voc.h
+$(TARGET)\caix.o: vocmux.h
+
+$(TARGET)\clk.o: CUST4SPE.H
+$(TARGET)\clk.o: addrdefs.h
+$(TARGET)\clk.o: arm.h
+$(TARGET)\clk.o: cai.h
+$(TARGET)\clk.o: clk.c
+$(TARGET)\clk.o: clk.h
+$(TARGET)\clk.o: clki.h
+$(TARGET)\clk.o: clkregim.h
+$(TARGET)\clk.o: cmd.h
+$(TARGET)\clk.o: comdef.h
+$(TARGET)\clk.o: customer.h
+$(TARGET)\clk.o: dmod.h
+$(TARGET)\clk.o: dog.h
+$(TARGET)\clk.o: enc.h
+$(TARGET)\clk.o: err.h
+$(TARGET)\clk.o: mc.h
+$(TARGET)\clk.o: misc.h
+$(TARGET)\clk.o: msg.h
+$(TARGET)\clk.o: msm.h
+$(TARGET)\clk.o: msm50reg.h
+$(TARGET)\clk.o: nv.h
+$(TARGET)\clk.o: processor.h
+$(TARGET)\clk.o: queue.h
+$(TARGET)\clk.o: qw.h
+$(TARGET)\clk.o: rex.h
+$(TARGET)\clk.o: rf.h
+$(TARGET)\clk.o: rfc.h
+$(TARGET)\clk.o: rficap.h
+$(TARGET)\clk.o: sleep.h
+$(TARGET)\clk.o: srch.h
+$(TARGET)\clk.o: target.h
+$(TARGET)\clk.o: targetg.h
+$(TARGET)\clk.o: task.h
+$(TARGET)\clk.o: tramp.h
+$(TARGET)\clk.o: ulpn.h
+
+$(TARGET)\clkjul.o: CUST4SPE.H
+$(TARGET)\clkjul.o: addrdefs.h
+$(TARGET)\clkjul.o: clk.h
+$(TARGET)\clkjul.o: clki.h
+$(TARGET)\clkjul.o: clkjul.c
+$(TARGET)\clkjul.o: comdef.h
+$(TARGET)\clkjul.o: customer.h
+$(TARGET)\clkjul.o: misc.h
+$(TARGET)\clkjul.o: msg.h
+$(TARGET)\clkjul.o: msm.h
+$(TARGET)\clkjul.o: msm50reg.h
+$(TARGET)\clkjul.o: queue.h
+$(TARGET)\clkjul.o: qw.h
+$(TARGET)\clkjul.o: rex.h
+$(TARGET)\clkjul.o: target.h
+$(TARGET)\clkjul.o: targetg.h
+$(TARGET)\clkjul.o: tramp.h
+
+$(TARGET)\clkm2p.o: CUST4SPE.H
+$(TARGET)\clkm2p.o: addrdefs.h
+$(TARGET)\clkm2p.o: cai.h
+$(TARGET)\clkm2p.o: clk.h
+$(TARGET)\clkm2p.o: clki.h
+$(TARGET)\clkm2p.o: clkm2p.c
+$(TARGET)\clkm2p.o: cmd.h
+$(TARGET)\clkm2p.o: comdef.h
+$(TARGET)\clkm2p.o: customer.h
+$(TARGET)\clkm2p.o: dog.h
+$(TARGET)\clkm2p.o: enc.h
+$(TARGET)\clkm2p.o: err.h
+$(TARGET)\clkm2p.o: mc.h
+$(TARGET)\clkm2p.o: msg.h
+$(TARGET)\clkm2p.o: msm.h
+$(TARGET)\clkm2p.o: msm50reg.h
+$(TARGET)\clkm2p.o: nv.h
+$(TARGET)\clkm2p.o: queue.h
+$(TARGET)\clkm2p.o: qw.h
+$(TARGET)\clkm2p.o: rex.h
+$(TARGET)\clkm2p.o: rf.h
+$(TARGET)\clkm2p.o: rfc.h
+$(TARGET)\clkm2p.o: rficap.h
+$(TARGET)\clkm2p.o: sleep.h
+$(TARGET)\clkm2p.o: srch.h
+$(TARGET)\clkm2p.o: target.h
+$(TARGET)\clkm2p.o: targetg.h
+$(TARGET)\clkm2p.o: task.h
+$(TARGET)\clkm2p.o: tramp.h
+$(TARGET)\clkm2p.o: ulpn.h
+
+$(TARGET)\clkregim.o: CUST4SPE.H
+$(TARGET)\clkregim.o: addrdefs.h
+$(TARGET)\clkregim.o: arm.h
+$(TARGET)\clkregim.o: clk.h
+$(TARGET)\clkregim.o: clkregim.c
+$(TARGET)\clkregim.o: clkregim.h
+$(TARGET)\clkregim.o: comdef.h
+$(TARGET)\clkregim.o: customer.h
+$(TARGET)\clkregim.o: deci.h
+$(TARGET)\clkregim.o: dmod.h
+$(TARGET)\clkregim.o: enci.h
+$(TARGET)\clkregim.o: err.h
+$(TARGET)\clkregim.o: hw.h
+$(TARGET)\clkregim.o: msg.h
+$(TARGET)\clkregim.o: msm.h
+$(TARGET)\clkregim.o: msm50reg.h
+$(TARGET)\clkregim.o: nv.h
+$(TARGET)\clkregim.o: processor.h
+$(TARGET)\clkregim.o: queue.h
+$(TARGET)\clkregim.o: qw.h
+$(TARGET)\clkregim.o: rex.h
+$(TARGET)\clkregim.o: sbi.h
+$(TARGET)\clkregim.o: target.h
+$(TARGET)\clkregim.o: targetg.h
+$(TARGET)\clkregim.o: tramp.h
+
+$(TARGET)\cm.o: CUST4SPE.H
+$(TARGET)\cm.o: addrdefs.h
+$(TARGET)\cm.o: cai.h
+$(TARGET)\cm.o: caii.h
+$(TARGET)\cm.o: clk.h
+$(TARGET)\cm.o: cm.c
+$(TARGET)\cm.o: cm.h
+$(TARGET)\cm.o: cmcall.h
+$(TARGET)\cm.o: cmclient.h
+$(TARGET)\cm.o: cmd.h
+$(TARGET)\cm.o: cmdbg.h
+$(TARGET)\cm.o: cmi.h
+$(TARGET)\cm.o: cminband.h
+$(TARGET)\cm.o: cmmc.h
+$(TARGET)\cm.o: cmnv.h
+$(TARGET)\cm.o: cmph.h
+$(TARGET)\cm.o: cmsms.h
+$(TARGET)\cm.o: cmss.h
+$(TARGET)\cm.o: comdef.h
+$(TARGET)\cm.o: customer.h
+$(TARGET)\cm.o: db.h
+$(TARGET)\cm.o: dog.h
+$(TARGET)\cm.o: enc.h
+$(TARGET)\cm.o: err.h
+$(TARGET)\cm.o: mc.h
+$(TARGET)\cm.o: msg.h
+$(TARGET)\cm.o: msm.h
+$(TARGET)\cm.o: msm50reg.h
+$(TARGET)\cm.o: nv.h
+$(TARGET)\cm.o: queue.h
+$(TARGET)\cm.o: qw.h
+$(TARGET)\cm.o: rex.h
+$(TARGET)\cm.o: snd.h
+$(TARGET)\cm.o: srch.h
+$(TARGET)\cm.o: target.h
+$(TARGET)\cm.o: targetg.h
+$(TARGET)\cm.o: task.h
+$(TARGET)\cm.o: tramp.h
+$(TARGET)\cm.o: uapi.h
+$(TARGET)\cm.o: uasms.h
+$(TARGET)\cm.o: uasmsi.h
+$(TARGET)\cm.o: ulpn.h
+$(TARGET)\cm.o: voc.h
+$(TARGET)\cm.o: vocmux.h
+
+$(TARGET)\cmcall.o: CUST4SPE.H
+$(TARGET)\cmcall.o: addrdefs.h
+$(TARGET)\cmcall.o: cai.h
+$(TARGET)\cmcall.o: caii.h
+$(TARGET)\cmcall.o: clk.h
+$(TARGET)\cmcall.o: cm.h
+$(TARGET)\cmcall.o: cmcall.c
+$(TARGET)\cmcall.o: cmcall.h
+$(TARGET)\cmcall.o: cmclient.h
+$(TARGET)\cmcall.o: cmd.h
+$(TARGET)\cmcall.o: cmdbg.h
+$(TARGET)\cmcall.o: cmi.h
+$(TARGET)\cmcall.o: cmmc.h
+$(TARGET)\cmcall.o: cmph.h
+$(TARGET)\cmcall.o: cmsms.h
+$(TARGET)\cmcall.o: comdef.h
+$(TARGET)\cmcall.o: customer.h
+$(TARGET)\cmcall.o: db.h
+$(TARGET)\cmcall.o: dog.h
+$(TARGET)\cmcall.o: enc.h
+$(TARGET)\cmcall.o: err.h
+$(TARGET)\cmcall.o: mc.h
+$(TARGET)\cmcall.o: msg.h
+$(TARGET)\cmcall.o: msm.h
+$(TARGET)\cmcall.o: msm50reg.h
+$(TARGET)\cmcall.o: nv.h
+$(TARGET)\cmcall.o: queue.h
+$(TARGET)\cmcall.o: qw.h
+$(TARGET)\cmcall.o: rex.h
+$(TARGET)\cmcall.o: snd.h
+$(TARGET)\cmcall.o: srch.h
+$(TARGET)\cmcall.o: target.h
+$(TARGET)\cmcall.o: targetg.h
+$(TARGET)\cmcall.o: task.h
+$(TARGET)\cmcall.o: tramp.h
+$(TARGET)\cmcall.o: ulpn.h
+$(TARGET)\cmcall.o: voc.h
+$(TARGET)\cmcall.o: vocmux.h
+
+$(TARGET)\cmclient.o: CUST4SPE.H
+$(TARGET)\cmclient.o: addrdefs.h
+$(TARGET)\cmclient.o: cai.h
+$(TARGET)\cmclient.o: caii.h
+$(TARGET)\cmclient.o: clk.h
+$(TARGET)\cmclient.o: cm.h
+$(TARGET)\cmclient.o: cmcall.h
+$(TARGET)\cmclient.o: cmclient.c
+$(TARGET)\cmclient.o: cmclient.h
+$(TARGET)\cmclient.o: cmd.h
+$(TARGET)\cmclient.o: cmdbg.h
+$(TARGET)\cmclient.o: cmi.h
+$(TARGET)\cmclient.o: cmmc.h
+$(TARGET)\cmclient.o: cmph.h
+$(TARGET)\cmclient.o: cmss.h
+$(TARGET)\cmclient.o: comdef.h
+$(TARGET)\cmclient.o: customer.h
+$(TARGET)\cmclient.o: db.h
+$(TARGET)\cmclient.o: dog.h
+$(TARGET)\cmclient.o: err.h
+$(TARGET)\cmclient.o: mc.h
+$(TARGET)\cmclient.o: msg.h
+$(TARGET)\cmclient.o: msm.h
+$(TARGET)\cmclient.o: msm50reg.h
+$(TARGET)\cmclient.o: nv.h
+$(TARGET)\cmclient.o: queue.h
+$(TARGET)\cmclient.o: qw.h
+$(TARGET)\cmclient.o: rex.h
+$(TARGET)\cmclient.o: snd.h
+$(TARGET)\cmclient.o: target.h
+$(TARGET)\cmclient.o: targetg.h
+$(TARGET)\cmclient.o: task.h
+$(TARGET)\cmclient.o: tramp.h
+$(TARGET)\cmclient.o: voc.h
+$(TARGET)\cmclient.o: vocmux.h
+
+$(TARGET)\cmd.o: CUST4SPE.H
+$(TARGET)\cmd.o: cmd.c
+$(TARGET)\cmd.o: cmd.h
+$(TARGET)\cmd.o: comdef.h
+$(TARGET)\cmd.o: customer.h
+$(TARGET)\cmd.o: queue.h
+$(TARGET)\cmd.o: rex.h
+$(TARGET)\cmd.o: target.h
+$(TARGET)\cmd.o: targetg.h
+
+$(TARGET)\cminband.o: CUST4SPE.H
+$(TARGET)\cminband.o: addrdefs.h
+$(TARGET)\cminband.o: cai.h
+$(TARGET)\cminband.o: caii.h
+$(TARGET)\cminband.o: clk.h
+$(TARGET)\cminband.o: cm.h
+$(TARGET)\cminband.o: cmcall.h
+$(TARGET)\cminband.o: cmclient.h
+$(TARGET)\cminband.o: cmd.h
+$(TARGET)\cminband.o: cmdbg.h
+$(TARGET)\cminband.o: cmi.h
+$(TARGET)\cminband.o: cminband.c
+$(TARGET)\cminband.o: cminband.h
+$(TARGET)\cminband.o: cmmc.h
+$(TARGET)\cminband.o: cmph.h
+$(TARGET)\cminband.o: comdef.h
+$(TARGET)\cminband.o: customer.h
+$(TARGET)\cminband.o: db.h
+$(TARGET)\cminband.o: dog.h
+$(TARGET)\cminband.o: err.h
+$(TARGET)\cminband.o: mc.h
+$(TARGET)\cminband.o: msg.h
+$(TARGET)\cminband.o: msm.h
+$(TARGET)\cminband.o: msm50reg.h
+$(TARGET)\cminband.o: nv.h
+$(TARGET)\cminband.o: queue.h
+$(TARGET)\cminband.o: qw.h
+$(TARGET)\cminband.o: rex.h
+$(TARGET)\cminband.o: snd.h
+$(TARGET)\cminband.o: target.h
+$(TARGET)\cminband.o: targetg.h
+$(TARGET)\cminband.o: task.h
+$(TARGET)\cminband.o: tramp.h
+$(TARGET)\cminband.o: voc.h
+$(TARGET)\cminband.o: vocmux.h
+
+$(TARGET)\cmnv.o: CUST4SPE.H
+$(TARGET)\cmnv.o: addrdefs.h
+$(TARGET)\cmnv.o: cai.h
+$(TARGET)\cmnv.o: caii.h
+$(TARGET)\cmnv.o: clk.h
+$(TARGET)\cmnv.o: cm.h
+$(TARGET)\cmnv.o: cmd.h
+$(TARGET)\cmnv.o: cmdbg.h
+$(TARGET)\cmnv.o: cmi.h
+$(TARGET)\cmnv.o: cmmc.h
+$(TARGET)\cmnv.o: cmnv.c
+$(TARGET)\cmnv.o: cmnv.h
+$(TARGET)\cmnv.o: comdef.h
+$(TARGET)\cmnv.o: customer.h
+$(TARGET)\cmnv.o: db.h
+$(TARGET)\cmnv.o: dog.h
+$(TARGET)\cmnv.o: err.h
+$(TARGET)\cmnv.o: mc.h
+$(TARGET)\cmnv.o: msg.h
+$(TARGET)\cmnv.o: msm.h
+$(TARGET)\cmnv.o: msm50reg.h
+$(TARGET)\cmnv.o: nv.h
+$(TARGET)\cmnv.o: queue.h
+$(TARGET)\cmnv.o: qw.h
+$(TARGET)\cmnv.o: rex.h
+$(TARGET)\cmnv.o: snd.h
+$(TARGET)\cmnv.o: target.h
+$(TARGET)\cmnv.o: targetg.h
+$(TARGET)\cmnv.o: task.h
+$(TARGET)\cmnv.o: tramp.h
+
+$(TARGET)\cmph.o: CUST4SPE.H
+$(TARGET)\cmph.o: acpmc.h
+$(TARGET)\cmph.o: addrdefs.h
+$(TARGET)\cmph.o: cai.h
+$(TARGET)\cmph.o: caii.h
+$(TARGET)\cmph.o: clk.h
+$(TARGET)\cmph.o: cm.h
+$(TARGET)\cmph.o: cmcall.h
+$(TARGET)\cmph.o: cmclient.h
+$(TARGET)\cmph.o: cmd.h
+$(TARGET)\cmph.o: cmdbg.h
+$(TARGET)\cmph.o: cmi.h
+$(TARGET)\cmph.o: cmmc.h
+$(TARGET)\cmph.o: cmnv.h
+$(TARGET)\cmph.o: cmph.c
+$(TARGET)\cmph.o: cmph.h
+$(TARGET)\cmph.o: cmsms.h
+$(TARGET)\cmph.o: comdef.h
+$(TARGET)\cmph.o: customer.h
+$(TARGET)\cmph.o: db.h
+$(TARGET)\cmph.o: dog.h
+$(TARGET)\cmph.o: enc.h
+$(TARGET)\cmph.o: err.h
+$(TARGET)\cmph.o: mc.h
+$(TARGET)\cmph.o: mcc.h
+$(TARGET)\cmph.o: mcsys.h
+$(TARGET)\cmph.o: msg.h
+$(TARGET)\cmph.o: msm.h
+$(TARGET)\cmph.o: msm50reg.h
+$(TARGET)\cmph.o: nv.h
+$(TARGET)\cmph.o: otaspi.h
+$(TARGET)\cmph.o: queue.h
+$(TARGET)\cmph.o: qw.h
+$(TARGET)\cmph.o: rex.h
+$(TARGET)\cmph.o: snd.h
+$(TARGET)\cmph.o: srch.h
+$(TARGET)\cmph.o: target.h
+$(TARGET)\cmph.o: targetg.h
+$(TARGET)\cmph.o: task.h
+$(TARGET)\cmph.o: tramp.h
+$(TARGET)\cmph.o: uapi.h
+$(TARGET)\cmph.o: uasms.h
+$(TARGET)\cmph.o: uasmsi.h
+$(TARGET)\cmph.o: ulpn.h
+$(TARGET)\cmph.o: voc.h
+$(TARGET)\cmph.o: vocmux.h
+
+$(TARGET)\cmsms.o: CUST4SPE.H
+$(TARGET)\cmsms.o: addrdefs.h
+$(TARGET)\cmsms.o: cai.h
+$(TARGET)\cmsms.o: caii.h
+$(TARGET)\cmsms.o: clk.h
+$(TARGET)\cmsms.o: cm.h
+$(TARGET)\cmsms.o: cmcall.h
+$(TARGET)\cmsms.o: cmclient.h
+$(TARGET)\cmsms.o: cmd.h
+$(TARGET)\cmsms.o: cmdbg.h
+$(TARGET)\cmsms.o: cmi.h
+$(TARGET)\cmsms.o: cmmc.h
+$(TARGET)\cmsms.o: cmph.h
+$(TARGET)\cmsms.o: cmsms.c
+$(TARGET)\cmsms.o: cmsms.h
+$(TARGET)\cmsms.o: comdef.h
+$(TARGET)\cmsms.o: customer.h
+$(TARGET)\cmsms.o: db.h
+$(TARGET)\cmsms.o: dog.h
+$(TARGET)\cmsms.o: enc.h
+$(TARGET)\cmsms.o: err.h
+$(TARGET)\cmsms.o: mc.h
+$(TARGET)\cmsms.o: msg.h
+$(TARGET)\cmsms.o: msm.h
+$(TARGET)\cmsms.o: msm50reg.h
+$(TARGET)\cmsms.o: nv.h
+$(TARGET)\cmsms.o: queue.h
+$(TARGET)\cmsms.o: qw.h
+$(TARGET)\cmsms.o: rex.h
+$(TARGET)\cmsms.o: snd.h
+$(TARGET)\cmsms.o: srch.h
+$(TARGET)\cmsms.o: target.h
+$(TARGET)\cmsms.o: targetg.h
+$(TARGET)\cmsms.o: task.h
+$(TARGET)\cmsms.o: tramp.h
+$(TARGET)\cmsms.o: ulpn.h
+$(TARGET)\cmsms.o: voc.h
+$(TARGET)\cmsms.o: vocmux.h
+
+$(TARGET)\cmss.o: CUST4SPE.H
+$(TARGET)\cmss.o: addrdefs.h
+$(TARGET)\cmss.o: cai.h
+$(TARGET)\cmss.o: caii.h
+$(TARGET)\cmss.o: clk.h
+$(TARGET)\cmss.o: cm.h
+$(TARGET)\cmss.o: cmcall.h
+$(TARGET)\cmss.o: cmclient.h
+$(TARGET)\cmss.o: cmd.h
+$(TARGET)\cmss.o: cmdbg.h
+$(TARGET)\cmss.o: cmi.h
+$(TARGET)\cmss.o: cmmc.h
+$(TARGET)\cmss.o: cmph.h
+$(TARGET)\cmss.o: cmss.c
+$(TARGET)\cmss.o: cmss.h
+$(TARGET)\cmss.o: comdef.h
+$(TARGET)\cmss.o: customer.h
+$(TARGET)\cmss.o: db.h
+$(TARGET)\cmss.o: dog.h
+$(TARGET)\cmss.o: err.h
+$(TARGET)\cmss.o: mc.h
+$(TARGET)\cmss.o: mccreg.h
+$(TARGET)\cmss.o: msg.h
+$(TARGET)\cmss.o: msm.h
+$(TARGET)\cmss.o: msm50reg.h
+$(TARGET)\cmss.o: nv.h
+$(TARGET)\cmss.o: queue.h
+$(TARGET)\cmss.o: qw.h
+$(TARGET)\cmss.o: rex.h
+$(TARGET)\cmss.o: snd.h
+$(TARGET)\cmss.o: target.h
+$(TARGET)\cmss.o: targetg.h
+$(TARGET)\cmss.o: task.h
+$(TARGET)\cmss.o: tramp.h
+$(TARGET)\cmss.o: voc.h
+$(TARGET)\cmss.o: vocmux.h
+
+$(TARGET)\crc.o: CUST4SPE.H
+$(TARGET)\crc.o: comdef.h
+$(TARGET)\crc.o: crc.c
+$(TARGET)\crc.o: crc.h
+$(TARGET)\crc.o: customer.h
+$(TARGET)\crc.o: rex.h
+$(TARGET)\crc.o: target.h
+$(TARGET)\crc.o: targetg.h
+
+$(TARGET)\db.o: CUST4SPE.H
+$(TARGET)\db.o: comdef.h
+$(TARGET)\db.o: customer.h
+$(TARGET)\db.o: db.c
+$(TARGET)\db.o: db.h
+$(TARGET)\db.o: err.h
+$(TARGET)\db.o: msg.h
+$(TARGET)\db.o: nv.h
+$(TARGET)\db.o: queue.h
+$(TARGET)\db.o: qw.h
+$(TARGET)\db.o: rex.h
+$(TARGET)\db.o: target.h
+$(TARGET)\db.o: targetg.h
+
+$(TARGET)\dec5000.o: CUST4SPE.H
+$(TARGET)\dec5000.o: addrdefs.h
+$(TARGET)\dec5000.o: comdef.h
+$(TARGET)\dec5000.o: customer.h
+$(TARGET)\dec5000.o: dec.h
+$(TARGET)\dec5000.o: dec5000.c
+$(TARGET)\dec5000.o: dec5000.h
+$(TARGET)\dec5000.o: err.h
+$(TARGET)\dec5000.o: misc.h
+$(TARGET)\dec5000.o: msg.h
+$(TARGET)\dec5000.o: msm.h
+$(TARGET)\dec5000.o: msm50reg.h
+$(TARGET)\dec5000.o: nv.h
+$(TARGET)\dec5000.o: queue.h
+$(TARGET)\dec5000.o: qw.h
+$(TARGET)\dec5000.o: rex.h
+$(TARGET)\dec5000.o: target.h
+$(TARGET)\dec5000.o: targetg.h
+
+$(TARGET)\deint.o: CUST4SPE.H
+$(TARGET)\deint.o: addrdefs.h
+$(TARGET)\deint.o: comdef.h
+$(TARGET)\deint.o: customer.h
+$(TARGET)\deint.o: dec.h
+$(TARGET)\deint.o: dec5000.h
+$(TARGET)\deint.o: deint.c
+$(TARGET)\deint.o: deint.h
+$(TARGET)\deint.o: err.h
+$(TARGET)\deint.o: msg.h
+$(TARGET)\deint.o: msm.h
+$(TARGET)\deint.o: msm50reg.h
+$(TARGET)\deint.o: nv.h
+$(TARGET)\deint.o: queue.h
+$(TARGET)\deint.o: qw.h
+$(TARGET)\deint.o: rex.h
+$(TARGET)\deint.o: target.h
+$(TARGET)\deint.o: targetg.h
+
+$(TARGET)\diag.o: CUST4SPE.H
+$(TARGET)\diag.o: addrdefs.h
+$(TARGET)\diag.o: arm.h
+$(TARGET)\diag.o: assert.h
+$(TARGET)\diag.o: bio.h
+$(TARGET)\diag.o: biog.h
+$(TARGET)\diag.o: cai.h
+$(TARGET)\diag.o: clk.h
+$(TARGET)\diag.o: cm.h
+$(TARGET)\diag.o: cmd.h
+$(TARGET)\diag.o: comdef.h
+$(TARGET)\diag.o: crc.h
+$(TARGET)\diag.o: customer.h
+$(TARGET)\diag.o: db.h
+$(TARGET)\diag.o: dec.h
+$(TARGET)\diag.o: dec5000.h
+$(TARGET)\diag.o: deci.h
+$(TARGET)\diag.o: deint.h
+$(TARGET)\diag.o: diag.c
+$(TARGET)\diag.o: diag.h
+$(TARGET)\diag.o: diagcmd.h
+$(TARGET)\diag.o: diagi.h
+$(TARGET)\diag.o: diagpkt.h
+$(TARGET)\diag.o: diagt.h
+$(TARGET)\diag.o: dload.h
+$(TARGET)\diag.o: dloadarm.h
+$(TARGET)\diag.o: dmod.h
+$(TARGET)\diag.o: dog.h
+$(TARGET)\diag.o: ds.h
+$(TARGET)\diag.o: dsm.h
+$(TARGET)\diag.o: dsnetmdl.h
+$(TARGET)\diag.o: dssocket.h
+$(TARGET)\diag.o: dssocki.h
+$(TARGET)\diag.o: enc.h
+$(TARGET)\diag.o: enci.h
+$(TARGET)\diag.o: err.h
+$(TARGET)\diag.o: feature.h
+$(TARGET)\diag.o: hs.h
+$(TARGET)\diag.o: iface.h
+$(TARGET)\diag.o: internet.h
+$(TARGET)\diag.o: ip.h
+$(TARGET)\diag.o: log.h
+$(TARGET)\diag.o: mc.h
+$(TARGET)\diag.o: mdrrlp.h
+$(TARGET)\diag.o: memory.h
+$(TARGET)\diag.o: misc.h
+$(TARGET)\diag.o: msg.h
+$(TARGET)\diag.o: msm.h
+$(TARGET)\diag.o: msm50reg.h
+$(TARGET)\diag.o: netuser.h
+$(TARGET)\diag.o: nv.h
+$(TARGET)\diag.o: pppfsm.h
+$(TARGET)\diag.o: processor.h
+$(TARGET)\diag.o: psglobal.h
+$(TARGET)\diag.o: queue.h
+$(TARGET)\diag.o: qw.h
+$(TARGET)\diag.o: rex.h
+$(TARGET)\diag.o: rf.h
+$(TARGET)\diag.o: rfc.h
+$(TARGET)\diag.o: rficap.h
+$(TARGET)\diag.o: rxc.h
+$(TARGET)\diag.o: sdevmap.h
+$(TARGET)\diag.o: sio.h
+$(TARGET)\diag.o: sleep.h
+$(TARGET)\diag.o: smsi.h
+$(TARGET)\diag.o: snd.h
+$(TARGET)\diag.o: srch.h
+$(TARGET)\diag.o: target.h
+$(TARGET)\diag.o: targetg.h
+$(TARGET)\diag.o: task.h
+$(TARGET)\diag.o: tcp.h
+$(TARGET)\diag.o: tramp.h
+$(TARGET)\diag.o: uapi.h
+$(TARGET)\diag.o: uasms.h
+$(TARGET)\diag.o: ui.h
+$(TARGET)\diag.o: ulpn.h
+$(TARGET)\diag.o: voc.h
+$(TARGET)\diag.o: vocmux.h
+
+$(TARGET)\diagfs.o: CUST4SPE.H
+$(TARGET)\diagfs.o: addrdefs.h
+$(TARGET)\diagfs.o: cai.h
+$(TARGET)\diagfs.o: clk.h
+$(TARGET)\diagfs.o: cm.h
+$(TARGET)\diagfs.o: cmd.h
+$(TARGET)\diagfs.o: comdef.h
+$(TARGET)\diagfs.o: customer.h
+$(TARGET)\diagfs.o: db.h
+$(TARGET)\diagfs.o: dec.h
+$(TARGET)\diagfs.o: dec5000.h
+$(TARGET)\diagfs.o: deint.h
+$(TARGET)\diagfs.o: diagcmd.h
+$(TARGET)\diagfs.o: diagfs.c
+$(TARGET)\diagfs.o: diagfs.h
+$(TARGET)\diagfs.o: diagi.h
+$(TARGET)\diagfs.o: diagpkt.h
+$(TARGET)\diagfs.o: diagt.h
+$(TARGET)\diagfs.o: dog.h
+$(TARGET)\diagfs.o: ds.h
+$(TARGET)\diagfs.o: dsm.h
+$(TARGET)\diagfs.o: dsnetmdl.h
+$(TARGET)\diagfs.o: dssocket.h
+$(TARGET)\diagfs.o: dssocki.h
+$(TARGET)\diagfs.o: enc.h
+$(TARGET)\diagfs.o: feature.h
+$(TARGET)\diagfs.o: fs.h
+$(TARGET)\diagfs.o: fs_parms.h
+$(TARGET)\diagfs.o: hs.h
+$(TARGET)\diagfs.o: iface.h
+$(TARGET)\diagfs.o: internet.h
+$(TARGET)\diagfs.o: ip.h
+$(TARGET)\diagfs.o: log.h
+$(TARGET)\diagfs.o: mc.h
+$(TARGET)\diagfs.o: mdrrlp.h
+$(TARGET)\diagfs.o: memory.h
+$(TARGET)\diagfs.o: msg.h
+$(TARGET)\diagfs.o: msm.h
+$(TARGET)\diagfs.o: msm50reg.h
+$(TARGET)\diagfs.o: netuser.h
+$(TARGET)\diagfs.o: nv.h
+$(TARGET)\diagfs.o: pppfsm.h
+$(TARGET)\diagfs.o: psglobal.h
+$(TARGET)\diagfs.o: queue.h
+$(TARGET)\diagfs.o: qw.h
+$(TARGET)\diagfs.o: rex.h
+$(TARGET)\diagfs.o: rxc.h
+$(TARGET)\diagfs.o: sio.h
+$(TARGET)\diagfs.o: smsi.h
+$(TARGET)\diagfs.o: snd.h
+$(TARGET)\diagfs.o: srch.h
+$(TARGET)\diagfs.o: target.h
+$(TARGET)\diagfs.o: targetg.h
+$(TARGET)\diagfs.o: task.h
+$(TARGET)\diagfs.o: tcp.h
+$(TARGET)\diagfs.o: tramp.h
+$(TARGET)\diagfs.o: uapi.h
+$(TARGET)\diagfs.o: uasms.h
+$(TARGET)\diagfs.o: ui.h
+$(TARGET)\diagfs.o: ulpn.h
+
+$(TARGET)\diagp.o: CUST4SPE.H
+$(TARGET)\diagp.o: acpmc.h
+$(TARGET)\diagp.o: addrdefs.h
+$(TARGET)\diagp.o: arm.h
+$(TARGET)\diagp.o: bio.h
+$(TARGET)\diagp.o: biog.h
+$(TARGET)\diagp.o: cai.h
+$(TARGET)\diagp.o: caii.h
+$(TARGET)\diagp.o: clk.h
+$(TARGET)\diagp.o: cm.h
+$(TARGET)\diagp.o: cmd.h
+$(TARGET)\diagp.o: cmmc.h
+$(TARGET)\diagp.o: comdef.h
+$(TARGET)\diagp.o: customer.h
+$(TARGET)\diagp.o: db.h
+$(TARGET)\diagp.o: dec.h
+$(TARGET)\diagp.o: dec5000.h
+$(TARGET)\diagp.o: deci.h
+$(TARGET)\diagp.o: deint.h
+$(TARGET)\diagp.o: diag.h
+$(TARGET)\diagp.o: diagcmd.h
+$(TARGET)\diagp.o: diagfs.h
+$(TARGET)\diagp.o: diagi.h
+$(TARGET)\diagp.o: diagp.c
+$(TARGET)\diagp.o: diagpkt.h
+$(TARGET)\diagp.o: diagt.h
+$(TARGET)\diagp.o: dmod.h
+$(TARGET)\diagp.o: dog.h
+$(TARGET)\diagp.o: ds.h
+$(TARGET)\diagp.o: dsi.h
+$(TARGET)\diagp.o: dsm.h
+$(TARGET)\diagp.o: dsmgr.h
+$(TARGET)\diagp.o: dsnetmdl.h
+$(TARGET)\diagp.o: dsrmio.h
+$(TARGET)\diagp.o: dssocket.h
+$(TARGET)\diagp.o: dssocki.h
+$(TARGET)\diagp.o: enc.h
+$(TARGET)\diagp.o: enci.h
+$(TARGET)\diagp.o: err.h
+$(TARGET)\diagp.o: feature.h
+$(TARGET)\diagp.o: hs.h
+$(TARGET)\diagp.o: hw.h
+$(TARGET)\diagp.o: iface.h
+$(TARGET)\diagp.o: internet.h
+$(TARGET)\diagp.o: ip.h
+$(TARGET)\diagp.o: log.h
+$(TARGET)\diagp.o: mar.h
+$(TARGET)\diagp.o: mc.h
+$(TARGET)\diagp.o: mcc.h
+$(TARGET)\diagp.o: mccdma.h
+$(TARGET)\diagp.o: mccreg.h
+$(TARGET)\diagp.o: mccsrch.h
+$(TARGET)\diagp.o: mcsys.h
+$(TARGET)\diagp.o: mdrrlp.h
+$(TARGET)\diagp.o: memory.h
+$(TARGET)\diagp.o: misc.h
+$(TARGET)\diagp.o: mobile.h
+$(TARGET)\diagp.o: msg.h
+$(TARGET)\diagp.o: msm.h
+$(TARGET)\diagp.o: msm50reg.h
+$(TARGET)\diagp.o: netuser.h
+$(TARGET)\diagp.o: nv.h
+$(TARGET)\diagp.o: otaspi.h
+$(TARGET)\diagp.o: parm.h
+$(TARGET)\diagp.o: pppfsm.h
+$(TARGET)\diagp.o: processor.h
+$(TARGET)\diagp.o: psglobal.h
+$(TARGET)\diagp.o: queue.h
+$(TARGET)\diagp.o: qw.h
+$(TARGET)\diagp.o: rex.h
+$(TARGET)\diagp.o: rf.h
+$(TARGET)\diagp.o: rfc.h
+$(TARGET)\diagp.o: rficap.h
+$(TARGET)\diagp.o: rlp.h
+$(TARGET)\diagp.o: rxc.h
+$(TARGET)\diagp.o: rxtx.h
+$(TARGET)\diagp.o: sio.h
+$(TARGET)\diagp.o: sleep.h
+$(TARGET)\diagp.o: smsi.h
+$(TARGET)\diagp.o: snd.h
+$(TARGET)\diagp.o: snm.h
+$(TARGET)\diagp.o: srch.h
+$(TARGET)\diagp.o: target.h
+$(TARGET)\diagp.o: targetg.h
+$(TARGET)\diagp.o: task.h
+$(TARGET)\diagp.o: tcp.h
+$(TARGET)\diagp.o: tramp.h
+$(TARGET)\diagp.o: ts.h
+$(TARGET)\diagp.o: txc.h
+$(TARGET)\diagp.o: uapi.h
+$(TARGET)\diagp.o: uasms.h
+$(TARGET)\diagp.o: uasmsi.h
+$(TARGET)\diagp.o: ui.h
+$(TARGET)\diagp.o: ulpn.h
+$(TARGET)\diagp.o: voc.h
+$(TARGET)\diagp.o: vocmux.h
+
+$(TARGET)\distreg.o: CUST4SPE.H
+$(TARGET)\distreg.o: comdef.h
+$(TARGET)\distreg.o: customer.h
+$(TARGET)\distreg.o: distreg.c
+$(TARGET)\distreg.o: distreg.h
+$(TARGET)\distreg.o: rex.h
+$(TARGET)\distreg.o: target.h
+$(TARGET)\distreg.o: targetg.h
+
+$(TARGET)\dloadarm.o: CUST4SPE.H
+$(TARGET)\dloadarm.o: addrdefs.h
+$(TARGET)\dloadarm.o: boothw.h
+$(TARGET)\dloadarm.o: comdef.h
+$(TARGET)\dloadarm.o: customer.h
+$(TARGET)\dloadarm.o: dloadarm.c
+$(TARGET)\dloadarm.o: dloadarm.h
+$(TARGET)\dloadarm.o: dloaduart.h
+$(TARGET)\dloadarm.o: memory.h
+$(TARGET)\dloadarm.o: mobile.h
+$(TARGET)\dloadarm.o: msm.h
+$(TARGET)\dloadarm.o: msm50reg.h
+$(TARGET)\dloadarm.o: rex.h
+$(TARGET)\dloadarm.o: target.h
+$(TARGET)\dloadarm.o: targetg.h
+
+$(TARGET)\dloadpoll.o: CUST4SPE.H
+$(TARGET)\dloadpoll.o: addrdefs.h
+$(TARGET)\dloadpoll.o: arm.h
+$(TARGET)\dloadpoll.o: armasm.h
+$(TARGET)\dloadpoll.o: customer.h
+$(TARGET)\dloadpoll.o: dloadpoll.s
+$(TARGET)\dloadpoll.o: dloaduart.h
+$(TARGET)\dloadpoll.o: msm50reg.h
+$(TARGET)\dloadpoll.o: target.h
+$(TARGET)\dloadpoll.o: targetg.h
+
+$(TARGET)\dloaduart.o: CUST4SPE.H
+$(TARGET)\dloaduart.o: addrdefs.h
+$(TARGET)\dloaduart.o: arm.h
+$(TARGET)\dloaduart.o: boothw.h
+$(TARGET)\dloaduart.o: clkregim.h
+$(TARGET)\dloaduart.o: comdef.h
+$(TARGET)\dloaduart.o: customer.h
+$(TARGET)\dloaduart.o: deci.h
+$(TARGET)\dloaduart.o: dloadarm.h
+$(TARGET)\dloaduart.o: dloaduart.c
+$(TARGET)\dloaduart.o: dloaduart.h
+$(TARGET)\dloaduart.o: msm.h
+$(TARGET)\dloaduart.o: msm50reg.h
+$(TARGET)\dloaduart.o: processor.h
+$(TARGET)\dloaduart.o: rex.h
+$(TARGET)\dloaduart.o: target.h
+$(TARGET)\dloaduart.o: targetg.h
+
+$(TARGET)\dmddown.o: CUST4SPE.H
+$(TARGET)\dmddown.o: addrdefs.h
+$(TARGET)\dmddown.o: clk.h
+$(TARGET)\dmddown.o: comdef.h
+$(TARGET)\dmddown.o: customer.h
+$(TARGET)\dmddown.o: dmddown.c
+$(TARGET)\dmddown.o: dmddown.h
+$(TARGET)\dmddown.o: dmdimage.h
+$(TARGET)\dmddown.o: dog.h
+$(TARGET)\dmddown.o: err.h
+$(TARGET)\dmddown.o: misc.h
+$(TARGET)\dmddown.o: msg.h
+$(TARGET)\dmddown.o: msm.h
+$(TARGET)\dmddown.o: msm50reg.h
+$(TARGET)\dmddown.o: nv.h
+$(TARGET)\dmddown.o: queue.h
+$(TARGET)\dmddown.o: qw.h
+$(TARGET)\dmddown.o: rex.h
+$(TARGET)\dmddown.o: target.h
+$(TARGET)\dmddown.o: targetg.h
+$(TARGET)\dmddown.o: task.h
+$(TARGET)\dmddown.o: tramp.h
+
+$(TARGET)\dmdimage.o: CUST4SPE.H
+$(TARGET)\dmdimage.o: comdef.h
+$(TARGET)\dmdimage.o: customer.h
+$(TARGET)\dmdimage.o: demod.ins
+$(TARGET)\dmdimage.o: dmddown.h
+$(TARGET)\dmdimage.o: dmdimage.c
+$(TARGET)\dmdimage.o: rex.h
+$(TARGET)\dmdimage.o: target.h
+$(TARGET)\dmdimage.o: targetg.h
+
+$(TARGET)\dmod.o: CUST4SPE.H
+$(TARGET)\dmod.o: addrdefs.h
+$(TARGET)\dmod.o: arm.h
+$(TARGET)\dmod.o: comdef.h
+$(TARGET)\dmod.o: customer.h
+$(TARGET)\dmod.o: dmod.c
+$(TARGET)\dmod.o: dmod.h
+$(TARGET)\dmod.o: msm.h
+$(TARGET)\dmod.o: msm50reg.h
+$(TARGET)\dmod.o: processor.h
+$(TARGET)\dmod.o: rex.h
+$(TARGET)\dmod.o: target.h
+$(TARGET)\dmod.o: targetg.h
+
+$(TARGET)\dog.o: CUST4SPE.H
+$(TARGET)\dog.o: addrdefs.h
+$(TARGET)\dog.o: arm.h
+$(TARGET)\dog.o: bio.h
+$(TARGET)\dog.o: biog.h
+$(TARGET)\dog.o: cai.h
+$(TARGET)\dog.o: clk.h
+$(TARGET)\dog.o: cmd.h
+$(TARGET)\dog.o: comdef.h
+$(TARGET)\dog.o: customer.h
+$(TARGET)\dog.o: deci.h
+$(TARGET)\dog.o: dmod.h
+$(TARGET)\dog.o: dog.c
+$(TARGET)\dog.o: dog.h
+$(TARGET)\dog.o: enc.h
+$(TARGET)\dog.o: enci.h
+$(TARGET)\dog.o: err.h
+$(TARGET)\dog.o: mc.h
+$(TARGET)\dog.o: msg.h
+$(TARGET)\dog.o: msm.h
+$(TARGET)\dog.o: msm50reg.h
+$(TARGET)\dog.o: nv.h
+$(TARGET)\dog.o: processor.h
+$(TARGET)\dog.o: queue.h
+$(TARGET)\dog.o: qw.h
+$(TARGET)\dog.o: rex.h
+$(TARGET)\dog.o: target.h
+$(TARGET)\dog.o: targetg.h
+$(TARGET)\dog.o: task.h
+$(TARGET)\dog.o: tramp.h
+
+$(TARGET)\ds_snoop.o: CUST4SPE.H
+$(TARGET)\ds_snoop.o: addrdefs.h
+$(TARGET)\ds_snoop.o: assert.h
+$(TARGET)\ds_snoop.o: cai.h
+$(TARGET)\ds_snoop.o: clk.h
+$(TARGET)\ds_snoop.o: cm.h
+$(TARGET)\ds_snoop.o: cmd.h
+$(TARGET)\ds_snoop.o: comdef.h
+$(TARGET)\ds_snoop.o: customer.h
+$(TARGET)\ds_snoop.o: db.h
+$(TARGET)\ds_snoop.o: dog.h
+$(TARGET)\ds_snoop.o: ds.h
+$(TARGET)\ds_snoop.o: ds_snoop.c
+$(TARGET)\ds_snoop.o: ds_snoop.h
+$(TARGET)\ds_snoop.o: dsm.h
+$(TARGET)\ds_snoop.o: dsnetmdl.h
+$(TARGET)\ds_snoop.o: dssocket.h
+$(TARGET)\ds_snoop.o: dssocki.h
+$(TARGET)\ds_snoop.o: err.h
+$(TARGET)\ds_snoop.o: iface.h
+$(TARGET)\ds_snoop.o: internet.h
+$(TARGET)\ds_snoop.o: ip.h
+$(TARGET)\ds_snoop.o: mc.h
+$(TARGET)\ds_snoop.o: mdrrlp.h
+$(TARGET)\ds_snoop.o: memory.h
+$(TARGET)\ds_snoop.o: msg.h
+$(TARGET)\ds_snoop.o: msm.h
+$(TARGET)\ds_snoop.o: msm50reg.h
+$(TARGET)\ds_snoop.o: netuser.h
+$(TARGET)\ds_snoop.o: nv.h
+$(TARGET)\ds_snoop.o: ppp.h
+$(TARGET)\ds_snoop.o: pppfsm.h
+$(TARGET)\ds_snoop.o: ps.h
+$(TARGET)\ds_snoop.o: psglobal.h
+$(TARGET)\ds_snoop.o: psi.h
+$(TARGET)\ds_snoop.o: queue.h
+$(TARGET)\ds_snoop.o: qw.h
+$(TARGET)\ds_snoop.o: rex.h
+$(TARGET)\ds_snoop.o: target.h
+$(TARGET)\ds_snoop.o: targetg.h
+$(TARGET)\ds_snoop.o: task.h
+$(TARGET)\ds_snoop.o: tcp.h
+$(TARGET)\ds_snoop.o: tramp.h
+
+$(TARGET)\dsatcop.o: CUST4SPE.H
+$(TARGET)\dsatcop.o: addrdefs.h
+$(TARGET)\dsatcop.o: arm.h
+$(TARGET)\dsatcop.o: assert.h
+$(TARGET)\dsatcop.o: bbver.h
+$(TARGET)\dsatcop.o: bio.h
+$(TARGET)\dsatcop.o: biog.h
+$(TARGET)\dsatcop.o: cai.h
+$(TARGET)\dsatcop.o: caii.h
+$(TARGET)\dsatcop.o: clk.h
+$(TARGET)\dsatcop.o: cm.h
+$(TARGET)\dsatcop.o: cmd.h
+$(TARGET)\dsatcop.o: comdef.h
+$(TARGET)\dsatcop.o: customer.h
+$(TARGET)\dsatcop.o: db.h
+$(TARGET)\dsatcop.o: dec.h
+$(TARGET)\dsatcop.o: dec5000.h
+$(TARGET)\dsatcop.o: deci.h
+$(TARGET)\dsatcop.o: diag.h
+$(TARGET)\dsatcop.o: dmod.h
+$(TARGET)\dsatcop.o: dog.h
+$(TARGET)\dsatcop.o: ds.h
+$(TARGET)\dsatcop.o: dsatcop.c
+$(TARGET)\dsatcop.o: dsatcop.h
+$(TARGET)\dsatcop.o: dsatcopi.h
+$(TARGET)\dsatcop.o: dsi.h
+$(TARGET)\dsatcop.o: dsm.h
+$(TARGET)\dsatcop.o: dsmgr.h
+$(TARGET)\dsatcop.o: dsnetmdl.h
+$(TARGET)\dsatcop.o: dsrmio.h
+$(TARGET)\dsatcop.o: dssocfg.h
+$(TARGET)\dsatcop.o: dssocket.h
+$(TARGET)\dsatcop.o: dssocki.h
+$(TARGET)\dsatcop.o: enc.h
+$(TARGET)\dsatcop.o: enci.h
+$(TARGET)\dsatcop.o: err.h
+$(TARGET)\dsatcop.o: hsig.h
+$(TARGET)\dsatcop.o: icmp.h
+$(TARGET)\dsatcop.o: iface.h
+$(TARGET)\dsatcop.o: internet.h
+$(TARGET)\dsatcop.o: ip.h
+$(TARGET)\dsatcop.o: mc.h
+$(TARGET)\dsatcop.o: mdrrlp.h
+$(TARGET)\dsatcop.o: memory.h
+$(TARGET)\dsatcop.o: mobile.h
+$(TARGET)\dsatcop.o: msg.h
+$(TARGET)\dsatcop.o: msm.h
+$(TARGET)\dsatcop.o: msm50reg.h
+$(TARGET)\dsatcop.o: netuser.h
+$(TARGET)\dsatcop.o: nv.h
+$(TARGET)\dsatcop.o: ppp.h
+$(TARGET)\dsatcop.o: pppfsm.h
+$(TARGET)\dsatcop.o: processor.h
+$(TARGET)\dsatcop.o: ps.h
+$(TARGET)\dsatcop.o: psglobal.h
+$(TARGET)\dsatcop.o: psi.h
+$(TARGET)\dsatcop.o: psmisc.h
+$(TARGET)\dsatcop.o: queue.h
+$(TARGET)\dsatcop.o: qw.h
+$(TARGET)\dsatcop.o: rex.h
+$(TARGET)\dsatcop.o: rf.h
+$(TARGET)\dsatcop.o: rfc.h
+$(TARGET)\dsatcop.o: rficap.h
+$(TARGET)\dsatcop.o: rlp.h
+$(TARGET)\dsatcop.o: sio.h
+$(TARGET)\dsatcop.o: sleep.h
+$(TARGET)\dsatcop.o: smsi.h
+$(TARGET)\dsatcop.o: snm.h
+$(TARGET)\dsatcop.o: srch.h
+$(TARGET)\dsatcop.o: target.h
+$(TARGET)\dsatcop.o: targetg.h
+$(TARGET)\dsatcop.o: task.h
+$(TARGET)\dsatcop.o: tcp.h
+$(TARGET)\dsatcop.o: tramp.h
+$(TARGET)\dsatcop.o: uapi.h
+$(TARGET)\dsatcop.o: uasms.h
+$(TARGET)\dsatcop.o: ui.h
+$(TARGET)\dsatcop.o: ulpn.h
+$(TARGET)\dsatcop.o: voc_core.h
+
+$(TARGET)\dsatdat.o: CUST4SPE.H
+$(TARGET)\dsatdat.o: addrdefs.h
+$(TARGET)\dsatdat.o: cai.h
+$(TARGET)\dsatdat.o: clk.h
+$(TARGET)\dsatdat.o: cm.h
+$(TARGET)\dsatdat.o: cmd.h
+$(TARGET)\dsatdat.o: comdef.h
+$(TARGET)\dsatdat.o: customer.h
+$(TARGET)\dsatdat.o: db.h
+$(TARGET)\dsatdat.o: dog.h
+$(TARGET)\dsatdat.o: ds.h
+$(TARGET)\dsatdat.o: dsatcop.h
+$(TARGET)\dsatdat.o: dsatcopi.h
+$(TARGET)\dsatdat.o: dsatdat.c
+$(TARGET)\dsatdat.o: dsi.h
+$(TARGET)\dsatdat.o: dsm.h
+$(TARGET)\dsatdat.o: dsnetmdl.h
+$(TARGET)\dsatdat.o: dssocket.h
+$(TARGET)\dsatdat.o: dssocki.h
+$(TARGET)\dsatdat.o: hw.h
+$(TARGET)\dsatdat.o: iface.h
+$(TARGET)\dsatdat.o: internet.h
+$(TARGET)\dsatdat.o: ip.h
+$(TARGET)\dsatdat.o: mc.h
+$(TARGET)\dsatdat.o: mdrrlp.h
+$(TARGET)\dsatdat.o: msm.h
+$(TARGET)\dsatdat.o: msm50reg.h
+$(TARGET)\dsatdat.o: netuser.h
+$(TARGET)\dsatdat.o: nv.h
+$(TARGET)\dsatdat.o: pppfsm.h
+$(TARGET)\dsatdat.o: psglobal.h
+$(TARGET)\dsatdat.o: queue.h
+$(TARGET)\dsatdat.o: qw.h
+$(TARGET)\dsatdat.o: rex.h
+$(TARGET)\dsatdat.o: sio.h
+$(TARGET)\dsatdat.o: target.h
+$(TARGET)\dsatdat.o: targetg.h
+$(TARGET)\dsatdat.o: task.h
+$(TARGET)\dsatdat.o: tcp.h
+$(TARGET)\dsatdat.o: tramp.h
+
+$(TARGET)\dsatps.o: CUST4SPE.H
+$(TARGET)\dsatps.o: addrdefs.h
+$(TARGET)\dsatps.o: cai.h
+$(TARGET)\dsatps.o: clk.h
+$(TARGET)\dsatps.o: cm.h
+$(TARGET)\dsatps.o: cmd.h
+$(TARGET)\dsatps.o: comdef.h
+$(TARGET)\dsatps.o: customer.h
+$(TARGET)\dsatps.o: db.h
+$(TARGET)\dsatps.o: dog.h
+$(TARGET)\dsatps.o: ds.h
+$(TARGET)\dsatps.o: dsatcop.h
+$(TARGET)\dsatps.o: dsatcopi.h
+$(TARGET)\dsatps.o: dsatps.c
+$(TARGET)\dsatps.o: dsi.h
+$(TARGET)\dsatps.o: dsm.h
+$(TARGET)\dsatps.o: dsmgr.h
+$(TARGET)\dsatps.o: dsnetmdl.h
+$(TARGET)\dsatps.o: dsrmio.h
+$(TARGET)\dsatps.o: dssocket.h
+$(TARGET)\dsatps.o: dssocki.h
+$(TARGET)\dsatps.o: err.h
+$(TARGET)\dsatps.o: iface.h
+$(TARGET)\dsatps.o: internet.h
+$(TARGET)\dsatps.o: ip.h
+$(TARGET)\dsatps.o: mc.h
+$(TARGET)\dsatps.o: mdrrlp.h
+$(TARGET)\dsatps.o: msg.h
+$(TARGET)\dsatps.o: msm.h
+$(TARGET)\dsatps.o: msm50reg.h
+$(TARGET)\dsatps.o: netuser.h
+$(TARGET)\dsatps.o: nv.h
+$(TARGET)\dsatps.o: pppfsm.h
+$(TARGET)\dsatps.o: ps.h
+$(TARGET)\dsatps.o: psglobal.h
+$(TARGET)\dsatps.o: queue.h
+$(TARGET)\dsatps.o: qw.h
+$(TARGET)\dsatps.o: rex.h
+$(TARGET)\dsatps.o: rlp.h
+$(TARGET)\dsatps.o: sio.h
+$(TARGET)\dsatps.o: target.h
+$(TARGET)\dsatps.o: targetg.h
+$(TARGET)\dsatps.o: task.h
+$(TARGET)\dsatps.o: tcp.h
+$(TARGET)\dsatps.o: tramp.h
+
+$(TARGET)\dsatsio.o: CUST4SPE.H
+$(TARGET)\dsatsio.o: addrdefs.h
+$(TARGET)\dsatsio.o: cai.h
+$(TARGET)\dsatsio.o: clk.h
+$(TARGET)\dsatsio.o: cm.h
+$(TARGET)\dsatsio.o: cmd.h
+$(TARGET)\dsatsio.o: comdef.h
+$(TARGET)\dsatsio.o: customer.h
+$(TARGET)\dsatsio.o: db.h
+$(TARGET)\dsatsio.o: dog.h
+$(TARGET)\dsatsio.o: ds.h
+$(TARGET)\dsatsio.o: dsatcop.h
+$(TARGET)\dsatsio.o: dsatcopi.h
+$(TARGET)\dsatsio.o: dsatsio.c
+$(TARGET)\dsatsio.o: dsi.h
+$(TARGET)\dsatsio.o: dsm.h
+$(TARGET)\dsatsio.o: dsmgr.h
+$(TARGET)\dsatsio.o: dsnetmdl.h
+$(TARGET)\dsatsio.o: dsrmio.h
+$(TARGET)\dsatsio.o: dssocket.h
+$(TARGET)\dsatsio.o: dssocki.h
+$(TARGET)\dsatsio.o: err.h
+$(TARGET)\dsatsio.o: iface.h
+$(TARGET)\dsatsio.o: internet.h
+$(TARGET)\dsatsio.o: ip.h
+$(TARGET)\dsatsio.o: mc.h
+$(TARGET)\dsatsio.o: mdrrlp.h
+$(TARGET)\dsatsio.o: msg.h
+$(TARGET)\dsatsio.o: msm.h
+$(TARGET)\dsatsio.o: msm50reg.h
+$(TARGET)\dsatsio.o: netuser.h
+$(TARGET)\dsatsio.o: nv.h
+$(TARGET)\dsatsio.o: pppfsm.h
+$(TARGET)\dsatsio.o: ps.h
+$(TARGET)\dsatsio.o: psglobal.h
+$(TARGET)\dsatsio.o: queue.h
+$(TARGET)\dsatsio.o: qw.h
+$(TARGET)\dsatsio.o: rex.h
+$(TARGET)\dsatsio.o: rlp.h
+$(TARGET)\dsatsio.o: sio.h
+$(TARGET)\dsatsio.o: target.h
+$(TARGET)\dsatsio.o: targetg.h
+$(TARGET)\dsatsio.o: task.h
+$(TARGET)\dsatsio.o: tcp.h
+$(TARGET)\dsatsio.o: tramp.h
+
+$(TARGET)\dsctl.o: CUST4SPE.H
+$(TARGET)\dsctl.o: addrdefs.h
+$(TARGET)\dsctl.o: bit.h
+$(TARGET)\dsctl.o: cai.h
+$(TARGET)\dsctl.o: clk.h
+$(TARGET)\dsctl.o: cm.h
+$(TARGET)\dsctl.o: cmd.h
+$(TARGET)\dsctl.o: comdef.h
+$(TARGET)\dsctl.o: customer.h
+$(TARGET)\dsctl.o: db.h
+$(TARGET)\dsctl.o: dog.h
+$(TARGET)\dsctl.o: ds.h
+$(TARGET)\dsctl.o: dsctl.c
+$(TARGET)\dsctl.o: dsi.h
+$(TARGET)\dsctl.o: dsm.h
+$(TARGET)\dsctl.o: dsmgr.h
+$(TARGET)\dsctl.o: dsnetmdl.h
+$(TARGET)\dsctl.o: dsrmio.h
+$(TARGET)\dsctl.o: dssocfg.h
+$(TARGET)\dsctl.o: dssocket.h
+$(TARGET)\dsctl.o: dssocki.h
+$(TARGET)\dsctl.o: err.h
+$(TARGET)\dsctl.o: iface.h
+$(TARGET)\dsctl.o: internet.h
+$(TARGET)\dsctl.o: ip.h
+$(TARGET)\dsctl.o: mc.h
+$(TARGET)\dsctl.o: mdrrlp.h
+$(TARGET)\dsctl.o: memory.h
+$(TARGET)\dsctl.o: msg.h
+$(TARGET)\dsctl.o: msm.h
+$(TARGET)\dsctl.o: msm50reg.h
+$(TARGET)\dsctl.o: netuser.h
+$(TARGET)\dsctl.o: nv.h
+$(TARGET)\dsctl.o: pppfsm.h
+$(TARGET)\dsctl.o: ppplcp.h
+$(TARGET)\dsctl.o: psglobal.h
+$(TARGET)\dsctl.o: queue.h
+$(TARGET)\dsctl.o: qw.h
+$(TARGET)\dsctl.o: rex.h
+$(TARGET)\dsctl.o: rlp.h
+$(TARGET)\dsctl.o: sio.h
+$(TARGET)\dsctl.o: target.h
+$(TARGET)\dsctl.o: targetg.h
+$(TARGET)\dsctl.o: task.h
+$(TARGET)\dsctl.o: tcp.h
+$(TARGET)\dsctl.o: tramp.h
+
+$(TARGET)\dsm.o: CUST4SPE.H
+$(TARGET)\dsm.o: addrdefs.h
+$(TARGET)\dsm.o: assert.h
+$(TARGET)\dsm.o: cai.h
+$(TARGET)\dsm.o: clk.h
+$(TARGET)\dsm.o: cm.h
+$(TARGET)\dsm.o: cmd.h
+$(TARGET)\dsm.o: comdef.h
+$(TARGET)\dsm.o: customer.h
+$(TARGET)\dsm.o: db.h
+$(TARGET)\dsm.o: dog.h
+$(TARGET)\dsm.o: ds.h
+$(TARGET)\dsm.o: dsi.h
+$(TARGET)\dsm.o: dsm.c
+$(TARGET)\dsm.o: dsm.h
+$(TARGET)\dsm.o: dsnetmdl.h
+$(TARGET)\dsm.o: dssocket.h
+$(TARGET)\dsm.o: dssocki.h
+$(TARGET)\dsm.o: err.h
+$(TARGET)\dsm.o: iface.h
+$(TARGET)\dsm.o: internet.h
+$(TARGET)\dsm.o: ip.h
+$(TARGET)\dsm.o: mc.h
+$(TARGET)\dsm.o: mdrrlp.h
+$(TARGET)\dsm.o: memory.h
+$(TARGET)\dsm.o: msg.h
+$(TARGET)\dsm.o: msm.h
+$(TARGET)\dsm.o: msm50reg.h
+$(TARGET)\dsm.o: netuser.h
+$(TARGET)\dsm.o: nv.h
+$(TARGET)\dsm.o: pppfsm.h
+$(TARGET)\dsm.o: ps.h
+$(TARGET)\dsm.o: psglobal.h
+$(TARGET)\dsm.o: psi.h
+$(TARGET)\dsm.o: psmisc.h
+$(TARGET)\dsm.o: queue.h
+$(TARGET)\dsm.o: qw.h
+$(TARGET)\dsm.o: rex.h
+$(TARGET)\dsm.o: sio.h
+$(TARGET)\dsm.o: target.h
+$(TARGET)\dsm.o: targetg.h
+$(TARGET)\dsm.o: task.h
+$(TARGET)\dsm.o: tcp.h
+$(TARGET)\dsm.o: tramp.h
+
+$(TARGET)\dsmgr.o: CUST4SPE.H
+$(TARGET)\dsmgr.o: addrdefs.h
+$(TARGET)\dsmgr.o: assert.h
+$(TARGET)\dsmgr.o: cai.h
+$(TARGET)\dsmgr.o: caii.h
+$(TARGET)\dsmgr.o: clk.h
+$(TARGET)\dsmgr.o: cm.h
+$(TARGET)\dsmgr.o: cmd.h
+$(TARGET)\dsmgr.o: comdef.h
+$(TARGET)\dsmgr.o: customer.h
+$(TARGET)\dsmgr.o: db.h
+$(TARGET)\dsmgr.o: dec.h
+$(TARGET)\dsmgr.o: dec5000.h
+$(TARGET)\dsmgr.o: diag.h
+$(TARGET)\dsmgr.o: dog.h
+$(TARGET)\dsmgr.o: ds.h
+$(TARGET)\dsmgr.o: ds_snoop.h
+$(TARGET)\dsmgr.o: dsatcop.h
+$(TARGET)\dsmgr.o: dsi.h
+$(TARGET)\dsmgr.o: dsm.h
+$(TARGET)\dsmgr.o: dsmgr.c
+$(TARGET)\dsmgr.o: dsmgr.h
+$(TARGET)\dsmgr.o: dsnetmdl.h
+$(TARGET)\dsmgr.o: dsrmio.h
+$(TARGET)\dsmgr.o: dssdorm.h
+$(TARGET)\dsmgr.o: dssocfg.h
+$(TARGET)\dsmgr.o: dssocket.h
+$(TARGET)\dsmgr.o: dssocki.h
+$(TARGET)\dsmgr.o: dssoctl.h
+$(TARGET)\dsmgr.o: enc.h
+$(TARGET)\dsmgr.o: err.h
+$(TARGET)\dsmgr.o: iface.h
+$(TARGET)\dsmgr.o: internet.h
+$(TARGET)\dsmgr.o: ip.h
+$(TARGET)\dsmgr.o: mc.h
+$(TARGET)\dsmgr.o: mccsyobj.h
+$(TARGET)\dsmgr.o: mdrrlp.h
+$(TARGET)\dsmgr.o: memory.h
+$(TARGET)\dsmgr.o: msg.h
+$(TARGET)\dsmgr.o: msm.h
+$(TARGET)\dsmgr.o: msm50reg.h
+$(TARGET)\dsmgr.o: netuser.h
+$(TARGET)\dsmgr.o: nv.h
+$(TARGET)\dsmgr.o: ppp.h
+$(TARGET)\dsmgr.o: pppfsm.h
+$(TARGET)\dsmgr.o: ps.h
+$(TARGET)\dsmgr.o: psglobal.h
+$(TARGET)\dsmgr.o: psi.h
+$(TARGET)\dsmgr.o: queue.h
+$(TARGET)\dsmgr.o: qw.h
+$(TARGET)\dsmgr.o: rex.h
+$(TARGET)\dsmgr.o: rf.h
+$(TARGET)\dsmgr.o: rfc.h
+$(TARGET)\dsmgr.o: rficap.h
+$(TARGET)\dsmgr.o: rlp.h
+$(TARGET)\dsmgr.o: sdevmap.h
+$(TARGET)\dsmgr.o: sio.h
+$(TARGET)\dsmgr.o: sleep.h
+$(TARGET)\dsmgr.o: smsi.h
+$(TARGET)\dsmgr.o: snm.h
+$(TARGET)\dsmgr.o: srch.h
+$(TARGET)\dsmgr.o: target.h
+$(TARGET)\dsmgr.o: targetg.h
+$(TARGET)\dsmgr.o: task.h
+$(TARGET)\dsmgr.o: tcp.h
+$(TARGET)\dsmgr.o: tramp.h
+$(TARGET)\dsmgr.o: uapi.h
+$(TARGET)\dsmgr.o: uasms.h
+$(TARGET)\dsmgr.o: ui.h
+$(TARGET)\dsmgr.o: ulpn.h
+
+$(TARGET)\dsnetmdl.o: CUST4SPE.H
+$(TARGET)\dsnetmdl.o: addrdefs.h
+$(TARGET)\dsnetmdl.o: assert.h
+$(TARGET)\dsnetmdl.o: cai.h
+$(TARGET)\dsnetmdl.o: clk.h
+$(TARGET)\dsnetmdl.o: cm.h
+$(TARGET)\dsnetmdl.o: cmd.h
+$(TARGET)\dsnetmdl.o: comdef.h
+$(TARGET)\dsnetmdl.o: customer.h
+$(TARGET)\dsnetmdl.o: db.h
+$(TARGET)\dsnetmdl.o: dog.h
+$(TARGET)\dsnetmdl.o: ds.h
+$(TARGET)\dsnetmdl.o: ds_snoop.h
+$(TARGET)\dsnetmdl.o: dsatcop.h
+$(TARGET)\dsnetmdl.o: dsi.h
+$(TARGET)\dsnetmdl.o: dsm.h
+$(TARGET)\dsnetmdl.o: dsnetmdl.c
+$(TARGET)\dsnetmdl.o: dsnetmdl.h
+$(TARGET)\dsnetmdl.o: dssocket.h
+$(TARGET)\dsnetmdl.o: dssocki.h
+$(TARGET)\dsnetmdl.o: err.h
+$(TARGET)\dsnetmdl.o: iface.h
+$(TARGET)\dsnetmdl.o: internet.h
+$(TARGET)\dsnetmdl.o: ip.h
+$(TARGET)\dsnetmdl.o: mc.h
+$(TARGET)\dsnetmdl.o: mdrrlp.h
+$(TARGET)\dsnetmdl.o: memory.h
+$(TARGET)\dsnetmdl.o: msg.h
+$(TARGET)\dsnetmdl.o: msm.h
+$(TARGET)\dsnetmdl.o: msm50reg.h
+$(TARGET)\dsnetmdl.o: netuser.h
+$(TARGET)\dsnetmdl.o: nv.h
+$(TARGET)\dsnetmdl.o: ppp.h
+$(TARGET)\dsnetmdl.o: pppfsm.h
+$(TARGET)\dsnetmdl.o: pppipcp.h
+$(TARGET)\dsnetmdl.o: ppplcp.h
+$(TARGET)\dsnetmdl.o: ps.h
+$(TARGET)\dsnetmdl.o: psglobal.h
+$(TARGET)\dsnetmdl.o: psi.h
+$(TARGET)\dsnetmdl.o: queue.h
+$(TARGET)\dsnetmdl.o: qw.h
+$(TARGET)\dsnetmdl.o: rex.h
+$(TARGET)\dsnetmdl.o: sio.h
+$(TARGET)\dsnetmdl.o: slhc.h
+$(TARGET)\dsnetmdl.o: target.h
+$(TARGET)\dsnetmdl.o: targetg.h
+$(TARGET)\dsnetmdl.o: task.h
+$(TARGET)\dsnetmdl.o: tcp.h
+$(TARGET)\dsnetmdl.o: tramp.h
+
+$(TARGET)\dssdorm.o: CUST4SPE.H
+$(TARGET)\dssdorm.o: addrdefs.h
+$(TARGET)\dssdorm.o: assert.h
+$(TARGET)\dssdorm.o: cai.h
+$(TARGET)\dssdorm.o: clk.h
+$(TARGET)\dssdorm.o: cm.h
+$(TARGET)\dssdorm.o: cmd.h
+$(TARGET)\dssdorm.o: comdef.h
+$(TARGET)\dssdorm.o: customer.h
+$(TARGET)\dssdorm.o: db.h
+$(TARGET)\dssdorm.o: dog.h
+$(TARGET)\dssdorm.o: ds.h
+$(TARGET)\dssdorm.o: dsm.h
+$(TARGET)\dssdorm.o: dsnetmdl.h
+$(TARGET)\dssdorm.o: dssdorm.c
+$(TARGET)\dssdorm.o: dssdorm.h
+$(TARGET)\dssdorm.o: dssocket.h
+$(TARGET)\dssdorm.o: dssocki.h
+$(TARGET)\dssdorm.o: err.h
+$(TARGET)\dssdorm.o: iface.h
+$(TARGET)\dssdorm.o: internet.h
+$(TARGET)\dssdorm.o: ip.h
+$(TARGET)\dssdorm.o: mc.h
+$(TARGET)\dssdorm.o: mdrrlp.h
+$(TARGET)\dssdorm.o: msg.h
+$(TARGET)\dssdorm.o: msm.h
+$(TARGET)\dssdorm.o: msm50reg.h
+$(TARGET)\dssdorm.o: netuser.h
+$(TARGET)\dssdorm.o: nv.h
+$(TARGET)\dssdorm.o: pppfsm.h
+$(TARGET)\dssdorm.o: psglobal.h
+$(TARGET)\dssdorm.o: queue.h
+$(TARGET)\dssdorm.o: qw.h
+$(TARGET)\dssdorm.o: rex.h
+$(TARGET)\dssdorm.o: target.h
+$(TARGET)\dssdorm.o: targetg.h
+$(TARGET)\dssdorm.o: task.h
+$(TARGET)\dssdorm.o: tcp.h
+$(TARGET)\dssdorm.o: tramp.h
+
+$(TARGET)\dssnet.o: CUST4SPE.H
+$(TARGET)\dssnet.o: addrdefs.h
+$(TARGET)\dssnet.o: assert.h
+$(TARGET)\dssnet.o: cai.h
+$(TARGET)\dssnet.o: clk.h
+$(TARGET)\dssnet.o: cm.h
+$(TARGET)\dssnet.o: cmd.h
+$(TARGET)\dssnet.o: comdef.h
+$(TARGET)\dssnet.o: customer.h
+$(TARGET)\dssnet.o: db.h
+$(TARGET)\dssnet.o: dog.h
+$(TARGET)\dssnet.o: ds.h
+$(TARGET)\dssnet.o: dsm.h
+$(TARGET)\dssnet.o: dsnetmdl.h
+$(TARGET)\dssnet.o: dssdorm.h
+$(TARGET)\dssnet.o: dssnet.c
+$(TARGET)\dssnet.o: dssnet.h
+$(TARGET)\dssnet.o: dssocket.h
+$(TARGET)\dssnet.o: dssocki.h
+$(TARGET)\dssnet.o: err.h
+$(TARGET)\dssnet.o: iface.h
+$(TARGET)\dssnet.o: internet.h
+$(TARGET)\dssnet.o: ip.h
+$(TARGET)\dssnet.o: mc.h
+$(TARGET)\dssnet.o: mdrrlp.h
+$(TARGET)\dssnet.o: msg.h
+$(TARGET)\dssnet.o: msm.h
+$(TARGET)\dssnet.o: msm50reg.h
+$(TARGET)\dssnet.o: netuser.h
+$(TARGET)\dssnet.o: nv.h
+$(TARGET)\dssnet.o: pppfsm.h
+$(TARGET)\dssnet.o: psglobal.h
+$(TARGET)\dssnet.o: queue.h
+$(TARGET)\dssnet.o: qw.h
+$(TARGET)\dssnet.o: rex.h
+$(TARGET)\dssnet.o: target.h
+$(TARGET)\dssnet.o: targetg.h
+$(TARGET)\dssnet.o: task.h
+$(TARGET)\dssnet.o: tcp.h
+$(TARGET)\dssnet.o: tramp.h
+
+$(TARGET)\dssocfg.o: CUST4SPE.H
+$(TARGET)\dssocfg.o: addrdefs.h
+$(TARGET)\dssocfg.o: cai.h
+$(TARGET)\dssocfg.o: caii.h
+$(TARGET)\dssocfg.o: clk.h
+$(TARGET)\dssocfg.o: cm.h
+$(TARGET)\dssocfg.o: cmd.h
+$(TARGET)\dssocfg.o: comdef.h
+$(TARGET)\dssocfg.o: customer.h
+$(TARGET)\dssocfg.o: db.h
+$(TARGET)\dssocfg.o: dec.h
+$(TARGET)\dssocfg.o: dec5000.h
+$(TARGET)\dssocfg.o: dog.h
+$(TARGET)\dssocfg.o: ds.h
+$(TARGET)\dssocfg.o: dsatcop.h
+$(TARGET)\dssocfg.o: dsi.h
+$(TARGET)\dssocfg.o: dsm.h
+$(TARGET)\dssocfg.o: dsnetmdl.h
+$(TARGET)\dssocfg.o: dssocfg.c
+$(TARGET)\dssocfg.o: dssocfg.h
+$(TARGET)\dssocfg.o: dssocket.h
+$(TARGET)\dssocfg.o: dssocki.h
+$(TARGET)\dssocfg.o: dssoctl.h
+$(TARGET)\dssocfg.o: err.h
+$(TARGET)\dssocfg.o: iface.h
+$(TARGET)\dssocfg.o: internet.h
+$(TARGET)\dssocfg.o: ip.h
+$(TARGET)\dssocfg.o: mc.h
+$(TARGET)\dssocfg.o: mccsyobj.h
+$(TARGET)\dssocfg.o: mdrrlp.h
+$(TARGET)\dssocfg.o: msg.h
+$(TARGET)\dssocfg.o: msm.h
+$(TARGET)\dssocfg.o: msm50reg.h
+$(TARGET)\dssocfg.o: netuser.h
+$(TARGET)\dssocfg.o: nv.h
+$(TARGET)\dssocfg.o: pppfsm.h
+$(TARGET)\dssocfg.o: psglobal.h
+$(TARGET)\dssocfg.o: queue.h
+$(TARGET)\dssocfg.o: qw.h
+$(TARGET)\dssocfg.o: rex.h
+$(TARGET)\dssocfg.o: sio.h
+$(TARGET)\dssocfg.o: snm.h
+$(TARGET)\dssocfg.o: target.h
+$(TARGET)\dssocfg.o: targetg.h
+$(TARGET)\dssocfg.o: task.h
+$(TARGET)\dssocfg.o: tcp.h
+$(TARGET)\dssocfg.o: tramp.h
+
+$(TARGET)\dssocket.o: CUST4SPE.H
+$(TARGET)\dssocket.o: addrdefs.h
+$(TARGET)\dssocket.o: assert.h
+$(TARGET)\dssocket.o: cai.h
+$(TARGET)\dssocket.o: clk.h
+$(TARGET)\dssocket.o: cm.h
+$(TARGET)\dssocket.o: cmd.h
+$(TARGET)\dssocket.o: comdef.h
+$(TARGET)\dssocket.o: customer.h
+$(TARGET)\dssocket.o: db.h
+$(TARGET)\dssocket.o: dog.h
+$(TARGET)\dssocket.o: ds.h
+$(TARGET)\dssocket.o: dsm.h
+$(TARGET)\dssocket.o: dsnetmdl.h
+$(TARGET)\dssocket.o: dssdorm.h
+$(TARGET)\dssocket.o: dssnet.h
+$(TARGET)\dssocket.o: dssocket.c
+$(TARGET)\dssocket.o: dssocket.h
+$(TARGET)\dssocket.o: dssocki.h
+$(TARGET)\dssocket.o: err.h
+$(TARGET)\dssocket.o: iface.h
+$(TARGET)\dssocket.o: internet.h
+$(TARGET)\dssocket.o: ip.h
+$(TARGET)\dssocket.o: mc.h
+$(TARGET)\dssocket.o: mdrrlp.h
+$(TARGET)\dssocket.o: msg.h
+$(TARGET)\dssocket.o: msm.h
+$(TARGET)\dssocket.o: msm50reg.h
+$(TARGET)\dssocket.o: netuser.h
+$(TARGET)\dssocket.o: nv.h
+$(TARGET)\dssocket.o: pppfsm.h
+$(TARGET)\dssocket.o: psglobal.h
+$(TARGET)\dssocket.o: queue.h
+$(TARGET)\dssocket.o: qw.h
+$(TARGET)\dssocket.o: rex.h
+$(TARGET)\dssocket.o: target.h
+$(TARGET)\dssocket.o: targetg.h
+$(TARGET)\dssocket.o: task.h
+$(TARGET)\dssocket.o: tcp.h
+$(TARGET)\dssocket.o: tramp.h
+$(TARGET)\dssocket.o: udp.h
+
+$(TARGET)\dssocki.o: CUST4SPE.H
+$(TARGET)\dssocki.o: assert.h
+$(TARGET)\dssocki.o: comdef.h
+$(TARGET)\dssocki.o: customer.h
+$(TARGET)\dssocki.o: dsm.h
+$(TARGET)\dssocki.o: dsnetmdl.h
+$(TARGET)\dssocki.o: dssdorm.h
+$(TARGET)\dssocki.o: dssocket.h
+$(TARGET)\dssocki.o: dssocki.c
+$(TARGET)\dssocki.o: dssocki.h
+$(TARGET)\dssocki.o: dsstcp.h
+$(TARGET)\dssocki.o: dssudp.h
+$(TARGET)\dssocki.o: err.h
+$(TARGET)\dssocki.o: iface.h
+$(TARGET)\dssocki.o: internet.h
+$(TARGET)\dssocki.o: ip.h
+$(TARGET)\dssocki.o: msg.h
+$(TARGET)\dssocki.o: netuser.h
+$(TARGET)\dssocki.o: nv.h
+$(TARGET)\dssocki.o: pppfsm.h
+$(TARGET)\dssocki.o: ps.h
+$(TARGET)\dssocki.o: psglobal.h
+$(TARGET)\dssocki.o: queue.h
+$(TARGET)\dssocki.o: qw.h
+$(TARGET)\dssocki.o: rex.h
+$(TARGET)\dssocki.o: target.h
+$(TARGET)\dssocki.o: targetg.h
+$(TARGET)\dssocki.o: task.h
+$(TARGET)\dssocki.o: tcp.h
+
+$(TARGET)\dssoctl.o: CUST4SPE.H
+$(TARGET)\dssoctl.o: addrdefs.h
+$(TARGET)\dssoctl.o: assert.h
+$(TARGET)\dssoctl.o: cai.h
+$(TARGET)\dssoctl.o: caii.h
+$(TARGET)\dssoctl.o: clk.h
+$(TARGET)\dssoctl.o: cm.h
+$(TARGET)\dssoctl.o: cmd.h
+$(TARGET)\dssoctl.o: comdef.h
+$(TARGET)\dssoctl.o: customer.h
+$(TARGET)\dssoctl.o: db.h
+$(TARGET)\dssoctl.o: dec.h
+$(TARGET)\dssoctl.o: dec5000.h
+$(TARGET)\dssoctl.o: dog.h
+$(TARGET)\dssoctl.o: ds.h
+$(TARGET)\dssoctl.o: dsi.h
+$(TARGET)\dssoctl.o: dsm.h
+$(TARGET)\dssoctl.o: dsnetmdl.h
+$(TARGET)\dssoctl.o: dssocfg.h
+$(TARGET)\dssoctl.o: dssocket.h
+$(TARGET)\dssoctl.o: dssocki.h
+$(TARGET)\dssoctl.o: dssoctl.c
+$(TARGET)\dssoctl.o: dssoctl.h
+$(TARGET)\dssoctl.o: err.h
+$(TARGET)\dssoctl.o: iface.h
+$(TARGET)\dssoctl.o: internet.h
+$(TARGET)\dssoctl.o: ip.h
+$(TARGET)\dssoctl.o: mc.h
+$(TARGET)\dssoctl.o: mccsyobj.h
+$(TARGET)\dssoctl.o: mdrrlp.h
+$(TARGET)\dssoctl.o: msg.h
+$(TARGET)\dssoctl.o: msm.h
+$(TARGET)\dssoctl.o: msm50reg.h
+$(TARGET)\dssoctl.o: netuser.h
+$(TARGET)\dssoctl.o: nv.h
+$(TARGET)\dssoctl.o: pppfsm.h
+$(TARGET)\dssoctl.o: psglobal.h
+$(TARGET)\dssoctl.o: queue.h
+$(TARGET)\dssoctl.o: qw.h
+$(TARGET)\dssoctl.o: rex.h
+$(TARGET)\dssoctl.o: sio.h
+$(TARGET)\dssoctl.o: snm.h
+$(TARGET)\dssoctl.o: target.h
+$(TARGET)\dssoctl.o: targetg.h
+$(TARGET)\dssoctl.o: task.h
+$(TARGET)\dssoctl.o: tcp.h
+$(TARGET)\dssoctl.o: tramp.h
+
+$(TARGET)\dsstcp.o: CUST4SPE.H
+$(TARGET)\dsstcp.o: addrdefs.h
+$(TARGET)\dsstcp.o: assert.h
+$(TARGET)\dsstcp.o: cai.h
+$(TARGET)\dsstcp.o: clk.h
+$(TARGET)\dsstcp.o: cm.h
+$(TARGET)\dsstcp.o: cmd.h
+$(TARGET)\dsstcp.o: comdef.h
+$(TARGET)\dsstcp.o: customer.h
+$(TARGET)\dsstcp.o: db.h
+$(TARGET)\dsstcp.o: dog.h
+$(TARGET)\dsstcp.o: ds.h
+$(TARGET)\dsstcp.o: dsm.h
+$(TARGET)\dsstcp.o: dsnetmdl.h
+$(TARGET)\dsstcp.o: dssocket.h
+$(TARGET)\dsstcp.o: dssocki.h
+$(TARGET)\dsstcp.o: dsstcp.c
+$(TARGET)\dsstcp.o: dsstcp.h
+$(TARGET)\dsstcp.o: err.h
+$(TARGET)\dsstcp.o: iface.h
+$(TARGET)\dsstcp.o: internet.h
+$(TARGET)\dsstcp.o: ip.h
+$(TARGET)\dsstcp.o: mc.h
+$(TARGET)\dsstcp.o: mdrrlp.h
+$(TARGET)\dsstcp.o: msg.h
+$(TARGET)\dsstcp.o: msm.h
+$(TARGET)\dsstcp.o: msm50reg.h
+$(TARGET)\dsstcp.o: netuser.h
+$(TARGET)\dsstcp.o: nv.h
+$(TARGET)\dsstcp.o: pppfsm.h
+$(TARGET)\dsstcp.o: ps.h
+$(TARGET)\dsstcp.o: psglobal.h
+$(TARGET)\dsstcp.o: psi.h
+$(TARGET)\dsstcp.o: queue.h
+$(TARGET)\dsstcp.o: qw.h
+$(TARGET)\dsstcp.o: rex.h
+$(TARGET)\dsstcp.o: target.h
+$(TARGET)\dsstcp.o: targetg.h
+$(TARGET)\dsstcp.o: task.h
+$(TARGET)\dsstcp.o: tcp.h
+$(TARGET)\dsstcp.o: tramp.h
+
+$(TARGET)\dssudp.o: CUST4SPE.H
+$(TARGET)\dssudp.o: assert.h
+$(TARGET)\dssudp.o: comdef.h
+$(TARGET)\dssudp.o: customer.h
+$(TARGET)\dssudp.o: dsm.h
+$(TARGET)\dssudp.o: dsnetmdl.h
+$(TARGET)\dssudp.o: dssocket.h
+$(TARGET)\dssudp.o: dssocki.h
+$(TARGET)\dssudp.o: dssudp.c
+$(TARGET)\dssudp.o: err.h
+$(TARGET)\dssudp.o: iface.h
+$(TARGET)\dssudp.o: internet.h
+$(TARGET)\dssudp.o: ip.h
+$(TARGET)\dssudp.o: memory.h
+$(TARGET)\dssudp.o: msg.h
+$(TARGET)\dssudp.o: netuser.h
+$(TARGET)\dssudp.o: nv.h
+$(TARGET)\dssudp.o: pppfsm.h
+$(TARGET)\dssudp.o: ps.h
+$(TARGET)\dssudp.o: psglobal.h
+$(TARGET)\dssudp.o: queue.h
+$(TARGET)\dssudp.o: qw.h
+$(TARGET)\dssudp.o: rex.h
+$(TARGET)\dssudp.o: target.h
+$(TARGET)\dssudp.o: targetg.h
+$(TARGET)\dssudp.o: tcp.h
+$(TARGET)\dssudp.o: udp.h
+
+$(TARGET)\enc.o: CUST4SPE.H
+$(TARGET)\enc.o: addrdefs.h
+$(TARGET)\enc.o: arm.h
+$(TARGET)\enc.o: assert.h
+$(TARGET)\enc.o: bio.h
+$(TARGET)\enc.o: biog.h
+$(TARGET)\enc.o: cai.h
+$(TARGET)\enc.o: clk.h
+$(TARGET)\enc.o: cmd.h
+$(TARGET)\enc.o: comdef.h
+$(TARGET)\enc.o: customer.h
+$(TARGET)\enc.o: deci.h
+$(TARGET)\enc.o: dmod.h
+$(TARGET)\enc.o: dog.h
+$(TARGET)\enc.o: enc.c
+$(TARGET)\enc.o: enc.h
+$(TARGET)\enc.o: enci.h
+$(TARGET)\enc.o: err.h
+$(TARGET)\enc.o: hw.h
+$(TARGET)\enc.o: mc.h
+$(TARGET)\enc.o: misc.h
+$(TARGET)\enc.o: msg.h
+$(TARGET)\enc.o: msm.h
+$(TARGET)\enc.o: msm50reg.h
+$(TARGET)\enc.o: nv.h
+$(TARGET)\enc.o: processor.h
+$(TARGET)\enc.o: queue.h
+$(TARGET)\enc.o: qw.h
+$(TARGET)\enc.o: rex.h
+$(TARGET)\enc.o: srch.h
+$(TARGET)\enc.o: target.h
+$(TARGET)\enc.o: targetg.h
+$(TARGET)\enc.o: task.h
+$(TARGET)\enc.o: tramp.h
+$(TARGET)\enc.o: ulpn.h
+
+$(TARGET)\err.o: CUST4SPE.H
+$(TARGET)\err.o: addrdefs.h
+$(TARGET)\err.o: arm.h
+$(TARGET)\err.o: bio.h
+$(TARGET)\err.o: biog.h
+$(TARGET)\err.o: c:\apps\arm250\include\string.h
+$(TARGET)\err.o: comdef.h
+$(TARGET)\err.o: customer.h
+$(TARGET)\err.o: deci.h
+$(TARGET)\err.o: dmod.h
+$(TARGET)\err.o: enc.h
+$(TARGET)\err.o: enci.h
+$(TARGET)\err.o: err.c
+$(TARGET)\err.o: err.h
+$(TARGET)\err.o: hs.h
+$(TARGET)\err.o: hw.h
+$(TARGET)\err.o: lcd.h
+$(TARGET)\err.o: msg.h
+$(TARGET)\err.o: msm.h
+$(TARGET)\err.o: msm50reg.h
+$(TARGET)\err.o: nv.h
+$(TARGET)\err.o: processor.h
+$(TARGET)\err.o: queue.h
+$(TARGET)\err.o: qw.h
+$(TARGET)\err.o: rex.h
+$(TARGET)\err.o: ring.h
+$(TARGET)\err.o: sndring.h
+$(TARGET)\err.o: target.h
+$(TARGET)\err.o: targetg.h
+
+$(TARGET)\feature.o: CUST4SPE.H
+$(TARGET)\feature.o: comdef.h
+$(TARGET)\feature.o: customer.h
+$(TARGET)\feature.o: feature.c
+$(TARGET)\feature.o: feature.h
+$(TARGET)\feature.o: rex.h
+$(TARGET)\feature.o: target.h
+$(TARGET)\feature.o: targetg.h
+
+$(TARGET)\fs.o: CUST4SPE.H
+$(TARGET)\fs.o: addrdefs.h
+$(TARGET)\fs.o: cai.h
+$(TARGET)\fs.o: clk.h
+$(TARGET)\fs.o: cmd.h
+$(TARGET)\fs.o: comdef.h
+$(TARGET)\fs.o: customer.h
+$(TARGET)\fs.o: dog.h
+$(TARGET)\fs.o: err.h
+$(TARGET)\fs.o: fs.c
+$(TARGET)\fs.o: fs.h
+$(TARGET)\fs.o: fs_alloc.h
+$(TARGET)\fs.o: fs_dir.h
+$(TARGET)\fs.o: fs_ops.h
+$(TARGET)\fs.o: fs_parms.h
+$(TARGET)\fs.o: fsi.h
+$(TARGET)\fs.o: mc.h
+$(TARGET)\fs.o: memory.h
+$(TARGET)\fs.o: msg.h
+$(TARGET)\fs.o: msm.h
+$(TARGET)\fs.o: msm50reg.h
+$(TARGET)\fs.o: nv.h
+$(TARGET)\fs.o: queue.h
+$(TARGET)\fs.o: qw.h
+$(TARGET)\fs.o: rex.h
+$(TARGET)\fs.o: target.h
+$(TARGET)\fs.o: targetg.h
+$(TARGET)\fs.o: task.h
+$(TARGET)\fs.o: tramp.h
+
+$(TARGET)\fs_alloc.o: CUST4SPE.H
+$(TARGET)\fs_alloc.o: addrdefs.h
+$(TARGET)\fs_alloc.o: clk.h
+$(TARGET)\fs_alloc.o: comdef.h
+$(TARGET)\fs_alloc.o: crc.h
+$(TARGET)\fs_alloc.o: customer.h
+$(TARGET)\fs_alloc.o: dog.h
+$(TARGET)\fs_alloc.o: err.h
+$(TARGET)\fs_alloc.o: fs.h
+$(TARGET)\fs_alloc.o: fs_alloc.c
+$(TARGET)\fs_alloc.o: fs_alloc.h
+$(TARGET)\fs_alloc.o: fs_dev.h
+$(TARGET)\fs_alloc.o: fs_dir.h
+$(TARGET)\fs_alloc.o: fs_parms.h
+$(TARGET)\fs_alloc.o: fsi.h
+$(TARGET)\fs_alloc.o: msg.h
+$(TARGET)\fs_alloc.o: msm.h
+$(TARGET)\fs_alloc.o: msm50reg.h
+$(TARGET)\fs_alloc.o: nv.h
+$(TARGET)\fs_alloc.o: queue.h
+$(TARGET)\fs_alloc.o: qw.h
+$(TARGET)\fs_alloc.o: rex.h
+$(TARGET)\fs_alloc.o: target.h
+$(TARGET)\fs_alloc.o: targetg.h
+$(TARGET)\fs_alloc.o: task.h
+$(TARGET)\fs_alloc.o: tramp.h
+
+$(TARGET)\fs_dev.o: CUST4SPE.H
+$(TARGET)\fs_dev.o: addrdefs.h
+$(TARGET)\fs_dev.o: clk.h
+$(TARGET)\fs_dev.o: comdef.h
+$(TARGET)\fs_dev.o: customer.h
+$(TARGET)\fs_dev.o: err.h
+$(TARGET)\fs_dev.o: fs.h
+$(TARGET)\fs_dev.o: fs_dev.c
+$(TARGET)\fs_dev.o: fs_dev.h
+$(TARGET)\fs_dev.o: fs_devi.h
+$(TARGET)\fs_dev.o: fs_parms.h
+$(TARGET)\fs_dev.o: fsi.h
+$(TARGET)\fs_dev.o: memory.h
+$(TARGET)\fs_dev.o: msg.h
+$(TARGET)\fs_dev.o: msm.h
+$(TARGET)\fs_dev.o: msm50reg.h
+$(TARGET)\fs_dev.o: nv.h
+$(TARGET)\fs_dev.o: queue.h
+$(TARGET)\fs_dev.o: qw.h
+$(TARGET)\fs_dev.o: rex.h
+$(TARGET)\fs_dev.o: target.h
+$(TARGET)\fs_dev.o: targetg.h
+$(TARGET)\fs_dev.o: tramp.h
+
+$(TARGET)\fs_dir.o: CUST4SPE.H
+$(TARGET)\fs_dir.o: addrdefs.h
+$(TARGET)\fs_dir.o: clk.h
+$(TARGET)\fs_dir.o: comdef.h
+$(TARGET)\fs_dir.o: crc.h
+$(TARGET)\fs_dir.o: customer.h
+$(TARGET)\fs_dir.o: dog.h
+$(TARGET)\fs_dir.o: err.h
+$(TARGET)\fs_dir.o: fs.h
+$(TARGET)\fs_dir.o: fs_alloc.h
+$(TARGET)\fs_dir.o: fs_dev.h
+$(TARGET)\fs_dir.o: fs_dir.c
+$(TARGET)\fs_dir.o: fs_dir.h
+$(TARGET)\fs_dir.o: fs_ops.h
+$(TARGET)\fs_dir.o: fs_parms.h
+$(TARGET)\fs_dir.o: fs_udir.h
+$(TARGET)\fs_dir.o: fsi.h
+$(TARGET)\fs_dir.o: msg.h
+$(TARGET)\fs_dir.o: msm.h
+$(TARGET)\fs_dir.o: msm50reg.h
+$(TARGET)\fs_dir.o: nv.h
+$(TARGET)\fs_dir.o: queue.h
+$(TARGET)\fs_dir.o: qw.h
+$(TARGET)\fs_dir.o: rex.h
+$(TARGET)\fs_dir.o: target.h
+$(TARGET)\fs_dir.o: targetg.h
+$(TARGET)\fs_dir.o: task.h
+$(TARGET)\fs_dir.o: tramp.h
+
+$(TARGET)\fs_ops.o: CUST4SPE.H
+$(TARGET)\fs_ops.o: addrdefs.h
+$(TARGET)\fs_ops.o: clk.h
+$(TARGET)\fs_ops.o: comdef.h
+$(TARGET)\fs_ops.o: customer.h
+$(TARGET)\fs_ops.o: err.h
+$(TARGET)\fs_ops.o: fs.h
+$(TARGET)\fs_ops.o: fs_alloc.h
+$(TARGET)\fs_ops.o: fs_dev.h
+$(TARGET)\fs_ops.o: fs_dir.h
+$(TARGET)\fs_ops.o: fs_ops.c
+$(TARGET)\fs_ops.o: fs_ops.h
+$(TARGET)\fs_ops.o: fs_parms.h
+$(TARGET)\fs_ops.o: fs_udir.h
+$(TARGET)\fs_ops.o: fsi.h
+$(TARGET)\fs_ops.o: memory.h
+$(TARGET)\fs_ops.o: msg.h
+$(TARGET)\fs_ops.o: msm.h
+$(TARGET)\fs_ops.o: msm50reg.h
+$(TARGET)\fs_ops.o: nv.h
+$(TARGET)\fs_ops.o: queue.h
+$(TARGET)\fs_ops.o: qw.h
+$(TARGET)\fs_ops.o: rex.h
+$(TARGET)\fs_ops.o: target.h
+$(TARGET)\fs_ops.o: targetg.h
+$(TARGET)\fs_ops.o: task.h
+$(TARGET)\fs_ops.o: tramp.h
+
+$(TARGET)\fs_udir.o: CUST4SPE.H
+$(TARGET)\fs_udir.o: comdef.h
+$(TARGET)\fs_udir.o: customer.h
+$(TARGET)\fs_udir.o: err.h
+$(TARGET)\fs_udir.o: fs.h
+$(TARGET)\fs_udir.o: fs_dir.h
+$(TARGET)\fs_udir.o: fs_ops.h
+$(TARGET)\fs_udir.o: fs_parms.h
+$(TARGET)\fs_udir.o: fs_udir.c
+$(TARGET)\fs_udir.o: fs_udir.h
+$(TARGET)\fs_udir.o: fsi.h
+$(TARGET)\fs_udir.o: msg.h
+$(TARGET)\fs_udir.o: nv.h
+$(TARGET)\fs_udir.o: queue.h
+$(TARGET)\fs_udir.o: qw.h
+$(TARGET)\fs_udir.o: rex.h
+$(TARGET)\fs_udir.o: target.h
+$(TARGET)\fs_udir.o: targetg.h
+
+$(TARGET)\hsg.o: CUST4SPE.H
+$(TARGET)\hsg.o: addrdefs.h
+$(TARGET)\hsg.o: arm.h
+$(TARGET)\hsg.o: bio.h
+$(TARGET)\hsg.o: biog.h
+$(TARGET)\hsg.o: cai.h
+$(TARGET)\hsg.o: clk.h
+$(TARGET)\hsg.o: cmd.h
+$(TARGET)\hsg.o: comdef.h
+$(TARGET)\hsg.o: customer.h
+$(TARGET)\hsg.o: db.h
+$(TARGET)\hsg.o: deci.h
+$(TARGET)\hsg.o: dmod.h
+$(TARGET)\hsg.o: dog.h
+$(TARGET)\hsg.o: enc.h
+$(TARGET)\hsg.o: enci.h
+$(TARGET)\hsg.o: err.h
+$(TARGET)\hsg.o: hs.h
+$(TARGET)\hsg.o: hsg.c
+$(TARGET)\hsg.o: hsig.h
+$(TARGET)\hsg.o: mc.h
+$(TARGET)\hsg.o: memory.h
+$(TARGET)\hsg.o: msg.h
+$(TARGET)\hsg.o: msm.h
+$(TARGET)\hsg.o: msm50reg.h
+$(TARGET)\hsg.o: nv.h
+$(TARGET)\hsg.o: processor.h
+$(TARGET)\hsg.o: queue.h
+$(TARGET)\hsg.o: qw.h
+$(TARGET)\hsg.o: rex.h
+$(TARGET)\hsg.o: rf.h
+$(TARGET)\hsg.o: rfc.h
+$(TARGET)\hsg.o: rficap.h
+$(TARGET)\hsg.o: sleep.h
+$(TARGET)\hsg.o: snd.h
+$(TARGET)\hsg.o: srch.h
+$(TARGET)\hsg.o: target.h
+$(TARGET)\hsg.o: targetg.h
+$(TARGET)\hsg.o: task.h
+$(TARGET)\hsg.o: tramp.h
+$(TARGET)\hsg.o: ulpn.h
+$(TARGET)\hsg.o: voc_core.h
+
+$(TARGET)\hw.o: CUST4SPE.H
+$(TARGET)\hw.o: addrdefs.h
+$(TARGET)\hw.o: arm.h
+$(TARGET)\hw.o: bio.h
+$(TARGET)\hw.o: biog.h
+$(TARGET)\hw.o: clk.h
+$(TARGET)\hw.o: comdef.h
+$(TARGET)\hw.o: customer.h
+$(TARGET)\hw.o: deci.h
+$(TARGET)\hw.o: dmod.h
+$(TARGET)\hw.o: dog.h
+$(TARGET)\hw.o: enci.h
+$(TARGET)\hw.o: err.h
+$(TARGET)\hw.o: hw.c
+$(TARGET)\hw.o: hw.h
+$(TARGET)\hw.o: msg.h
+$(TARGET)\hw.o: msm.h
+$(TARGET)\hw.o: msm50reg.h
+$(TARGET)\hw.o: nv.h
+$(TARGET)\hw.o: processor.h
+$(TARGET)\hw.o: queue.h
+$(TARGET)\hw.o: qw.h
+$(TARGET)\hw.o: rex.h
+$(TARGET)\hw.o: target.h
+$(TARGET)\hw.o: targetg.h
+$(TARGET)\hw.o: task.h
+$(TARGET)\hw.o: tramp.h
+$(TARGET)\hw.o: voc_core.h
+
+$(TARGET)\icmp.o: CUST4SPE.H
+$(TARGET)\icmp.o: addrdefs.h
+$(TARGET)\icmp.o: clk.h
+$(TARGET)\icmp.o: comdef.h
+$(TARGET)\icmp.o: customer.h
+$(TARGET)\icmp.o: dsm.h
+$(TARGET)\icmp.o: dsnetmdl.h
+$(TARGET)\icmp.o: err.h
+$(TARGET)\icmp.o: icmp.c
+$(TARGET)\icmp.o: icmp.h
+$(TARGET)\icmp.o: iface.h
+$(TARGET)\icmp.o: internet.h
+$(TARGET)\icmp.o: ip.h
+$(TARGET)\icmp.o: memory.h
+$(TARGET)\icmp.o: msg.h
+$(TARGET)\icmp.o: msm.h
+$(TARGET)\icmp.o: msm50reg.h
+$(TARGET)\icmp.o: netuser.h
+$(TARGET)\icmp.o: nv.h
+$(TARGET)\icmp.o: pppfsm.h
+$(TARGET)\icmp.o: psglobal.h
+$(TARGET)\icmp.o: psmisc.h
+$(TARGET)\icmp.o: queue.h
+$(TARGET)\icmp.o: qw.h
+$(TARGET)\icmp.o: rex.h
+$(TARGET)\icmp.o: target.h
+$(TARGET)\icmp.o: targetg.h
+$(TARGET)\icmp.o: tramp.h
+
+$(TARGET)\ip.o: CUST4SPE.H
+$(TARGET)\ip.o: addrdefs.h
+$(TARGET)\ip.o: cai.h
+$(TARGET)\ip.o: clk.h
+$(TARGET)\ip.o: cm.h
+$(TARGET)\ip.o: cmd.h
+$(TARGET)\ip.o: comdef.h
+$(TARGET)\ip.o: customer.h
+$(TARGET)\ip.o: db.h
+$(TARGET)\ip.o: dog.h
+$(TARGET)\ip.o: ds.h
+$(TARGET)\ip.o: dsm.h
+$(TARGET)\ip.o: dsnetmdl.h
+$(TARGET)\ip.o: dssocket.h
+$(TARGET)\ip.o: dssocki.h
+$(TARGET)\ip.o: err.h
+$(TARGET)\ip.o: icmp.h
+$(TARGET)\ip.o: iface.h
+$(TARGET)\ip.o: internet.h
+$(TARGET)\ip.o: ip.c
+$(TARGET)\ip.o: ip.h
+$(TARGET)\ip.o: mc.h
+$(TARGET)\ip.o: mdrrlp.h
+$(TARGET)\ip.o: memory.h
+$(TARGET)\ip.o: msg.h
+$(TARGET)\ip.o: msm.h
+$(TARGET)\ip.o: msm50reg.h
+$(TARGET)\ip.o: netuser.h
+$(TARGET)\ip.o: nv.h
+$(TARGET)\ip.o: ppp.h
+$(TARGET)\ip.o: pppfsm.h
+$(TARGET)\ip.o: ps.h
+$(TARGET)\ip.o: psglobal.h
+$(TARGET)\ip.o: psi.h
+$(TARGET)\ip.o: queue.h
+$(TARGET)\ip.o: qw.h
+$(TARGET)\ip.o: rex.h
+$(TARGET)\ip.o: target.h
+$(TARGET)\ip.o: targetg.h
+$(TARGET)\ip.o: task.h
+$(TARGET)\ip.o: tcp.h
+$(TARGET)\ip.o: tramp.h
+$(TARGET)\ip.o: udp.h
+
+$(TARGET)\iphdr.o: CUST4SPE.H
+$(TARGET)\iphdr.o: addrdefs.h
+$(TARGET)\iphdr.o: clk.h
+$(TARGET)\iphdr.o: comdef.h
+$(TARGET)\iphdr.o: customer.h
+$(TARGET)\iphdr.o: dsm.h
+$(TARGET)\iphdr.o: dsnetmdl.h
+$(TARGET)\iphdr.o: iface.h
+$(TARGET)\iphdr.o: internet.h
+$(TARGET)\iphdr.o: ip.h
+$(TARGET)\iphdr.o: iphdr.c
+$(TARGET)\iphdr.o: memory.h
+$(TARGET)\iphdr.o: msm.h
+$(TARGET)\iphdr.o: msm50reg.h
+$(TARGET)\iphdr.o: pppfsm.h
+$(TARGET)\iphdr.o: psglobal.h
+$(TARGET)\iphdr.o: psmisc.h
+$(TARGET)\iphdr.o: queue.h
+$(TARGET)\iphdr.o: qw.h
+$(TARGET)\iphdr.o: rex.h
+$(TARGET)\iphdr.o: target.h
+$(TARGET)\iphdr.o: targetg.h
+$(TARGET)\iphdr.o: tramp.h
+
+$(TARGET)\lcd.o: CUST4SPE.H
+$(TARGET)\lcd.o: addrdefs.h
+$(TARGET)\lcd.o: arm.h
+$(TARGET)\lcd.o: bio.h
+$(TARGET)\lcd.o: biog.h
+$(TARGET)\lcd.o: boothw.h
+$(TARGET)\lcd.o: comdef.h
+$(TARGET)\lcd.o: customer.h
+$(TARGET)\lcd.o: deci.h
+$(TARGET)\lcd.o: dmod.h
+$(TARGET)\lcd.o: enci.h
+$(TARGET)\lcd.o: lcd.c
+$(TARGET)\lcd.o: lcdp.h
+$(TARGET)\lcd.o: msm.h
+$(TARGET)\lcd.o: msm50reg.h
+$(TARGET)\lcd.o: processor.h
+$(TARGET)\lcd.o: rex.h
+$(TARGET)\lcd.o: target.h
+$(TARGET)\lcd.o: targetg.h
+
+$(TARGET)\lifetstg.o: CUST4SPE.H
+$(TARGET)\lifetstg.o: acpmc.h
+$(TARGET)\lifetstg.o: addrdefs.h
+$(TARGET)\lifetstg.o: arm.h
+$(TARGET)\lifetstg.o: bio.h
+$(TARGET)\lifetstg.o: biog.h
+$(TARGET)\lifetstg.o: cai.h
+$(TARGET)\lifetstg.o: caii.h
+$(TARGET)\lifetstg.o: clk.h
+$(TARGET)\lifetstg.o: cm.h
+$(TARGET)\lifetstg.o: cmd.h
+$(TARGET)\lifetstg.o: cmmc.h
+$(TARGET)\lifetstg.o: comdef.h
+$(TARGET)\lifetstg.o: customer.h
+$(TARGET)\lifetstg.o: db.h
+$(TARGET)\lifetstg.o: dec.h
+$(TARGET)\lifetstg.o: dec5000.h
+$(TARGET)\lifetstg.o: deci.h
+$(TARGET)\lifetstg.o: deint.h
+$(TARGET)\lifetstg.o: dmod.h
+$(TARGET)\lifetstg.o: dog.h
+$(TARGET)\lifetstg.o: ds.h
+$(TARGET)\lifetstg.o: dsm.h
+$(TARGET)\lifetstg.o: dsnetmdl.h
+$(TARGET)\lifetstg.o: dssocket.h
+$(TARGET)\lifetstg.o: dssocki.h
+$(TARGET)\lifetstg.o: enc.h
+$(TARGET)\lifetstg.o: enci.h
+$(TARGET)\lifetstg.o: hs.h
+$(TARGET)\lifetstg.o: iface.h
+$(TARGET)\lifetstg.o: internet.h
+$(TARGET)\lifetstg.o: ip.h
+$(TARGET)\lifetstg.o: lifetstg.c
+$(TARGET)\lifetstg.o: mc.h
+$(TARGET)\lifetstg.o: mcc.h
+$(TARGET)\lifetstg.o: mccdma.h
+$(TARGET)\lifetstg.o: mccsrch.h
+$(TARGET)\lifetstg.o: mdrrlp.h
+$(TARGET)\lifetstg.o: memory.h
+$(TARGET)\lifetstg.o: msm.h
+$(TARGET)\lifetstg.o: msm50reg.h
+$(TARGET)\lifetstg.o: netuser.h
+$(TARGET)\lifetstg.o: nv.h
+$(TARGET)\lifetstg.o: otaspi.h
+$(TARGET)\lifetstg.o: pppfsm.h
+$(TARGET)\lifetstg.o: processor.h
+$(TARGET)\lifetstg.o: psglobal.h
+$(TARGET)\lifetstg.o: queue.h
+$(TARGET)\lifetstg.o: qw.h
+$(TARGET)\lifetstg.o: rex.h
+$(TARGET)\lifetstg.o: rf.h
+$(TARGET)\lifetstg.o: rfc.h
+$(TARGET)\lifetstg.o: rficap.h
+$(TARGET)\lifetstg.o: rfnv.h
+$(TARGET)\lifetstg.o: ring.h
+$(TARGET)\lifetstg.o: rxc.h
+$(TARGET)\lifetstg.o: rxtx.h
+$(TARGET)\lifetstg.o: sio.h
+$(TARGET)\lifetstg.o: sleep.h
+$(TARGET)\lifetstg.o: snd.h
+$(TARGET)\lifetstg.o: sndi.h
+$(TARGET)\lifetstg.o: sndring.h
+$(TARGET)\lifetstg.o: srch.h
+$(TARGET)\lifetstg.o: target.h
+$(TARGET)\lifetstg.o: targetg.h
+$(TARGET)\lifetstg.o: task.h
+$(TARGET)\lifetstg.o: tcp.h
+$(TARGET)\lifetstg.o: tramp.h
+$(TARGET)\lifetstg.o: txc.h
+$(TARGET)\lifetstg.o: uapi.h
+$(TARGET)\lifetstg.o: uasms.h
+$(TARGET)\lifetstg.o: uasmsi.h
+$(TARGET)\lifetstg.o: ulpn.h
+$(TARGET)\lifetstg.o: voc.h
+$(TARGET)\lifetstg.o: voc_core.h
+$(TARGET)\lifetstg.o: vocmux.h
+
+$(TARGET)\log.o: CUST4SPE.H
+$(TARGET)\log.o: addrdefs.h
+$(TARGET)\log.o: cai.h
+$(TARGET)\log.o: clk.h
+$(TARGET)\log.o: cm.h
+$(TARGET)\log.o: cmd.h
+$(TARGET)\log.o: comdef.h
+$(TARGET)\log.o: customer.h
+$(TARGET)\log.o: db.h
+$(TARGET)\log.o: diag.h
+$(TARGET)\log.o: diagt.h
+$(TARGET)\log.o: dog.h
+$(TARGET)\log.o: ds.h
+$(TARGET)\log.o: dsm.h
+$(TARGET)\log.o: dsnetmdl.h
+$(TARGET)\log.o: dssocket.h
+$(TARGET)\log.o: dssocki.h
+$(TARGET)\log.o: enc.h
+$(TARGET)\log.o: iface.h
+$(TARGET)\log.o: internet.h
+$(TARGET)\log.o: ip.h
+$(TARGET)\log.o: log.c
+$(TARGET)\log.o: log.h
+$(TARGET)\log.o: mc.h
+$(TARGET)\log.o: mdrrlp.h
+$(TARGET)\log.o: msm.h
+$(TARGET)\log.o: msm50reg.h
+$(TARGET)\log.o: netuser.h
+$(TARGET)\log.o: nv.h
+$(TARGET)\log.o: pppfsm.h
+$(TARGET)\log.o: psglobal.h
+$(TARGET)\log.o: queue.h
+$(TARGET)\log.o: qw.h
+$(TARGET)\log.o: rex.h
+$(TARGET)\log.o: sio.h
+$(TARGET)\log.o: srch.h
+$(TARGET)\log.o: target.h
+$(TARGET)\log.o: targetg.h
+$(TARGET)\log.o: task.h
+$(TARGET)\log.o: tcp.h
+$(TARGET)\log.o: tramp.h
+$(TARGET)\log.o: ulpn.h
+
+$(TARGET)\loopback.o: CUST4SPE.H
+$(TARGET)\loopback.o: bit.h
+$(TARGET)\loopback.o: cai.h
+$(TARGET)\loopback.o: comdef.h
+$(TARGET)\loopback.o: customer.h
+$(TARGET)\loopback.o: err.h
+$(TARGET)\loopback.o: loopback.c
+$(TARGET)\loopback.o: loopback.h
+$(TARGET)\loopback.o: msg.h
+$(TARGET)\loopback.o: nv.h
+$(TARGET)\loopback.o: queue.h
+$(TARGET)\loopback.o: qw.h
+$(TARGET)\loopback.o: rex.h
+$(TARGET)\loopback.o: target.h
+$(TARGET)\loopback.o: targetg.h
+
+$(TARGET)\mar.o: CUST4SPE.H
+$(TARGET)\mar.o: cai.h
+$(TARGET)\mar.o: comdef.h
+$(TARGET)\mar.o: customer.h
+$(TARGET)\mar.o: mar.c
+$(TARGET)\mar.o: mar.h
+$(TARGET)\mar.o: martable.h
+$(TARGET)\mar.o: memory.h
+$(TARGET)\mar.o: nv.h
+$(TARGET)\mar.o: queue.h
+$(TARGET)\mar.o: qw.h
+$(TARGET)\mar.o: rex.h
+$(TARGET)\mar.o: target.h
+$(TARGET)\mar.o: targetg.h
+
+$(TARGET)\martable.o: CUST4SPE.H
+$(TARGET)\martable.o: comdef.h
+$(TARGET)\martable.o: customer.h
+$(TARGET)\martable.o: martable.c
+$(TARGET)\martable.o: martable.h
+$(TARGET)\martable.o: rex.h
+$(TARGET)\martable.o: target.h
+$(TARGET)\martable.o: targetg.h
+
+$(TARGET)\mc.o: CUST4SPE.H
+$(TARGET)\mc.o: acp553.h
+$(TARGET)\mc.o: acpcmdef.h
+$(TARGET)\mc.o: acpmc.h
+$(TARGET)\mc.o: acpwb.h
+$(TARGET)\mc.o: addrdefs.h
+$(TARGET)\mc.o: arm.h
+$(TARGET)\mc.o: bio.h
+$(TARGET)\mc.o: biog.h
+$(TARGET)\mc.o: cai.h
+$(TARGET)\mc.o: caii.h
+$(TARGET)\mc.o: clk.h
+$(TARGET)\mc.o: clkregim.h
+$(TARGET)\mc.o: cm.h
+$(TARGET)\mc.o: cmd.h
+$(TARGET)\mc.o: cmmc.h
+$(TARGET)\mc.o: comdef.h
+$(TARGET)\mc.o: customer.h
+$(TARGET)\mc.o: db.h
+$(TARGET)\mc.o: dec.h
+$(TARGET)\mc.o: dec5000.h
+$(TARGET)\mc.o: deci.h
+$(TARGET)\mc.o: deint.h
+$(TARGET)\mc.o: diag.h
+$(TARGET)\mc.o: dmddown.h
+$(TARGET)\mc.o: dmod.h
+$(TARGET)\mc.o: dog.h
+$(TARGET)\mc.o: ds.h
+$(TARGET)\mc.o: dsm.h
+$(TARGET)\mc.o: dsnetmdl.h
+$(TARGET)\mc.o: dssocket.h
+$(TARGET)\mc.o: dssocki.h
+$(TARGET)\mc.o: enc.h
+$(TARGET)\mc.o: enci.h
+$(TARGET)\mc.o: err.h
+$(TARGET)\mc.o: fs.h
+$(TARGET)\mc.o: fs_parms.h
+$(TARGET)\mc.o: hs.h
+$(TARGET)\mc.o: hw.h
+$(TARGET)\mc.o: iface.h
+$(TARGET)\mc.o: internet.h
+$(TARGET)\mc.o: ip.h
+$(TARGET)\mc.o: mc.c
+$(TARGET)\mc.o: mc.h
+$(TARGET)\mc.o: mcc.h
+$(TARGET)\mc.o: mccccl.h
+$(TARGET)\mc.o: mccdma.h
+$(TARGET)\mc.o: mccrxtx.h
+$(TARGET)\mc.o: mccscm.h
+$(TARGET)\mc.o: mccsrch.h
+$(TARGET)\mc.o: mccsyobj.h
+$(TARGET)\mc.o: mci.h
+$(TARGET)\mc.o: mcsys.h
+$(TARGET)\mc.o: mdrrlp.h
+$(TARGET)\mc.o: mobile.h
+$(TARGET)\mc.o: msg.h
+$(TARGET)\mc.o: msm.h
+$(TARGET)\mc.o: msm50reg.h
+$(TARGET)\mc.o: netuser.h
+$(TARGET)\mc.o: nv.h
+$(TARGET)\mc.o: otaspi.h
+$(TARGET)\mc.o: pppfsm.h
+$(TARGET)\mc.o: processor.h
+$(TARGET)\mc.o: ps.h
+$(TARGET)\mc.o: psglobal.h
+$(TARGET)\mc.o: queue.h
+$(TARGET)\mc.o: qw.h
+$(TARGET)\mc.o: ran.h
+$(TARGET)\mc.o: rex.h
+$(TARGET)\mc.o: rf.h
+$(TARGET)\mc.o: rfc.h
+$(TARGET)\mc.o: rficap.h
+$(TARGET)\mc.o: rfnv.h
+$(TARGET)\mc.o: rx.h
+$(TARGET)\mc.o: rxc.h
+$(TARGET)\mc.o: rxtx.h
+$(TARGET)\mc.o: sbi.h
+$(TARGET)\mc.o: sio.h
+$(TARGET)\mc.o: sleep.h
+$(TARGET)\mc.o: smsi.h
+$(TARGET)\mc.o: snd.h
+$(TARGET)\mc.o: snm.h
+$(TARGET)\mc.o: srch.h
+$(TARGET)\mc.o: target.h
+$(TARGET)\mc.o: targetg.h
+$(TARGET)\mc.o: task.h
+$(TARGET)\mc.o: tcp.h
+$(TARGET)\mc.o: therm.h
+$(TARGET)\mc.o: tramp.h
+$(TARGET)\mc.o: tx.h
+$(TARGET)\mc.o: txc.h
+$(TARGET)\mc.o: uapi.h
+$(TARGET)\mc.o: uasms.h
+$(TARGET)\mc.o: uasmsi.h
+$(TARGET)\mc.o: ui.h
+$(TARGET)\mc.o: ulpn.h
+$(TARGET)\mc.o: vbatt.h
+$(TARGET)\mc.o: voc.h
+$(TARGET)\mc.o: vocmux.h
+
+$(TARGET)\mccccl.o: CUST4SPE.H
+$(TARGET)\mccccl.o: addrdefs.h
+$(TARGET)\mccccl.o: assert.h
+$(TARGET)\mccccl.o: cai.h
+$(TARGET)\mccccl.o: caii.h
+$(TARGET)\mccccl.o: clk.h
+$(TARGET)\mccccl.o: cmd.h
+$(TARGET)\mccccl.o: comdef.h
+$(TARGET)\mccccl.o: customer.h
+$(TARGET)\mccccl.o: dog.h
+$(TARGET)\mccccl.o: enc.h
+$(TARGET)\mccccl.o: err.h
+$(TARGET)\mccccl.o: mc.h
+$(TARGET)\mccccl.o: mccccl.c
+$(TARGET)\mccccl.o: mccccl.h
+$(TARGET)\mccccl.o: msg.h
+$(TARGET)\mccccl.o: msm.h
+$(TARGET)\mccccl.o: msm50reg.h
+$(TARGET)\mccccl.o: nv.h
+$(TARGET)\mccccl.o: queue.h
+$(TARGET)\mccccl.o: qw.h
+$(TARGET)\mccccl.o: rex.h
+$(TARGET)\mccccl.o: srch.h
+$(TARGET)\mccccl.o: target.h
+$(TARGET)\mccccl.o: targetg.h
+$(TARGET)\mccccl.o: task.h
+$(TARGET)\mccccl.o: tramp.h
+$(TARGET)\mccccl.o: ulpn.h
+
+$(TARGET)\mccdma.o: CUST4SPE.H
+$(TARGET)\mccdma.o: acpmc.h
+$(TARGET)\mccdma.o: addrdefs.h
+$(TARGET)\mccdma.o: cai.h
+$(TARGET)\mccdma.o: caii.h
+$(TARGET)\mccdma.o: clk.h
+$(TARGET)\mccdma.o: cm.h
+$(TARGET)\mccdma.o: cmd.h
+$(TARGET)\mccdma.o: cmmc.h
+$(TARGET)\mccdma.o: comdef.h
+$(TARGET)\mccdma.o: customer.h
+$(TARGET)\mccdma.o: db.h
+$(TARGET)\mccdma.o: dec.h
+$(TARGET)\mccdma.o: dec5000.h
+$(TARGET)\mccdma.o: deint.h
+$(TARGET)\mccdma.o: diag.h
+$(TARGET)\mccdma.o: dog.h
+$(TARGET)\mccdma.o: ds.h
+$(TARGET)\mccdma.o: dsm.h
+$(TARGET)\mccdma.o: dsnetmdl.h
+$(TARGET)\mccdma.o: dssocket.h
+$(TARGET)\mccdma.o: dssocki.h
+$(TARGET)\mccdma.o: enc.h
+$(TARGET)\mccdma.o: err.h
+$(TARGET)\mccdma.o: iface.h
+$(TARGET)\mccdma.o: internet.h
+$(TARGET)\mccdma.o: ip.h
+$(TARGET)\mccdma.o: mc.h
+$(TARGET)\mccdma.o: mcc.h
+$(TARGET)\mccdma.o: mccdma.c
+$(TARGET)\mccdma.o: mccdma.h
+$(TARGET)\mccdma.o: mccreg.h
+$(TARGET)\mccdma.o: mccrx.h
+$(TARGET)\mccdma.o: mccrxtx.h
+$(TARGET)\mccdma.o: mccsrch.h
+$(TARGET)\mccdma.o: mci.h
+$(TARGET)\mccdma.o: mcsys.h
+$(TARGET)\mccdma.o: mdrrlp.h
+$(TARGET)\mccdma.o: memory.h
+$(TARGET)\mccdma.o: msg.h
+$(TARGET)\mccdma.o: msm.h
+$(TARGET)\mccdma.o: msm50reg.h
+$(TARGET)\mccdma.o: netuser.h
+$(TARGET)\mccdma.o: nv.h
+$(TARGET)\mccdma.o: otaspi.h
+$(TARGET)\mccdma.o: pppfsm.h
+$(TARGET)\mccdma.o: psglobal.h
+$(TARGET)\mccdma.o: queue.h
+$(TARGET)\mccdma.o: qw.h
+$(TARGET)\mccdma.o: rex.h
+$(TARGET)\mccdma.o: rf.h
+$(TARGET)\mccdma.o: rfc.h
+$(TARGET)\mccdma.o: rficap.h
+$(TARGET)\mccdma.o: rxc.h
+$(TARGET)\mccdma.o: rxtx.h
+$(TARGET)\mccdma.o: sio.h
+$(TARGET)\mccdma.o: srch.h
+$(TARGET)\mccdma.o: target.h
+$(TARGET)\mccdma.o: targetg.h
+$(TARGET)\mccdma.o: task.h
+$(TARGET)\mccdma.o: tcp.h
+$(TARGET)\mccdma.o: tmsi.h
+$(TARGET)\mccdma.o: tramp.h
+$(TARGET)\mccdma.o: txc.h
+$(TARGET)\mccdma.o: uapi.h
+$(TARGET)\mccdma.o: uasms.h
+$(TARGET)\mccdma.o: uasmsi.h
+$(TARGET)\mccdma.o: ulpn.h
+$(TARGET)\mccdma.o: voc.h
+$(TARGET)\mccdma.o: vocmux.h
+
+$(TARGET)\mccidl.o: CUST4SPE.H
+$(TARGET)\mccidl.o: acpmc.h
+$(TARGET)\mccidl.o: addrdefs.h
+$(TARGET)\mccidl.o: arm.h
+$(TARGET)\mccidl.o: bio.h
+$(TARGET)\mccidl.o: biog.h
+$(TARGET)\mccidl.o: cai.h
+$(TARGET)\mccidl.o: caii.h
+$(TARGET)\mccidl.o: clk.h
+$(TARGET)\mccidl.o: cm.h
+$(TARGET)\mccidl.o: cmd.h
+$(TARGET)\mccidl.o: cmmc.h
+$(TARGET)\mccidl.o: comdef.h
+$(TARGET)\mccidl.o: customer.h
+$(TARGET)\mccidl.o: db.h
+$(TARGET)\mccidl.o: dec.h
+$(TARGET)\mccidl.o: dec5000.h
+$(TARGET)\mccidl.o: deci.h
+$(TARGET)\mccidl.o: deint.h
+$(TARGET)\mccidl.o: distreg.h
+$(TARGET)\mccidl.o: dmod.h
+$(TARGET)\mccidl.o: dog.h
+$(TARGET)\mccidl.o: ds.h
+$(TARGET)\mccidl.o: dsm.h
+$(TARGET)\mccidl.o: dsnetmdl.h
+$(TARGET)\mccidl.o: dssocket.h
+$(TARGET)\mccidl.o: dssocki.h
+$(TARGET)\mccidl.o: enc.h
+$(TARGET)\mccidl.o: enci.h
+$(TARGET)\mccidl.o: err.h
+$(TARGET)\mccidl.o: iface.h
+$(TARGET)\mccidl.o: internet.h
+$(TARGET)\mccidl.o: ip.h
+$(TARGET)\mccidl.o: mc.h
+$(TARGET)\mccidl.o: mcc.h
+$(TARGET)\mccidl.o: mccdma.h
+$(TARGET)\mccidl.o: mccidl.c
+$(TARGET)\mccidl.o: mccreg.h
+$(TARGET)\mccidl.o: mccrx.h
+$(TARGET)\mccidl.o: mccrxtx.h
+$(TARGET)\mccidl.o: mccsrch.h
+$(TARGET)\mccidl.o: mccsyobj.h
+$(TARGET)\mccidl.o: mcctcsup.h
+$(TARGET)\mccidl.o: mci.h
+$(TARGET)\mccidl.o: mcsys.h
+$(TARGET)\mccidl.o: mdrrlp.h
+$(TARGET)\mccidl.o: mobile.h
+$(TARGET)\mccidl.o: msg.h
+$(TARGET)\mccidl.o: msm.h
+$(TARGET)\mccidl.o: msm50reg.h
+$(TARGET)\mccidl.o: netuser.h
+$(TARGET)\mccidl.o: nv.h
+$(TARGET)\mccidl.o: otaspi.h
+$(TARGET)\mccidl.o: parm.h
+$(TARGET)\mccidl.o: pppfsm.h
+$(TARGET)\mccidl.o: processor.h
+$(TARGET)\mccidl.o: psglobal.h
+$(TARGET)\mccidl.o: queue.h
+$(TARGET)\mccidl.o: qw.h
+$(TARGET)\mccidl.o: ran.h
+$(TARGET)\mccidl.o: rex.h
+$(TARGET)\mccidl.o: rf.h
+$(TARGET)\mccidl.o: rfc.h
+$(TARGET)\mccidl.o: rficap.h
+$(TARGET)\mccidl.o: rxc.h
+$(TARGET)\mccidl.o: rxtx.h
+$(TARGET)\mccidl.o: snm.h
+$(TARGET)\mccidl.o: srch.h
+$(TARGET)\mccidl.o: target.h
+$(TARGET)\mccidl.o: targetg.h
+$(TARGET)\mccidl.o: task.h
+$(TARGET)\mccidl.o: tcp.h
+$(TARGET)\mccidl.o: tmsi.h
+$(TARGET)\mccidl.o: tramp.h
+$(TARGET)\mccidl.o: ts.h
+$(TARGET)\mccidl.o: txc.h
+$(TARGET)\mccidl.o: uapi.h
+$(TARGET)\mccidl.o: uasms.h
+$(TARGET)\mccidl.o: uasmsi.h
+$(TARGET)\mccidl.o: ulpn.h
+$(TARGET)\mccidl.o: voc.h
+$(TARGET)\mccidl.o: vocmux.h
+
+$(TARGET)\mccini.o: CUST4SPE.H
+$(TARGET)\mccini.o: acpmc.h
+$(TARGET)\mccini.o: addrdefs.h
+$(TARGET)\mccini.o: arm.h
+$(TARGET)\mccini.o: assert.h
+$(TARGET)\mccini.o: bio.h
+$(TARGET)\mccini.o: biog.h
+$(TARGET)\mccini.o: cai.h
+$(TARGET)\mccini.o: caii.h
+$(TARGET)\mccini.o: clk.h
+$(TARGET)\mccini.o: cm.h
+$(TARGET)\mccini.o: cmd.h
+$(TARGET)\mccini.o: cmmc.h
+$(TARGET)\mccini.o: comdef.h
+$(TARGET)\mccini.o: customer.h
+$(TARGET)\mccini.o: db.h
+$(TARGET)\mccini.o: dec.h
+$(TARGET)\mccini.o: dec5000.h
+$(TARGET)\mccini.o: deci.h
+$(TARGET)\mccini.o: deint.h
+$(TARGET)\mccini.o: dmod.h
+$(TARGET)\mccini.o: dog.h
+$(TARGET)\mccini.o: ds.h
+$(TARGET)\mccini.o: dsm.h
+$(TARGET)\mccini.o: dsnetmdl.h
+$(TARGET)\mccini.o: dssocket.h
+$(TARGET)\mccini.o: dssocki.h
+$(TARGET)\mccini.o: enc.h
+$(TARGET)\mccini.o: enci.h
+$(TARGET)\mccini.o: err.h
+$(TARGET)\mccini.o: iface.h
+$(TARGET)\mccini.o: internet.h
+$(TARGET)\mccini.o: ip.h
+$(TARGET)\mccini.o: mc.h
+$(TARGET)\mccini.o: mcc.h
+$(TARGET)\mccini.o: mccdma.h
+$(TARGET)\mccini.o: mccini.c
+$(TARGET)\mccini.o: mccreg.h
+$(TARGET)\mccini.o: mccrxtx.h
+$(TARGET)\mccini.o: mccsrch.h
+$(TARGET)\mccini.o: mci.h
+$(TARGET)\mccini.o: mcsys.h
+$(TARGET)\mccini.o: mdrrlp.h
+$(TARGET)\mccini.o: memory.h
+$(TARGET)\mccini.o: msg.h
+$(TARGET)\mccini.o: msm.h
+$(TARGET)\mccini.o: msm50reg.h
+$(TARGET)\mccini.o: netuser.h
+$(TARGET)\mccini.o: nv.h
+$(TARGET)\mccini.o: otaspi.h
+$(TARGET)\mccini.o: parm.h
+$(TARGET)\mccini.o: pppfsm.h
+$(TARGET)\mccini.o: processor.h
+$(TARGET)\mccini.o: psglobal.h
+$(TARGET)\mccini.o: queue.h
+$(TARGET)\mccini.o: qw.h
+$(TARGET)\mccini.o: ran.h
+$(TARGET)\mccini.o: rex.h
+$(TARGET)\mccini.o: rf.h
+$(TARGET)\mccini.o: rfc.h
+$(TARGET)\mccini.o: rficap.h
+$(TARGET)\mccini.o: rxc.h
+$(TARGET)\mccini.o: rxtx.h
+$(TARGET)\mccini.o: srch.h
+$(TARGET)\mccini.o: target.h
+$(TARGET)\mccini.o: targetg.h
+$(TARGET)\mccini.o: task.h
+$(TARGET)\mccini.o: tcp.h
+$(TARGET)\mccini.o: tmsi.h
+$(TARGET)\mccini.o: tramp.h
+$(TARGET)\mccini.o: txc.h
+$(TARGET)\mccini.o: uapi.h
+$(TARGET)\mccini.o: uasms.h
+$(TARGET)\mccini.o: uasmsi.h
+$(TARGET)\mccini.o: ulpn.h
+$(TARGET)\mccini.o: voc.h
+$(TARGET)\mccini.o: vocmux.h
+
+$(TARGET)\mccreg.o: CUST4SPE.H
+$(TARGET)\mccreg.o: acpmc.h
+$(TARGET)\mccreg.o: addrdefs.h
+$(TARGET)\mccreg.o: cai.h
+$(TARGET)\mccreg.o: caii.h
+$(TARGET)\mccreg.o: clk.h
+$(TARGET)\mccreg.o: cm.h
+$(TARGET)\mccreg.o: cmd.h
+$(TARGET)\mccreg.o: cmmc.h
+$(TARGET)\mccreg.o: comdef.h
+$(TARGET)\mccreg.o: customer.h
+$(TARGET)\mccreg.o: db.h
+$(TARGET)\mccreg.o: dec.h
+$(TARGET)\mccreg.o: dec5000.h
+$(TARGET)\mccreg.o: deint.h
+$(TARGET)\mccreg.o: distreg.h
+$(TARGET)\mccreg.o: dog.h
+$(TARGET)\mccreg.o: ds.h
+$(TARGET)\mccreg.o: dsm.h
+$(TARGET)\mccreg.o: dsnetmdl.h
+$(TARGET)\mccreg.o: dssocket.h
+$(TARGET)\mccreg.o: dssocki.h
+$(TARGET)\mccreg.o: enc.h
+$(TARGET)\mccreg.o: err.h
+$(TARGET)\mccreg.o: iface.h
+$(TARGET)\mccreg.o: internet.h
+$(TARGET)\mccreg.o: ip.h
+$(TARGET)\mccreg.o: mc.h
+$(TARGET)\mccreg.o: mcc.h
+$(TARGET)\mccreg.o: mccdma.h
+$(TARGET)\mccreg.o: mccreg.c
+$(TARGET)\mccreg.o: mccreg.h
+$(TARGET)\mccreg.o: mccsrch.h
+$(TARGET)\mccreg.o: mdrrlp.h
+$(TARGET)\mccreg.o: msg.h
+$(TARGET)\mccreg.o: msm.h
+$(TARGET)\mccreg.o: msm50reg.h
+$(TARGET)\mccreg.o: netuser.h
+$(TARGET)\mccreg.o: nv.h
+$(TARGET)\mccreg.o: otaspi.h
+$(TARGET)\mccreg.o: pppfsm.h
+$(TARGET)\mccreg.o: psglobal.h
+$(TARGET)\mccreg.o: queue.h
+$(TARGET)\mccreg.o: qw.h
+$(TARGET)\mccreg.o: ran.h
+$(TARGET)\mccreg.o: rex.h
+$(TARGET)\mccreg.o: rxc.h
+$(TARGET)\mccreg.o: rxtx.h
+$(TARGET)\mccreg.o: srch.h
+$(TARGET)\mccreg.o: target.h
+$(TARGET)\mccreg.o: targetg.h
+$(TARGET)\mccreg.o: task.h
+$(TARGET)\mccreg.o: tcp.h
+$(TARGET)\mccreg.o: tramp.h
+$(TARGET)\mccreg.o: txc.h
+$(TARGET)\mccreg.o: uapi.h
+$(TARGET)\mccreg.o: uasms.h
+$(TARGET)\mccreg.o: uasmsi.h
+$(TARGET)\mccreg.o: ulpn.h
+$(TARGET)\mccreg.o: voc.h
+$(TARGET)\mccreg.o: vocmux.h
+
+$(TARGET)\mccrx.o: CUST4SPE.H
+$(TARGET)\mccrx.o: cmd.h
+$(TARGET)\mccrx.o: comdef.h
+$(TARGET)\mccrx.o: customer.h
+$(TARGET)\mccrx.o: mccrx.c
+$(TARGET)\mccrx.o: mccrx.h
+$(TARGET)\mccrx.o: queue.h
+$(TARGET)\mccrx.o: qw.h
+$(TARGET)\mccrx.o: rex.h
+$(TARGET)\mccrx.o: target.h
+$(TARGET)\mccrx.o: targetg.h
+
+$(TARGET)\mccrxtx.o: CUST4SPE.H
+$(TARGET)\mccrxtx.o: addrdefs.h
+$(TARGET)\mccrxtx.o: cai.h
+$(TARGET)\mccrxtx.o: caii.h
+$(TARGET)\mccrxtx.o: clk.h
+$(TARGET)\mccrxtx.o: cmd.h
+$(TARGET)\mccrxtx.o: comdef.h
+$(TARGET)\mccrxtx.o: customer.h
+$(TARGET)\mccrxtx.o: dog.h
+$(TARGET)\mccrxtx.o: mc.h
+$(TARGET)\mccrxtx.o: mccrxtx.c
+$(TARGET)\mccrxtx.o: mccrxtx.h
+$(TARGET)\mccrxtx.o: msm.h
+$(TARGET)\mccrxtx.o: msm50reg.h
+$(TARGET)\mccrxtx.o: nv.h
+$(TARGET)\mccrxtx.o: queue.h
+$(TARGET)\mccrxtx.o: qw.h
+$(TARGET)\mccrxtx.o: rex.h
+$(TARGET)\mccrxtx.o: target.h
+$(TARGET)\mccrxtx.o: targetg.h
+$(TARGET)\mccrxtx.o: task.h
+$(TARGET)\mccrxtx.o: tramp.h
+
+$(TARGET)\mccsa.o: CUST4SPE.H
+$(TARGET)\mccsa.o: acpmc.h
+$(TARGET)\mccsa.o: addrdefs.h
+$(TARGET)\mccsa.o: bit.h
+$(TARGET)\mccsa.o: cai.h
+$(TARGET)\mccsa.o: caii.h
+$(TARGET)\mccsa.o: caix.h
+$(TARGET)\mccsa.o: clk.h
+$(TARGET)\mccsa.o: cm.h
+$(TARGET)\mccsa.o: cmd.h
+$(TARGET)\mccsa.o: cmmc.h
+$(TARGET)\mccsa.o: comdef.h
+$(TARGET)\mccsa.o: customer.h
+$(TARGET)\mccsa.o: db.h
+$(TARGET)\mccsa.o: dec.h
+$(TARGET)\mccsa.o: dec5000.h
+$(TARGET)\mccsa.o: deint.h
+$(TARGET)\mccsa.o: dog.h
+$(TARGET)\mccsa.o: ds.h
+$(TARGET)\mccsa.o: dsm.h
+$(TARGET)\mccsa.o: dsnetmdl.h
+$(TARGET)\mccsa.o: dssocket.h
+$(TARGET)\mccsa.o: dssocki.h
+$(TARGET)\mccsa.o: enc.h
+$(TARGET)\mccsa.o: err.h
+$(TARGET)\mccsa.o: iface.h
+$(TARGET)\mccsa.o: internet.h
+$(TARGET)\mccsa.o: ip.h
+$(TARGET)\mccsa.o: mc.h
+$(TARGET)\mccsa.o: mcc.h
+$(TARGET)\mccsa.o: mccccl.h
+$(TARGET)\mccsa.o: mccdma.h
+$(TARGET)\mccsa.o: mccreg.h
+$(TARGET)\mccsa.o: mccrx.h
+$(TARGET)\mccsa.o: mccrxtx.h
+$(TARGET)\mccsa.o: mccsa.c
+$(TARGET)\mccsa.o: mccsrch.h
+$(TARGET)\mccsa.o: mcctcho.h
+$(TARGET)\mccsa.o: mci.h
+$(TARGET)\mccsa.o: mcsys.h
+$(TARGET)\mccsa.o: mdrrlp.h
+$(TARGET)\mccsa.o: memory.h
+$(TARGET)\mccsa.o: msg.h
+$(TARGET)\mccsa.o: msm.h
+$(TARGET)\mccsa.o: msm50reg.h
+$(TARGET)\mccsa.o: netuser.h
+$(TARGET)\mccsa.o: nv.h
+$(TARGET)\mccsa.o: otaspi.h
+$(TARGET)\mccsa.o: parm.h
+$(TARGET)\mccsa.o: pppfsm.h
+$(TARGET)\mccsa.o: psglobal.h
+$(TARGET)\mccsa.o: queue.h
+$(TARGET)\mccsa.o: qw.h
+$(TARGET)\mccsa.o: ran.h
+$(TARGET)\mccsa.o: rex.h
+$(TARGET)\mccsa.o: rxc.h
+$(TARGET)\mccsa.o: rxtx.h
+$(TARGET)\mccsa.o: snm.h
+$(TARGET)\mccsa.o: srch.h
+$(TARGET)\mccsa.o: srv.h
+$(TARGET)\mccsa.o: target.h
+$(TARGET)\mccsa.o: targetg.h
+$(TARGET)\mccsa.o: task.h
+$(TARGET)\mccsa.o: tcp.h
+$(TARGET)\mccsa.o: tmsi.h
+$(TARGET)\mccsa.o: tramp.h
+$(TARGET)\mccsa.o: txc.h
+$(TARGET)\mccsa.o: uapi.h
+$(TARGET)\mccsa.o: uasms.h
+$(TARGET)\mccsa.o: uasmsi.h
+$(TARGET)\mccsa.o: ulpn.h
+$(TARGET)\mccsa.o: voc.h
+$(TARGET)\mccsa.o: vocmux.h
+
+$(TARGET)\mccscm.o: CUST4SPE.H
+$(TARGET)\mccscm.o: acpmc.h
+$(TARGET)\mccscm.o: addrdefs.h
+$(TARGET)\mccscm.o: assert.h
+$(TARGET)\mccscm.o: cai.h
+$(TARGET)\mccscm.o: caii.h
+$(TARGET)\mccscm.o: clk.h
+$(TARGET)\mccscm.o: cm.h
+$(TARGET)\mccscm.o: cmd.h
+$(TARGET)\mccscm.o: cmmc.h
+$(TARGET)\mccscm.o: comdef.h
+$(TARGET)\mccscm.o: customer.h
+$(TARGET)\mccscm.o: db.h
+$(TARGET)\mccscm.o: dec.h
+$(TARGET)\mccscm.o: dec5000.h
+$(TARGET)\mccscm.o: deint.h
+$(TARGET)\mccscm.o: dog.h
+$(TARGET)\mccscm.o: ds.h
+$(TARGET)\mccscm.o: dsm.h
+$(TARGET)\mccscm.o: dsnetmdl.h
+$(TARGET)\mccscm.o: dssocket.h
+$(TARGET)\mccscm.o: dssocki.h
+$(TARGET)\mccscm.o: enc.h
+$(TARGET)\mccscm.o: err.h
+$(TARGET)\mccscm.o: iface.h
+$(TARGET)\mccscm.o: internet.h
+$(TARGET)\mccscm.o: ip.h
+$(TARGET)\mccscm.o: mc.h
+$(TARGET)\mccscm.o: mcc.h
+$(TARGET)\mccscm.o: mccccl.h
+$(TARGET)\mccscm.o: mccdma.h
+$(TARGET)\mccscm.o: mccrx.h
+$(TARGET)\mccscm.o: mccrxtx.h
+$(TARGET)\mccscm.o: mccscm.c
+$(TARGET)\mccscm.o: mccscm.h
+$(TARGET)\mccscm.o: mccsrch.h
+$(TARGET)\mccscm.o: mcctcsup.h
+$(TARGET)\mccscm.o: mdrrlp.h
+$(TARGET)\mccscm.o: msg.h
+$(TARGET)\mccscm.o: msm.h
+$(TARGET)\mccscm.o: msm50reg.h
+$(TARGET)\mccscm.o: netuser.h
+$(TARGET)\mccscm.o: nv.h
+$(TARGET)\mccscm.o: otaspi.h
+$(TARGET)\mccscm.o: pppfsm.h
+$(TARGET)\mccscm.o: psglobal.h
+$(TARGET)\mccscm.o: queue.h
+$(TARGET)\mccscm.o: qw.h
+$(TARGET)\mccscm.o: rex.h
+$(TARGET)\mccscm.o: rxc.h
+$(TARGET)\mccscm.o: rxtx.h
+$(TARGET)\mccscm.o: snm.h
+$(TARGET)\mccscm.o: srch.h
+$(TARGET)\mccscm.o: target.h
+$(TARGET)\mccscm.o: targetg.h
+$(TARGET)\mccscm.o: task.h
+$(TARGET)\mccscm.o: tcp.h
+$(TARGET)\mccscm.o: tramp.h
+$(TARGET)\mccscm.o: ts.h
+$(TARGET)\mccscm.o: txc.h
+$(TARGET)\mccscm.o: uapi.h
+$(TARGET)\mccscm.o: uasms.h
+$(TARGET)\mccscm.o: uasmsi.h
+$(TARGET)\mccscm.o: ulpn.h
+$(TARGET)\mccscm.o: voc.h
+$(TARGET)\mccscm.o: vocmux.h
+
+$(TARGET)\mccsrch.o: CUST4SPE.H
+$(TARGET)\mccsrch.o: addrdefs.h
+$(TARGET)\mccsrch.o: cai.h
+$(TARGET)\mccsrch.o: clk.h
+$(TARGET)\mccsrch.o: cmd.h
+$(TARGET)\mccsrch.o: comdef.h
+$(TARGET)\mccsrch.o: customer.h
+$(TARGET)\mccsrch.o: dog.h
+$(TARGET)\mccsrch.o: enc.h
+$(TARGET)\mccsrch.o: mc.h
+$(TARGET)\mccsrch.o: mccsrch.c
+$(TARGET)\mccsrch.o: mccsrch.h
+$(TARGET)\mccsrch.o: msm.h
+$(TARGET)\mccsrch.o: msm50reg.h
+$(TARGET)\mccsrch.o: nv.h
+$(TARGET)\mccsrch.o: queue.h
+$(TARGET)\mccsrch.o: qw.h
+$(TARGET)\mccsrch.o: rex.h
+$(TARGET)\mccsrch.o: srch.h
+$(TARGET)\mccsrch.o: target.h
+$(TARGET)\mccsrch.o: targetg.h
+$(TARGET)\mccsrch.o: task.h
+$(TARGET)\mccsrch.o: tramp.h
+$(TARGET)\mccsrch.o: ulpn.h
+
+$(TARGET)\mccsup.o: CUST4SPE.H
+$(TARGET)\mccsup.o: acpmc.h
+$(TARGET)\mccsup.o: addrdefs.h
+$(TARGET)\mccsup.o: cai.h
+$(TARGET)\mccsup.o: caii.h
+$(TARGET)\mccsup.o: clk.h
+$(TARGET)\mccsup.o: cm.h
+$(TARGET)\mccsup.o: cmd.h
+$(TARGET)\mccsup.o: cmmc.h
+$(TARGET)\mccsup.o: comdef.h
+$(TARGET)\mccsup.o: customer.h
+$(TARGET)\mccsup.o: db.h
+$(TARGET)\mccsup.o: dec.h
+$(TARGET)\mccsup.o: dec5000.h
+$(TARGET)\mccsup.o: deint.h
+$(TARGET)\mccsup.o: diag.h
+$(TARGET)\mccsup.o: dog.h
+$(TARGET)\mccsup.o: ds.h
+$(TARGET)\mccsup.o: dsm.h
+$(TARGET)\mccsup.o: dsnetmdl.h
+$(TARGET)\mccsup.o: dssocket.h
+$(TARGET)\mccsup.o: dssocki.h
+$(TARGET)\mccsup.o: enc.h
+$(TARGET)\mccsup.o: err.h
+$(TARGET)\mccsup.o: iface.h
+$(TARGET)\mccsup.o: internet.h
+$(TARGET)\mccsup.o: ip.h
+$(TARGET)\mccsup.o: mc.h
+$(TARGET)\mccsup.o: mcc.h
+$(TARGET)\mccsup.o: mccdma.h
+$(TARGET)\mccsup.o: mccrxtx.h
+$(TARGET)\mccsup.o: mccsrch.h
+$(TARGET)\mccsup.o: mccsup.c
+$(TARGET)\mccsup.o: mccsyobj.h
+$(TARGET)\mccsup.o: mcsys.h
+$(TARGET)\mccsup.o: mcsyspr.h
+$(TARGET)\mccsup.o: mdrrlp.h
+$(TARGET)\mccsup.o: memory.h
+$(TARGET)\mccsup.o: msg.h
+$(TARGET)\mccsup.o: msm.h
+$(TARGET)\mccsup.o: msm50reg.h
+$(TARGET)\mccsup.o: netuser.h
+$(TARGET)\mccsup.o: nv.h
+$(TARGET)\mccsup.o: otaspi.h
+$(TARGET)\mccsup.o: pppfsm.h
+$(TARGET)\mccsup.o: prl.h
+$(TARGET)\mccsup.o: prli.h
+$(TARGET)\mccsup.o: psglobal.h
+$(TARGET)\mccsup.o: queue.h
+$(TARGET)\mccsup.o: qw.h
+$(TARGET)\mccsup.o: rex.h
+$(TARGET)\mccsup.o: rf.h
+$(TARGET)\mccsup.o: rfc.h
+$(TARGET)\mccsup.o: rficap.h
+$(TARGET)\mccsup.o: rxc.h
+$(TARGET)\mccsup.o: rxtx.h
+$(TARGET)\mccsup.o: sio.h
+$(TARGET)\mccsup.o: snm.h
+$(TARGET)\mccsup.o: srch.h
+$(TARGET)\mccsup.o: srv.h
+$(TARGET)\mccsup.o: target.h
+$(TARGET)\mccsup.o: targetg.h
+$(TARGET)\mccsup.o: task.h
+$(TARGET)\mccsup.o: tcp.h
+$(TARGET)\mccsup.o: tmsi.h
+$(TARGET)\mccsup.o: tramp.h
+$(TARGET)\mccsup.o: ts.h
+$(TARGET)\mccsup.o: txc.h
+$(TARGET)\mccsup.o: uapi.h
+$(TARGET)\mccsup.o: uasms.h
+$(TARGET)\mccsup.o: uasmsi.h
+$(TARGET)\mccsup.o: ulpn.h
+$(TARGET)\mccsup.o: voc.h
+$(TARGET)\mccsup.o: vocmux.h
+
+$(TARGET)\mccsyobj.o: CUST4SPE.H
+$(TARGET)\mccsyobj.o: cai.h
+$(TARGET)\mccsyobj.o: caii.h
+$(TARGET)\mccsyobj.o: comdef.h
+$(TARGET)\mccsyobj.o: customer.h
+$(TARGET)\mccsyobj.o: mccsyobj.c
+$(TARGET)\mccsyobj.o: mccsyobj.h
+$(TARGET)\mccsyobj.o: msg.h
+$(TARGET)\mccsyobj.o: nv.h
+$(TARGET)\mccsyobj.o: queue.h
+$(TARGET)\mccsyobj.o: qw.h
+$(TARGET)\mccsyobj.o: rex.h
+$(TARGET)\mccsyobj.o: target.h
+$(TARGET)\mccsyobj.o: targetg.h
+
+$(TARGET)\mcctc.o: CUST4SPE.H
+$(TARGET)\mcctc.o: acpmc.h
+$(TARGET)\mcctc.o: addrdefs.h
+$(TARGET)\mcctc.o: cai.h
+$(TARGET)\mcctc.o: caii.h
+$(TARGET)\mcctc.o: clk.h
+$(TARGET)\mcctc.o: cm.h
+$(TARGET)\mcctc.o: cmd.h
+$(TARGET)\mcctc.o: cmmc.h
+$(TARGET)\mcctc.o: comdef.h
+$(TARGET)\mcctc.o: customer.h
+$(TARGET)\mcctc.o: db.h
+$(TARGET)\mcctc.o: dec.h
+$(TARGET)\mcctc.o: dec5000.h
+$(TARGET)\mcctc.o: deint.h
+$(TARGET)\mcctc.o: dog.h
+$(TARGET)\mcctc.o: ds.h
+$(TARGET)\mcctc.o: dsm.h
+$(TARGET)\mcctc.o: dsnetmdl.h
+$(TARGET)\mcctc.o: dssocket.h
+$(TARGET)\mcctc.o: dssocki.h
+$(TARGET)\mcctc.o: enc.h
+$(TARGET)\mcctc.o: err.h
+$(TARGET)\mcctc.o: iface.h
+$(TARGET)\mcctc.o: internet.h
+$(TARGET)\mcctc.o: ip.h
+$(TARGET)\mcctc.o: mar.h
+$(TARGET)\mcctc.o: mc.h
+$(TARGET)\mcctc.o: mcc.h
+$(TARGET)\mcctc.o: mccdma.h
+$(TARGET)\mcctc.o: mccreg.h
+$(TARGET)\mcctc.o: mccrx.h
+$(TARGET)\mcctc.o: mccrxtx.h
+$(TARGET)\mcctc.o: mccscm.h
+$(TARGET)\mcctc.o: mccsrch.h
+$(TARGET)\mcctc.o: mcctc.c
+$(TARGET)\mcctc.o: mcctcho.h
+$(TARGET)\mcctc.o: mcctcsup.h
+$(TARGET)\mcctc.o: mci.h
+$(TARGET)\mcctc.o: mcsys.h
+$(TARGET)\mcctc.o: mdrrlp.h
+$(TARGET)\mcctc.o: msg.h
+$(TARGET)\mcctc.o: msm.h
+$(TARGET)\mcctc.o: msm50reg.h
+$(TARGET)\mcctc.o: netuser.h
+$(TARGET)\mcctc.o: nv.h
+$(TARGET)\mcctc.o: otaspi.h
+$(TARGET)\mcctc.o: pppfsm.h
+$(TARGET)\mcctc.o: psglobal.h
+$(TARGET)\mcctc.o: queue.h
+$(TARGET)\mcctc.o: qw.h
+$(TARGET)\mcctc.o: rex.h
+$(TARGET)\mcctc.o: rf.h
+$(TARGET)\mcctc.o: rfc.h
+$(TARGET)\mcctc.o: rficap.h
+$(TARGET)\mcctc.o: rxc.h
+$(TARGET)\mcctc.o: rxtx.h
+$(TARGET)\mcctc.o: snm.h
+$(TARGET)\mcctc.o: srch.h
+$(TARGET)\mcctc.o: srv.h
+$(TARGET)\mcctc.o: target.h
+$(TARGET)\mcctc.o: targetg.h
+$(TARGET)\mcctc.o: task.h
+$(TARGET)\mcctc.o: tcp.h
+$(TARGET)\mcctc.o: tmsi.h
+$(TARGET)\mcctc.o: tramp.h
+$(TARGET)\mcctc.o: txc.h
+$(TARGET)\mcctc.o: uapi.h
+$(TARGET)\mcctc.o: uasms.h
+$(TARGET)\mcctc.o: uasmsi.h
+$(TARGET)\mcctc.o: ulpn.h
+$(TARGET)\mcctc.o: voc.h
+$(TARGET)\mcctc.o: vocmux.h
+
+$(TARGET)\mcctcho.o: CUST4SPE.H
+$(TARGET)\mcctcho.o: acpmc.h
+$(TARGET)\mcctcho.o: addrdefs.h
+$(TARGET)\mcctcho.o: assert.h
+$(TARGET)\mcctcho.o: cai.h
+$(TARGET)\mcctcho.o: caii.h
+$(TARGET)\mcctcho.o: clk.h
+$(TARGET)\mcctcho.o: cm.h
+$(TARGET)\mcctcho.o: cmd.h
+$(TARGET)\mcctcho.o: cmmc.h
+$(TARGET)\mcctcho.o: comdef.h
+$(TARGET)\mcctcho.o: customer.h
+$(TARGET)\mcctcho.o: db.h
+$(TARGET)\mcctcho.o: dec.h
+$(TARGET)\mcctcho.o: dec5000.h
+$(TARGET)\mcctcho.o: deint.h
+$(TARGET)\mcctcho.o: diag.h
+$(TARGET)\mcctcho.o: dog.h
+$(TARGET)\mcctcho.o: ds.h
+$(TARGET)\mcctcho.o: dsm.h
+$(TARGET)\mcctcho.o: dsnetmdl.h
+$(TARGET)\mcctcho.o: dssocket.h
+$(TARGET)\mcctcho.o: dssocki.h
+$(TARGET)\mcctcho.o: enc.h
+$(TARGET)\mcctcho.o: err.h
+$(TARGET)\mcctcho.o: iface.h
+$(TARGET)\mcctcho.o: internet.h
+$(TARGET)\mcctcho.o: ip.h
+$(TARGET)\mcctcho.o: mc.h
+$(TARGET)\mcctcho.o: mcc.h
+$(TARGET)\mcctcho.o: mccccl.h
+$(TARGET)\mcctcho.o: mccdma.h
+$(TARGET)\mcctcho.o: mccrx.h
+$(TARGET)\mcctcho.o: mccrxtx.h
+$(TARGET)\mcctcho.o: mccscm.h
+$(TARGET)\mcctcho.o: mccsrch.h
+$(TARGET)\mcctcho.o: mccsyobj.h
+$(TARGET)\mcctcho.o: mcctcho.c
+$(TARGET)\mcctcho.o: mcctcho.h
+$(TARGET)\mcctcho.o: mcctci.h
+$(TARGET)\mcctcho.o: mcctcsup.h
+$(TARGET)\mcctcho.o: mdrrlp.h
+$(TARGET)\mcctcho.o: msg.h
+$(TARGET)\mcctcho.o: msm.h
+$(TARGET)\mcctcho.o: msm50reg.h
+$(TARGET)\mcctcho.o: netuser.h
+$(TARGET)\mcctcho.o: nv.h
+$(TARGET)\mcctcho.o: otaspi.h
+$(TARGET)\mcctcho.o: pppfsm.h
+$(TARGET)\mcctcho.o: psglobal.h
+$(TARGET)\mcctcho.o: queue.h
+$(TARGET)\mcctcho.o: qw.h
+$(TARGET)\mcctcho.o: rex.h
+$(TARGET)\mcctcho.o: rf.h
+$(TARGET)\mcctcho.o: rfc.h
+$(TARGET)\mcctcho.o: rficap.h
+$(TARGET)\mcctcho.o: rxc.h
+$(TARGET)\mcctcho.o: rxtx.h
+$(TARGET)\mcctcho.o: sio.h
+$(TARGET)\mcctcho.o: srch.h
+$(TARGET)\mcctcho.o: srv.h
+$(TARGET)\mcctcho.o: target.h
+$(TARGET)\mcctcho.o: targetg.h
+$(TARGET)\mcctcho.o: task.h
+$(TARGET)\mcctcho.o: tcp.h
+$(TARGET)\mcctcho.o: tramp.h
+$(TARGET)\mcctcho.o: ts.h
+$(TARGET)\mcctcho.o: txc.h
+$(TARGET)\mcctcho.o: uapi.h
+$(TARGET)\mcctcho.o: uasms.h
+$(TARGET)\mcctcho.o: uasmsi.h
+$(TARGET)\mcctcho.o: ulpn.h
+$(TARGET)\mcctcho.o: voc.h
+$(TARGET)\mcctcho.o: vocmux.h
+
+$(TARGET)\mcctcsup.o: CUST4SPE.H
+$(TARGET)\mcctcsup.o: acpmc.h
+$(TARGET)\mcctcsup.o: addrdefs.h
+$(TARGET)\mcctcsup.o: assert.h
+$(TARGET)\mcctcsup.o: cai.h
+$(TARGET)\mcctcsup.o: caii.h
+$(TARGET)\mcctcsup.o: caix.h
+$(TARGET)\mcctcsup.o: clk.h
+$(TARGET)\mcctcsup.o: cm.h
+$(TARGET)\mcctcsup.o: cmd.h
+$(TARGET)\mcctcsup.o: cmmc.h
+$(TARGET)\mcctcsup.o: comdef.h
+$(TARGET)\mcctcsup.o: customer.h
+$(TARGET)\mcctcsup.o: db.h
+$(TARGET)\mcctcsup.o: dec.h
+$(TARGET)\mcctcsup.o: dec5000.h
+$(TARGET)\mcctcsup.o: deint.h
+$(TARGET)\mcctcsup.o: diag.h
+$(TARGET)\mcctcsup.o: dog.h
+$(TARGET)\mcctcsup.o: ds.h
+$(TARGET)\mcctcsup.o: dsm.h
+$(TARGET)\mcctcsup.o: dsnetmdl.h
+$(TARGET)\mcctcsup.o: dssocket.h
+$(TARGET)\mcctcsup.o: dssocki.h
+$(TARGET)\mcctcsup.o: enc.h
+$(TARGET)\mcctcsup.o: err.h
+$(TARGET)\mcctcsup.o: iface.h
+$(TARGET)\mcctcsup.o: internet.h
+$(TARGET)\mcctcsup.o: ip.h
+$(TARGET)\mcctcsup.o: loopback.h
+$(TARGET)\mcctcsup.o: mar.h
+$(TARGET)\mcctcsup.o: mc.h
+$(TARGET)\mcctcsup.o: mcc.h
+$(TARGET)\mcctcsup.o: mccccl.h
+$(TARGET)\mcctcsup.o: mccdma.h
+$(TARGET)\mcctcsup.o: mccreg.h
+$(TARGET)\mcctcsup.o: mccrx.h
+$(TARGET)\mcctcsup.o: mccrxtx.h
+$(TARGET)\mcctcsup.o: mccscm.h
+$(TARGET)\mcctcsup.o: mccsrch.h
+$(TARGET)\mcctcsup.o: mccsyobj.h
+$(TARGET)\mcctcsup.o: mcctcho.h
+$(TARGET)\mcctcsup.o: mcctci.h
+$(TARGET)\mcctcsup.o: mcctcsup.c
+$(TARGET)\mcctcsup.o: mdrrlp.h
+$(TARGET)\mcctcsup.o: msg.h
+$(TARGET)\mcctcsup.o: msm.h
+$(TARGET)\mcctcsup.o: msm50reg.h
+$(TARGET)\mcctcsup.o: netuser.h
+$(TARGET)\mcctcsup.o: nv.h
+$(TARGET)\mcctcsup.o: otaspi.h
+$(TARGET)\mcctcsup.o: otaspx.h
+$(TARGET)\mcctcsup.o: parm.h
+$(TARGET)\mcctcsup.o: pppfsm.h
+$(TARGET)\mcctcsup.o: psglobal.h
+$(TARGET)\mcctcsup.o: queue.h
+$(TARGET)\mcctcsup.o: qw.h
+$(TARGET)\mcctcsup.o: ran.h
+$(TARGET)\mcctcsup.o: rex.h
+$(TARGET)\mcctcsup.o: rf.h
+$(TARGET)\mcctcsup.o: rfc.h
+$(TARGET)\mcctcsup.o: rficap.h
+$(TARGET)\mcctcsup.o: rxc.h
+$(TARGET)\mcctcsup.o: rxtx.h
+$(TARGET)\mcctcsup.o: sio.h
+$(TARGET)\mcctcsup.o: snm.h
+$(TARGET)\mcctcsup.o: srch.h
+$(TARGET)\mcctcsup.o: srv.h
+$(TARGET)\mcctcsup.o: target.h
+$(TARGET)\mcctcsup.o: targetg.h
+$(TARGET)\mcctcsup.o: task.h
+$(TARGET)\mcctcsup.o: tcp.h
+$(TARGET)\mcctcsup.o: tmsi.h
+$(TARGET)\mcctcsup.o: tramp.h
+$(TARGET)\mcctcsup.o: ts.h
+$(TARGET)\mcctcsup.o: txc.h
+$(TARGET)\mcctcsup.o: uapi.h
+$(TARGET)\mcctcsup.o: uasms.h
+$(TARGET)\mcctcsup.o: uasmsi.h
+$(TARGET)\mcctcsup.o: ulpn.h
+$(TARGET)\mcctcsup.o: voc.h
+$(TARGET)\mcctcsup.o: vocmux.h
+
+$(TARGET)\mcscript.o: CUST4SPE.H
+$(TARGET)\mcscript.o: acpmc.h
+$(TARGET)\mcscript.o: addrdefs.h
+$(TARGET)\mcscript.o: cai.h
+$(TARGET)\mcscript.o: caii.h
+$(TARGET)\mcscript.o: clk.h
+$(TARGET)\mcscript.o: cm.h
+$(TARGET)\mcscript.o: cmd.h
+$(TARGET)\mcscript.o: cmmc.h
+$(TARGET)\mcscript.o: comdef.h
+$(TARGET)\mcscript.o: customer.h
+$(TARGET)\mcscript.o: db.h
+$(TARGET)\mcscript.o: dog.h
+$(TARGET)\mcscript.o: err.h
+$(TARGET)\mcscript.o: hw.h
+$(TARGET)\mcscript.o: mc.h
+$(TARGET)\mcscript.o: mcc.h
+$(TARGET)\mcscript.o: mcscript.c
+$(TARGET)\mcscript.o: mcscript.h
+$(TARGET)\mcscript.o: mcsys.h
+$(TARGET)\mcscript.o: mcsyspr.h
+$(TARGET)\mcscript.o: memory.h
+$(TARGET)\mcscript.o: msg.h
+$(TARGET)\mcscript.o: msm.h
+$(TARGET)\mcscript.o: msm50reg.h
+$(TARGET)\mcscript.o: nv.h
+$(TARGET)\mcscript.o: otaspi.h
+$(TARGET)\mcscript.o: prl.h
+$(TARGET)\mcscript.o: prli.h
+$(TARGET)\mcscript.o: queue.h
+$(TARGET)\mcscript.o: qw.h
+$(TARGET)\mcscript.o: rex.h
+$(TARGET)\mcscript.o: target.h
+$(TARGET)\mcscript.o: targetg.h
+$(TARGET)\mcscript.o: task.h
+$(TARGET)\mcscript.o: tramp.h
+$(TARGET)\mcscript.o: uapi.h
+$(TARGET)\mcscript.o: uasms.h
+$(TARGET)\mcscript.o: uasmsi.h
+
+$(TARGET)\mcsysci.o: CUST4SPE.H
+$(TARGET)\mcsysci.o: acpmc.h
+$(TARGET)\mcsysci.o: addrdefs.h
+$(TARGET)\mcsysci.o: assert.h
+$(TARGET)\mcsysci.o: cai.h
+$(TARGET)\mcsysci.o: caii.h
+$(TARGET)\mcsysci.o: clk.h
+$(TARGET)\mcsysci.o: cm.h
+$(TARGET)\mcsysci.o: cmd.h
+$(TARGET)\mcsysci.o: cmmc.h
+$(TARGET)\mcsysci.o: comdef.h
+$(TARGET)\mcsysci.o: customer.h
+$(TARGET)\mcsysci.o: db.h
+$(TARGET)\mcsysci.o: dog.h
+$(TARGET)\mcsysci.o: err.h
+$(TARGET)\mcsysci.o: mc.h
+$(TARGET)\mcsysci.o: mcc.h
+$(TARGET)\mcsysci.o: mcsys.h
+$(TARGET)\mcsysci.o: mcsysci.c
+$(TARGET)\mcsysci.o: mcsyspr.h
+$(TARGET)\mcsysci.o: msg.h
+$(TARGET)\mcsysci.o: msm.h
+$(TARGET)\mcsysci.o: msm50reg.h
+$(TARGET)\mcsysci.o: nv.h
+$(TARGET)\mcsysci.o: otaspi.h
+$(TARGET)\mcsysci.o: prl.h
+$(TARGET)\mcsysci.o: prli.h
+$(TARGET)\mcsysci.o: queue.h
+$(TARGET)\mcsysci.o: qw.h
+$(TARGET)\mcsysci.o: rex.h
+$(TARGET)\mcsysci.o: target.h
+$(TARGET)\mcsysci.o: targetg.h
+$(TARGET)\mcsysci.o: task.h
+$(TARGET)\mcsysci.o: tramp.h
+$(TARGET)\mcsysci.o: uapi.h
+$(TARGET)\mcsysci.o: uasms.h
+$(TARGET)\mcsysci.o: uasmsi.h
+
+$(TARGET)\mcsyspr.o: CUST4SPE.H
+$(TARGET)\mcsyspr.o: acpmc.h
+$(TARGET)\mcsyspr.o: addrdefs.h
+$(TARGET)\mcsyspr.o: arm.h
+$(TARGET)\mcsyspr.o: assert.h
+$(TARGET)\mcsyspr.o: bio.h
+$(TARGET)\mcsyspr.o: biog.h
+$(TARGET)\mcsyspr.o: bit.h
+$(TARGET)\mcsyspr.o: cai.h
+$(TARGET)\mcsyspr.o: caii.h
+$(TARGET)\mcsyspr.o: clk.h
+$(TARGET)\mcsyspr.o: cm.h
+$(TARGET)\mcsyspr.o: cmd.h
+$(TARGET)\mcsyspr.o: cmmc.h
+$(TARGET)\mcsyspr.o: comdef.h
+$(TARGET)\mcsyspr.o: customer.h
+$(TARGET)\mcsyspr.o: db.h
+$(TARGET)\mcsyspr.o: dec.h
+$(TARGET)\mcsyspr.o: dec5000.h
+$(TARGET)\mcsyspr.o: deci.h
+$(TARGET)\mcsyspr.o: deint.h
+$(TARGET)\mcsyspr.o: dmod.h
+$(TARGET)\mcsyspr.o: dog.h
+$(TARGET)\mcsyspr.o: ds.h
+$(TARGET)\mcsyspr.o: dsm.h
+$(TARGET)\mcsyspr.o: dsnetmdl.h
+$(TARGET)\mcsyspr.o: dssocket.h
+$(TARGET)\mcsyspr.o: dssocki.h
+$(TARGET)\mcsyspr.o: enc.h
+$(TARGET)\mcsyspr.o: enci.h
+$(TARGET)\mcsyspr.o: err.h
+$(TARGET)\mcsyspr.o: iface.h
+$(TARGET)\mcsyspr.o: internet.h
+$(TARGET)\mcsyspr.o: ip.h
+$(TARGET)\mcsyspr.o: mc.h
+$(TARGET)\mcsyspr.o: mcc.h
+$(TARGET)\mcsyspr.o: mccdma.h
+$(TARGET)\mcsyspr.o: mccreg.h
+$(TARGET)\mcsyspr.o: mccsrch.h
+$(TARGET)\mcsyspr.o: mci.h
+$(TARGET)\mcsyspr.o: mcscript.h
+$(TARGET)\mcsyspr.o: mcsys.h
+$(TARGET)\mcsyspr.o: mcsyspr.c
+$(TARGET)\mcsyspr.o: mcsyspr.h
+$(TARGET)\mcsyspr.o: mdrrlp.h
+$(TARGET)\mcsyspr.o: memory.h
+$(TARGET)\mcsyspr.o: msg.h
+$(TARGET)\mcsyspr.o: msm.h
+$(TARGET)\mcsyspr.o: msm50reg.h
+$(TARGET)\mcsyspr.o: netuser.h
+$(TARGET)\mcsyspr.o: nv.h
+$(TARGET)\mcsyspr.o: otaspi.h
+$(TARGET)\mcsyspr.o: pppfsm.h
+$(TARGET)\mcsyspr.o: prl.h
+$(TARGET)\mcsyspr.o: prli.h
+$(TARGET)\mcsyspr.o: processor.h
+$(TARGET)\mcsyspr.o: psglobal.h
+$(TARGET)\mcsyspr.o: queue.h
+$(TARGET)\mcsyspr.o: qw.h
+$(TARGET)\mcsyspr.o: rex.h
+$(TARGET)\mcsyspr.o: rf.h
+$(TARGET)\mcsyspr.o: rfc.h
+$(TARGET)\mcsyspr.o: rficap.h
+$(TARGET)\mcsyspr.o: rxc.h
+$(TARGET)\mcsyspr.o: rxtx.h
+$(TARGET)\mcsyspr.o: sleep.h
+$(TARGET)\mcsyspr.o: srch.h
+$(TARGET)\mcsyspr.o: target.h
+$(TARGET)\mcsyspr.o: targetg.h
+$(TARGET)\mcsyspr.o: task.h
+$(TARGET)\mcsyspr.o: tcp.h
+$(TARGET)\mcsyspr.o: tramp.h
+$(TARGET)\mcsyspr.o: txc.h
+$(TARGET)\mcsyspr.o: uapi.h
+$(TARGET)\mcsyspr.o: uasms.h
+$(TARGET)\mcsyspr.o: uasmsi.h
+$(TARGET)\mcsyspr.o: ulpn.h
+$(TARGET)\mcsyspr.o: voc.h
+$(TARGET)\mcsyspr.o: vocmux.h
+
+$(TARGET)\mcsyspra.o: CUST4SPE.H
+$(TARGET)\mcsyspra.o: comdef.h
+$(TARGET)\mcsyspra.o: customer.h
+$(TARGET)\mcsyspra.o: mcsyspra.c
+$(TARGET)\mcsyspra.o: rex.h
+$(TARGET)\mcsyspra.o: target.h
+$(TARGET)\mcsyspra.o: targetg.h
+
+$(TARGET)\mcsysprd.o: CUST4SPE.H
+$(TARGET)\mcsysprd.o: acpmc.h
+$(TARGET)\mcsysprd.o: addrdefs.h
+$(TARGET)\mcsysprd.o: bit.h
+$(TARGET)\mcsysprd.o: cai.h
+$(TARGET)\mcsysprd.o: caii.h
+$(TARGET)\mcsysprd.o: clk.h
+$(TARGET)\mcsysprd.o: cm.h
+$(TARGET)\mcsysprd.o: cmd.h
+$(TARGET)\mcsysprd.o: cmmc.h
+$(TARGET)\mcsysprd.o: comdef.h
+$(TARGET)\mcsysprd.o: customer.h
+$(TARGET)\mcsysprd.o: db.h
+$(TARGET)\mcsysprd.o: dec.h
+$(TARGET)\mcsysprd.o: dec5000.h
+$(TARGET)\mcsysprd.o: deint.h
+$(TARGET)\mcsysprd.o: dog.h
+$(TARGET)\mcsysprd.o: ds.h
+$(TARGET)\mcsysprd.o: dsm.h
+$(TARGET)\mcsysprd.o: dsnetmdl.h
+$(TARGET)\mcsysprd.o: dssocket.h
+$(TARGET)\mcsysprd.o: dssocki.h
+$(TARGET)\mcsysprd.o: enc.h
+$(TARGET)\mcsysprd.o: err.h
+$(TARGET)\mcsysprd.o: iface.h
+$(TARGET)\mcsysprd.o: internet.h
+$(TARGET)\mcsysprd.o: ip.h
+$(TARGET)\mcsysprd.o: mc.h
+$(TARGET)\mcsysprd.o: mcc.h
+$(TARGET)\mcsysprd.o: mccdma.h
+$(TARGET)\mcsysprd.o: mccreg.h
+$(TARGET)\mcsysprd.o: mccsrch.h
+$(TARGET)\mcsysprd.o: mci.h
+$(TARGET)\mcsysprd.o: mcsys.h
+$(TARGET)\mcsysprd.o: mcsyspr.h
+$(TARGET)\mcsysprd.o: mcsysprd.c
+$(TARGET)\mcsysprd.o: mdrrlp.h
+$(TARGET)\mcsysprd.o: memory.h
+$(TARGET)\mcsysprd.o: msg.h
+$(TARGET)\mcsysprd.o: msm.h
+$(TARGET)\mcsysprd.o: msm50reg.h
+$(TARGET)\mcsysprd.o: netuser.h
+$(TARGET)\mcsysprd.o: nv.h
+$(TARGET)\mcsysprd.o: otaspi.h
+$(TARGET)\mcsysprd.o: pppfsm.h
+$(TARGET)\mcsysprd.o: prl.h
+$(TARGET)\mcsysprd.o: prli.h
+$(TARGET)\mcsysprd.o: psglobal.h
+$(TARGET)\mcsysprd.o: queue.h
+$(TARGET)\mcsysprd.o: qw.h
+$(TARGET)\mcsysprd.o: rex.h
+$(TARGET)\mcsysprd.o: rxc.h
+$(TARGET)\mcsysprd.o: rxtx.h
+$(TARGET)\mcsysprd.o: srch.h
+$(TARGET)\mcsysprd.o: target.h
+$(TARGET)\mcsysprd.o: targetg.h
+$(TARGET)\mcsysprd.o: task.h
+$(TARGET)\mcsysprd.o: tcp.h
+$(TARGET)\mcsysprd.o: tramp.h
+$(TARGET)\mcsysprd.o: txc.h
+$(TARGET)\mcsysprd.o: uapi.h
+$(TARGET)\mcsysprd.o: uasms.h
+$(TARGET)\mcsysprd.o: uasmsi.h
+$(TARGET)\mcsysprd.o: ulpn.h
+$(TARGET)\mcsysprd.o: voc.h
+$(TARGET)\mcsysprd.o: vocmux.h
+
+$(TARGET)\mcsyssup.o: CUST4SPE.H
+$(TARGET)\mcsyssup.o: acpmc.h
+$(TARGET)\mcsyssup.o: addrdefs.h
+$(TARGET)\mcsyssup.o: bit.h
+$(TARGET)\mcsyssup.o: cai.h
+$(TARGET)\mcsyssup.o: caii.h
+$(TARGET)\mcsyssup.o: clk.h
+$(TARGET)\mcsyssup.o: cm.h
+$(TARGET)\mcsyssup.o: cmd.h
+$(TARGET)\mcsyssup.o: cmmc.h
+$(TARGET)\mcsyssup.o: comdef.h
+$(TARGET)\mcsyssup.o: customer.h
+$(TARGET)\mcsyssup.o: db.h
+$(TARGET)\mcsyssup.o: dog.h
+$(TARGET)\mcsyssup.o: err.h
+$(TARGET)\mcsyssup.o: mc.h
+$(TARGET)\mcsyssup.o: mcc.h
+$(TARGET)\mcsyssup.o: mcsys.h
+$(TARGET)\mcsyssup.o: mcsyspr.h
+$(TARGET)\mcsyssup.o: mcsyssup.c
+$(TARGET)\mcsyssup.o: msg.h
+$(TARGET)\mcsyssup.o: msm.h
+$(TARGET)\mcsyssup.o: msm50reg.h
+$(TARGET)\mcsyssup.o: nv.h
+$(TARGET)\mcsyssup.o: otaspi.h
+$(TARGET)\mcsyssup.o: prl.h
+$(TARGET)\mcsyssup.o: prli.h
+$(TARGET)\mcsyssup.o: queue.h
+$(TARGET)\mcsyssup.o: qw.h
+$(TARGET)\mcsyssup.o: rex.h
+$(TARGET)\mcsyssup.o: target.h
+$(TARGET)\mcsyssup.o: targetg.h
+$(TARGET)\mcsyssup.o: task.h
+$(TARGET)\mcsyssup.o: tramp.h
+$(TARGET)\mcsyssup.o: uapi.h
+$(TARGET)\mcsyssup.o: uasms.h
+$(TARGET)\mcsyssup.o: uasmsi.h
+
+$(TARGET)\mdrrlp.o: CUST4SPE.H
+$(TARGET)\mdrrlp.o: addrdefs.h
+$(TARGET)\mdrrlp.o: bit.h
+$(TARGET)\mdrrlp.o: cai.h
+$(TARGET)\mdrrlp.o: clk.h
+$(TARGET)\mdrrlp.o: cm.h
+$(TARGET)\mdrrlp.o: cmd.h
+$(TARGET)\mdrrlp.o: comdef.h
+$(TARGET)\mdrrlp.o: crc.h
+$(TARGET)\mdrrlp.o: customer.h
+$(TARGET)\mdrrlp.o: db.h
+$(TARGET)\mdrrlp.o: dog.h
+$(TARGET)\mdrrlp.o: ds.h
+$(TARGET)\mdrrlp.o: dsi.h
+$(TARGET)\mdrrlp.o: dsm.h
+$(TARGET)\mdrrlp.o: dsnetmdl.h
+$(TARGET)\mdrrlp.o: dssocket.h
+$(TARGET)\mdrrlp.o: dssocki.h
+$(TARGET)\mdrrlp.o: err.h
+$(TARGET)\mdrrlp.o: iface.h
+$(TARGET)\mdrrlp.o: internet.h
+$(TARGET)\mdrrlp.o: ip.h
+$(TARGET)\mdrrlp.o: mc.h
+$(TARGET)\mdrrlp.o: mdrrlp.c
+$(TARGET)\mdrrlp.o: mdrrlp.h
+$(TARGET)\mdrrlp.o: memory.h
+$(TARGET)\mdrrlp.o: msg.h
+$(TARGET)\mdrrlp.o: msm.h
+$(TARGET)\mdrrlp.o: msm50reg.h
+$(TARGET)\mdrrlp.o: netuser.h
+$(TARGET)\mdrrlp.o: nv.h
+$(TARGET)\mdrrlp.o: pppfsm.h
+$(TARGET)\mdrrlp.o: psglobal.h
+$(TARGET)\mdrrlp.o: queue.h
+$(TARGET)\mdrrlp.o: qw.h
+$(TARGET)\mdrrlp.o: rex.h
+$(TARGET)\mdrrlp.o: sio.h
+$(TARGET)\mdrrlp.o: target.h
+$(TARGET)\mdrrlp.o: targetg.h
+$(TARGET)\mdrrlp.o: task.h
+$(TARGET)\mdrrlp.o: tcp.h
+$(TARGET)\mdrrlp.o: tramp.h
+
+$(TARGET)\misc.o: CUST4SPE.H
+$(TARGET)\misc.o: arm.h
+$(TARGET)\misc.o: comdef.h
+$(TARGET)\misc.o: customer.h
+$(TARGET)\misc.o: misc.c
+$(TARGET)\misc.o: misc.h
+$(TARGET)\misc.o: processor.h
+$(TARGET)\misc.o: rex.h
+$(TARGET)\misc.o: target.h
+$(TARGET)\misc.o: targetg.h
+
+$(TARGET)\mobile.o: CUST4SPE.H
+$(TARGET)\mobile.o: addrdefs.h
+$(TARGET)\mobile.o: armasm.h
+$(TARGET)\mobile.o: cai.h
+$(TARGET)\mobile.o: clk.h
+$(TARGET)\mobile.o: cmd.h
+$(TARGET)\mobile.o: comdef.h
+$(TARGET)\mobile.o: customer.h
+$(TARGET)\mobile.o: dog.h
+$(TARGET)\mobile.o: mc.h
+$(TARGET)\mobile.o: mobile.c
+$(TARGET)\mobile.o: mobile.h
+$(TARGET)\mobile.o: msm.h
+$(TARGET)\mobile.o: msm50reg.h
+$(TARGET)\mobile.o: nv.h
+$(TARGET)\mobile.o: queue.h
+$(TARGET)\mobile.o: qw.h
+$(TARGET)\mobile.o: rex.h
+$(TARGET)\mobile.o: target.h
+$(TARGET)\mobile.o: targetg.h
+$(TARGET)\mobile.o: task.h
+$(TARGET)\mobile.o: tramp.h
+
+$(TARGET)\msg.o: CUST4SPE.H
+$(TARGET)\msg.o: comdef.h
+$(TARGET)\msg.o: customer.h
+$(TARGET)\msg.o: err.h
+$(TARGET)\msg.o: memory.h
+$(TARGET)\msg.o: msg.c
+$(TARGET)\msg.o: msg.h
+$(TARGET)\msg.o: nv.h
+$(TARGET)\msg.o: queue.h
+$(TARGET)\msg.o: qw.h
+$(TARGET)\msg.o: rex.h
+$(TARGET)\msg.o: target.h
+$(TARGET)\msg.o: targetg.h
+$(TARGET)\msg.o: ts.h
+
+$(TARGET)\msm5_init.o: CUST4SPE.H
+$(TARGET)\msm5_init.o: addrdefs.h
+$(TARGET)\msm5_init.o: arm.h
+$(TARGET)\msm5_init.o: clkregim.h
+$(TARGET)\msm5_init.o: comdef.h
+$(TARGET)\msm5_init.o: customer.h
+$(TARGET)\msm5_init.o: dfm.h
+$(TARGET)\msm5_init.o: msm.h
+$(TARGET)\msm5_init.o: msm50reg.h
+$(TARGET)\msm5_init.o: msm5_init.c
+$(TARGET)\msm5_init.o: processor.h
+$(TARGET)\msm5_init.o: rex.h
+$(TARGET)\msm5_init.o: target.h
+$(TARGET)\msm5_init.o: targetg.h
+
+$(TARGET)\nvim.o: CUST4SPE.H
+$(TARGET)\nvim.o: addrdefs.h
+$(TARGET)\nvim.o: cai.h
+$(TARGET)\nvim.o: clk.h
+$(TARGET)\nvim.o: cmd.h
+$(TARGET)\nvim.o: comdef.h
+$(TARGET)\nvim.o: customer.h
+$(TARGET)\nvim.o: dog.h
+$(TARGET)\nvim.o: err.h
+$(TARGET)\nvim.o: fs.h
+$(TARGET)\nvim.o: fs_parms.h
+$(TARGET)\nvim.o: hw.h
+$(TARGET)\nvim.o: mc.h
+$(TARGET)\nvim.o: memory.h
+$(TARGET)\nvim.o: msg.h
+$(TARGET)\nvim.o: msm.h
+$(TARGET)\nvim.o: msm50reg.h
+$(TARGET)\nvim.o: nv.h
+$(TARGET)\nvim.o: nvi.h
+$(TARGET)\nvim.o: nvim.c
+$(TARGET)\nvim.o: nvim.h
+$(TARGET)\nvim.o: nvimio.h
+$(TARGET)\nvim.o: nvimr.h
+$(TARGET)\nvim.o: nvimw.h
+$(TARGET)\nvim.o: queue.h
+$(TARGET)\nvim.o: qw.h
+$(TARGET)\nvim.o: rex.h
+$(TARGET)\nvim.o: target.h
+$(TARGET)\nvim.o: targetg.h
+$(TARGET)\nvim.o: task.h
+$(TARGET)\nvim.o: tramp.h
+
+$(TARGET)\nvimio.o: CUST4SPE.H
+$(TARGET)\nvimio.o: addrdefs.h
+$(TARGET)\nvimio.o: clk.h
+$(TARGET)\nvimio.o: comdef.h
+$(TARGET)\nvimio.o: customer.h
+$(TARGET)\nvimio.o: dog.h
+$(TARGET)\nvimio.o: err.h
+$(TARGET)\nvimio.o: fs.h
+$(TARGET)\nvimio.o: fs_parms.h
+$(TARGET)\nvimio.o: hw.h
+$(TARGET)\nvimio.o: memory.h
+$(TARGET)\nvimio.o: msg.h
+$(TARGET)\nvimio.o: msm.h
+$(TARGET)\nvimio.o: msm50reg.h
+$(TARGET)\nvimio.o: nv.h
+$(TARGET)\nvimio.o: nvi.h
+$(TARGET)\nvimio.o: nvim.h
+$(TARGET)\nvimio.o: nvimio.c
+$(TARGET)\nvimio.o: nvimio.h
+$(TARGET)\nvimio.o: queue.h
+$(TARGET)\nvimio.o: qw.h
+$(TARGET)\nvimio.o: rex.h
+$(TARGET)\nvimio.o: target.h
+$(TARGET)\nvimio.o: targetg.h
+$(TARGET)\nvimio.o: task.h
+$(TARGET)\nvimio.o: tramp.h
+
+$(TARGET)\nvimnv.o: CUST4SPE.H
+$(TARGET)\nvimnv.o: addrdefs.h
+$(TARGET)\nvimnv.o: cai.h
+$(TARGET)\nvimnv.o: clk.h
+$(TARGET)\nvimnv.o: cmd.h
+$(TARGET)\nvimnv.o: comdef.h
+$(TARGET)\nvimnv.o: crc.h
+$(TARGET)\nvimnv.o: customer.h
+$(TARGET)\nvimnv.o: dog.h
+$(TARGET)\nvimnv.o: err.h
+$(TARGET)\nvimnv.o: fs.h
+$(TARGET)\nvimnv.o: fs_parms.h
+$(TARGET)\nvimnv.o: hw.h
+$(TARGET)\nvimnv.o: mc.h
+$(TARGET)\nvimnv.o: memory.h
+$(TARGET)\nvimnv.o: msg.h
+$(TARGET)\nvimnv.o: msm.h
+$(TARGET)\nvimnv.o: msm50reg.h
+$(TARGET)\nvimnv.o: nv.h
+$(TARGET)\nvimnv.o: nvi.h
+$(TARGET)\nvimnv.o: nvim.h
+$(TARGET)\nvimnv.o: nvimio.h
+$(TARGET)\nvimnv.o: nvimnv.c
+$(TARGET)\nvimnv.o: nvimr.h
+$(TARGET)\nvimnv.o: nvimw.h
+$(TARGET)\nvimnv.o: queue.h
+$(TARGET)\nvimnv.o: qw.h
+$(TARGET)\nvimnv.o: rex.h
+$(TARGET)\nvimnv.o: target.h
+$(TARGET)\nvimnv.o: targetg.h
+$(TARGET)\nvimnv.o: task.h
+$(TARGET)\nvimnv.o: tramp.h
+
+$(TARGET)\nvimr.o: CUST4SPE.H
+$(TARGET)\nvimr.o: addrdefs.h
+$(TARGET)\nvimr.o: clk.h
+$(TARGET)\nvimr.o: comdef.h
+$(TARGET)\nvimr.o: crc.h
+$(TARGET)\nvimr.o: customer.h
+$(TARGET)\nvimr.o: dog.h
+$(TARGET)\nvimr.o: err.h
+$(TARGET)\nvimr.o: fs.h
+$(TARGET)\nvimr.o: fs_parms.h
+$(TARGET)\nvimr.o: hw.h
+$(TARGET)\nvimr.o: memory.h
+$(TARGET)\nvimr.o: msg.h
+$(TARGET)\nvimr.o: msm.h
+$(TARGET)\nvimr.o: msm50reg.h
+$(TARGET)\nvimr.o: nv.h
+$(TARGET)\nvimr.o: nvi.h
+$(TARGET)\nvimr.o: nvim.h
+$(TARGET)\nvimr.o: nvimio.h
+$(TARGET)\nvimr.o: nvimr.c
+$(TARGET)\nvimr.o: nvimr.h
+$(TARGET)\nvimr.o: queue.h
+$(TARGET)\nvimr.o: qw.h
+$(TARGET)\nvimr.o: rex.h
+$(TARGET)\nvimr.o: target.h
+$(TARGET)\nvimr.o: targetg.h
+$(TARGET)\nvimr.o: task.h
+$(TARGET)\nvimr.o: tramp.h
+
+$(TARGET)\nvimw.o: CUST4SPE.H
+$(TARGET)\nvimw.o: addrdefs.h
+$(TARGET)\nvimw.o: clk.h
+$(TARGET)\nvimw.o: comdef.h
+$(TARGET)\nvimw.o: crc.h
+$(TARGET)\nvimw.o: customer.h
+$(TARGET)\nvimw.o: dog.h
+$(TARGET)\nvimw.o: err.h
+$(TARGET)\nvimw.o: fs.h
+$(TARGET)\nvimw.o: fs_parms.h
+$(TARGET)\nvimw.o: hw.h
+$(TARGET)\nvimw.o: memory.h
+$(TARGET)\nvimw.o: msg.h
+$(TARGET)\nvimw.o: msm.h
+$(TARGET)\nvimw.o: msm50reg.h
+$(TARGET)\nvimw.o: nv.h
+$(TARGET)\nvimw.o: nvi.h
+$(TARGET)\nvimw.o: nvim.h
+$(TARGET)\nvimw.o: nvimio.h
+$(TARGET)\nvimw.o: nvimr.h
+$(TARGET)\nvimw.o: nvimw.c
+$(TARGET)\nvimw.o: nvimw.h
+$(TARGET)\nvimw.o: queue.h
+$(TARGET)\nvimw.o: qw.h
+$(TARGET)\nvimw.o: rex.h
+$(TARGET)\nvimw.o: target.h
+$(TARGET)\nvimw.o: targetg.h
+$(TARGET)\nvimw.o: task.h
+$(TARGET)\nvimw.o: tramp.h
+
+$(TARGET)\otasp.o: CUST4SPE.H
+$(TARGET)\otasp.o: acpmc.h
+$(TARGET)\otasp.o: addrdefs.h
+$(TARGET)\otasp.o: bit.h
+$(TARGET)\otasp.o: cai.h
+$(TARGET)\otasp.o: caii.h
+$(TARGET)\otasp.o: clk.h
+$(TARGET)\otasp.o: cm.h
+$(TARGET)\otasp.o: cmd.h
+$(TARGET)\otasp.o: cmmc.h
+$(TARGET)\otasp.o: comdef.h
+$(TARGET)\otasp.o: crc.h
+$(TARGET)\otasp.o: customer.h
+$(TARGET)\otasp.o: db.h
+$(TARGET)\otasp.o: dec.h
+$(TARGET)\otasp.o: dec5000.h
+$(TARGET)\otasp.o: deint.h
+$(TARGET)\otasp.o: diag.h
+$(TARGET)\otasp.o: dog.h
+$(TARGET)\otasp.o: ds.h
+$(TARGET)\otasp.o: dsm.h
+$(TARGET)\otasp.o: dsnetmdl.h
+$(TARGET)\otasp.o: dssocket.h
+$(TARGET)\otasp.o: dssocki.h
+$(TARGET)\otasp.o: enc.h
+$(TARGET)\otasp.o: err.h
+$(TARGET)\otasp.o: iface.h
+$(TARGET)\otasp.o: internet.h
+$(TARGET)\otasp.o: ip.h
+$(TARGET)\otasp.o: mc.h
+$(TARGET)\otasp.o: mcc.h
+$(TARGET)\otasp.o: mccdma.h
+$(TARGET)\otasp.o: mccrx.h
+$(TARGET)\otasp.o: mccrxtx.h
+$(TARGET)\otasp.o: mccsrch.h
+$(TARGET)\otasp.o: mcctcsup.h
+$(TARGET)\otasp.o: mcsys.h
+$(TARGET)\otasp.o: mcsyspr.h
+$(TARGET)\otasp.o: mdrrlp.h
+$(TARGET)\otasp.o: memory.h
+$(TARGET)\otasp.o: msg.h
+$(TARGET)\otasp.o: msm.h
+$(TARGET)\otasp.o: msm50reg.h
+$(TARGET)\otasp.o: netuser.h
+$(TARGET)\otasp.o: nv.h
+$(TARGET)\otasp.o: otasp.c
+$(TARGET)\otasp.o: otaspe.h
+$(TARGET)\otasp.o: otaspi.h
+$(TARGET)\otasp.o: otaspx.h
+$(TARGET)\otasp.o: pppfsm.h
+$(TARGET)\otasp.o: prl.h
+$(TARGET)\otasp.o: prli.h
+$(TARGET)\otasp.o: psglobal.h
+$(TARGET)\otasp.o: queue.h
+$(TARGET)\otasp.o: qw.h
+$(TARGET)\otasp.o: ran.h
+$(TARGET)\otasp.o: rex.h
+$(TARGET)\otasp.o: rxc.h
+$(TARGET)\otasp.o: rxtx.h
+$(TARGET)\otasp.o: sio.h
+$(TARGET)\otasp.o: srch.h
+$(TARGET)\otasp.o: target.h
+$(TARGET)\otasp.o: targetg.h
+$(TARGET)\otasp.o: task.h
+$(TARGET)\otasp.o: tcp.h
+$(TARGET)\otasp.o: tramp.h
+$(TARGET)\otasp.o: txc.h
+$(TARGET)\otasp.o: uapi.h
+$(TARGET)\otasp.o: uasms.h
+$(TARGET)\otasp.o: uasmsi.h
+$(TARGET)\otasp.o: ulpn.h
+$(TARGET)\otasp.o: voc.h
+$(TARGET)\otasp.o: vocmux.h
+
+$(TARGET)\otaspx.o: CUST4SPE.H
+$(TARGET)\otaspx.o: bit.h
+$(TARGET)\otaspx.o: comdef.h
+$(TARGET)\otaspx.o: customer.h
+$(TARGET)\otaspx.o: err.h
+$(TARGET)\otaspx.o: memory.h
+$(TARGET)\otaspx.o: msg.h
+$(TARGET)\otaspx.o: nv.h
+$(TARGET)\otaspx.o: otaspe.h
+$(TARGET)\otaspx.o: otaspi.h
+$(TARGET)\otaspx.o: otaspx.c
+$(TARGET)\otaspx.o: otaspx.h
+$(TARGET)\otaspx.o: queue.h
+$(TARGET)\otaspx.o: qw.h
+$(TARGET)\otaspx.o: rex.h
+$(TARGET)\otaspx.o: target.h
+$(TARGET)\otaspx.o: targetg.h
+
+$(TARGET)\parm.o: CUST4SPE.H
+$(TARGET)\parm.o: cai.h
+$(TARGET)\parm.o: comdef.h
+$(TARGET)\parm.o: customer.h
+$(TARGET)\parm.o: msg.h
+$(TARGET)\parm.o: nv.h
+$(TARGET)\parm.o: parm.c
+$(TARGET)\parm.o: parm.h
+$(TARGET)\parm.o: queue.h
+$(TARGET)\parm.o: qw.h
+$(TARGET)\parm.o: rex.h
+$(TARGET)\parm.o: target.h
+$(TARGET)\parm.o: targetg.h
+
+$(TARGET)\pnmask.o: CUST4SPE.H
+$(TARGET)\pnmask.o: comdef.h
+$(TARGET)\pnmask.o: customer.h
+$(TARGET)\pnmask.o: pnmask.c
+$(TARGET)\pnmask.o: rex.h
+$(TARGET)\pnmask.o: target.h
+$(TARGET)\pnmask.o: targetg.h
+
+$(TARGET)\ppp.o: CUST4SPE.H
+$(TARGET)\ppp.o: addrdefs.h
+$(TARGET)\ppp.o: assert.h
+$(TARGET)\ppp.o: cai.h
+$(TARGET)\ppp.o: clk.h
+$(TARGET)\ppp.o: cm.h
+$(TARGET)\ppp.o: cmd.h
+$(TARGET)\ppp.o: comdef.h
+$(TARGET)\ppp.o: crc.h
+$(TARGET)\ppp.o: customer.h
+$(TARGET)\ppp.o: db.h
+$(TARGET)\ppp.o: dog.h
+$(TARGET)\ppp.o: ds.h
+$(TARGET)\ppp.o: ds_snoop.h
+$(TARGET)\ppp.o: dsi.h
+$(TARGET)\ppp.o: dsm.h
+$(TARGET)\ppp.o: dsnetmdl.h
+$(TARGET)\ppp.o: dssocket.h
+$(TARGET)\ppp.o: dssocki.h
+$(TARGET)\ppp.o: err.h
+$(TARGET)\ppp.o: iface.h
+$(TARGET)\ppp.o: internet.h
+$(TARGET)\ppp.o: ip.h
+$(TARGET)\ppp.o: mc.h
+$(TARGET)\ppp.o: mdrrlp.h
+$(TARGET)\ppp.o: memory.h
+$(TARGET)\ppp.o: msg.h
+$(TARGET)\ppp.o: msm.h
+$(TARGET)\ppp.o: msm50reg.h
+$(TARGET)\ppp.o: netuser.h
+$(TARGET)\ppp.o: nv.h
+$(TARGET)\ppp.o: ppp.c
+$(TARGET)\ppp.o: ppp.h
+$(TARGET)\ppp.o: pppfsm.h
+$(TARGET)\ppp.o: pppipcp.h
+$(TARGET)\ppp.o: ppplcp.h
+$(TARGET)\ppp.o: ps.h
+$(TARGET)\ppp.o: psglobal.h
+$(TARGET)\ppp.o: psi.h
+$(TARGET)\ppp.o: psmisc.h
+$(TARGET)\ppp.o: queue.h
+$(TARGET)\ppp.o: qw.h
+$(TARGET)\ppp.o: rex.h
+$(TARGET)\ppp.o: sio.h
+$(TARGET)\ppp.o: slhc.h
+$(TARGET)\ppp.o: target.h
+$(TARGET)\ppp.o: targetg.h
+$(TARGET)\ppp.o: task.h
+$(TARGET)\ppp.o: tcp.h
+$(TARGET)\ppp.o: tramp.h
+
+$(TARGET)\pppfsm.o: CUST4SPE.H
+$(TARGET)\pppfsm.o: addrdefs.h
+$(TARGET)\pppfsm.o: cai.h
+$(TARGET)\pppfsm.o: clk.h
+$(TARGET)\pppfsm.o: cm.h
+$(TARGET)\pppfsm.o: cmd.h
+$(TARGET)\pppfsm.o: comdef.h
+$(TARGET)\pppfsm.o: customer.h
+$(TARGET)\pppfsm.o: db.h
+$(TARGET)\pppfsm.o: dog.h
+$(TARGET)\pppfsm.o: ds.h
+$(TARGET)\pppfsm.o: dsm.h
+$(TARGET)\pppfsm.o: dsnetmdl.h
+$(TARGET)\pppfsm.o: dssocket.h
+$(TARGET)\pppfsm.o: dssocki.h
+$(TARGET)\pppfsm.o: err.h
+$(TARGET)\pppfsm.o: iface.h
+$(TARGET)\pppfsm.o: internet.h
+$(TARGET)\pppfsm.o: ip.h
+$(TARGET)\pppfsm.o: mc.h
+$(TARGET)\pppfsm.o: mdrrlp.h
+$(TARGET)\pppfsm.o: msg.h
+$(TARGET)\pppfsm.o: msm.h
+$(TARGET)\pppfsm.o: msm50reg.h
+$(TARGET)\pppfsm.o: netuser.h
+$(TARGET)\pppfsm.o: nv.h
+$(TARGET)\pppfsm.o: ppp.h
+$(TARGET)\pppfsm.o: pppfsm.c
+$(TARGET)\pppfsm.o: pppfsm.h
+$(TARGET)\pppfsm.o: ppplcp.h
+$(TARGET)\pppfsm.o: ps.h
+$(TARGET)\pppfsm.o: psglobal.h
+$(TARGET)\pppfsm.o: psi.h
+$(TARGET)\pppfsm.o: psmisc.h
+$(TARGET)\pppfsm.o: queue.h
+$(TARGET)\pppfsm.o: qw.h
+$(TARGET)\pppfsm.o: rex.h
+$(TARGET)\pppfsm.o: target.h
+$(TARGET)\pppfsm.o: targetg.h
+$(TARGET)\pppfsm.o: task.h
+$(TARGET)\pppfsm.o: tcp.h
+$(TARGET)\pppfsm.o: tramp.h
+
+$(TARGET)\pppipcp.o: CUST4SPE.H
+$(TARGET)\pppipcp.o: addrdefs.h
+$(TARGET)\pppipcp.o: cai.h
+$(TARGET)\pppipcp.o: clk.h
+$(TARGET)\pppipcp.o: cm.h
+$(TARGET)\pppipcp.o: cmd.h
+$(TARGET)\pppipcp.o: comdef.h
+$(TARGET)\pppipcp.o: customer.h
+$(TARGET)\pppipcp.o: db.h
+$(TARGET)\pppipcp.o: dog.h
+$(TARGET)\pppipcp.o: ds.h
+$(TARGET)\pppipcp.o: dsm.h
+$(TARGET)\pppipcp.o: dsnetmdl.h
+$(TARGET)\pppipcp.o: dssocket.h
+$(TARGET)\pppipcp.o: dssocki.h
+$(TARGET)\pppipcp.o: err.h
+$(TARGET)\pppipcp.o: iface.h
+$(TARGET)\pppipcp.o: internet.h
+$(TARGET)\pppipcp.o: ip.h
+$(TARGET)\pppipcp.o: mc.h
+$(TARGET)\pppipcp.o: mdrrlp.h
+$(TARGET)\pppipcp.o: memory.h
+$(TARGET)\pppipcp.o: msg.h
+$(TARGET)\pppipcp.o: msm.h
+$(TARGET)\pppipcp.o: msm50reg.h
+$(TARGET)\pppipcp.o: netuser.h
+$(TARGET)\pppipcp.o: nv.h
+$(TARGET)\pppipcp.o: ppp.h
+$(TARGET)\pppipcp.o: pppfsm.h
+$(TARGET)\pppipcp.o: pppipcp.c
+$(TARGET)\pppipcp.o: pppipcp.h
+$(TARGET)\pppipcp.o: ps.h
+$(TARGET)\pppipcp.o: psglobal.h
+$(TARGET)\pppipcp.o: psi.h
+$(TARGET)\pppipcp.o: psmisc.h
+$(TARGET)\pppipcp.o: queue.h
+$(TARGET)\pppipcp.o: qw.h
+$(TARGET)\pppipcp.o: rex.h
+$(TARGET)\pppipcp.o: slhc.h
+$(TARGET)\pppipcp.o: target.h
+$(TARGET)\pppipcp.o: targetg.h
+$(TARGET)\pppipcp.o: task.h
+$(TARGET)\pppipcp.o: tcp.h
+$(TARGET)\pppipcp.o: tramp.h
+
+$(TARGET)\ppplcp.o: CUST4SPE.H
+$(TARGET)\ppplcp.o: addrdefs.h
+$(TARGET)\ppplcp.o: cai.h
+$(TARGET)\ppplcp.o: clk.h
+$(TARGET)\ppplcp.o: cm.h
+$(TARGET)\ppplcp.o: cmd.h
+$(TARGET)\ppplcp.o: comdef.h
+$(TARGET)\ppplcp.o: customer.h
+$(TARGET)\ppplcp.o: db.h
+$(TARGET)\ppplcp.o: dog.h
+$(TARGET)\ppplcp.o: ds.h
+$(TARGET)\ppplcp.o: ds_snoop.h
+$(TARGET)\ppplcp.o: dsm.h
+$(TARGET)\ppplcp.o: dsnetmdl.h
+$(TARGET)\ppplcp.o: dssocket.h
+$(TARGET)\ppplcp.o: dssocki.h
+$(TARGET)\ppplcp.o: err.h
+$(TARGET)\ppplcp.o: iface.h
+$(TARGET)\ppplcp.o: internet.h
+$(TARGET)\ppplcp.o: ip.h
+$(TARGET)\ppplcp.o: mc.h
+$(TARGET)\ppplcp.o: mdrrlp.h
+$(TARGET)\ppplcp.o: memory.h
+$(TARGET)\ppplcp.o: msg.h
+$(TARGET)\ppplcp.o: msm.h
+$(TARGET)\ppplcp.o: msm50reg.h
+$(TARGET)\ppplcp.o: netuser.h
+$(TARGET)\ppplcp.o: nv.h
+$(TARGET)\ppplcp.o: ppp.h
+$(TARGET)\ppplcp.o: pppfsm.h
+$(TARGET)\ppplcp.o: ppplcp.c
+$(TARGET)\ppplcp.o: ppplcp.h
+$(TARGET)\ppplcp.o: ps.h
+$(TARGET)\ppplcp.o: psglobal.h
+$(TARGET)\ppplcp.o: psi.h
+$(TARGET)\ppplcp.o: psmisc.h
+$(TARGET)\ppplcp.o: queue.h
+$(TARGET)\ppplcp.o: qw.h
+$(TARGET)\ppplcp.o: rex.h
+$(TARGET)\ppplcp.o: target.h
+$(TARGET)\ppplcp.o: targetg.h
+$(TARGET)\ppplcp.o: task.h
+$(TARGET)\ppplcp.o: tcp.h
+$(TARGET)\ppplcp.o: tramp.h
+
+$(TARGET)\prl.o: CUST4SPE.H
+$(TARGET)\prl.o: acpmc.h
+$(TARGET)\prl.o: addrdefs.h
+$(TARGET)\prl.o: assert.h
+$(TARGET)\prl.o: bit.h
+$(TARGET)\prl.o: cai.h
+$(TARGET)\prl.o: caii.h
+$(TARGET)\prl.o: clk.h
+$(TARGET)\prl.o: cm.h
+$(TARGET)\prl.o: cmd.h
+$(TARGET)\prl.o: cmmc.h
+$(TARGET)\prl.o: comdef.h
+$(TARGET)\prl.o: crc.h
+$(TARGET)\prl.o: customer.h
+$(TARGET)\prl.o: db.h
+$(TARGET)\prl.o: dog.h
+$(TARGET)\prl.o: err.h
+$(TARGET)\prl.o: mc.h
+$(TARGET)\prl.o: mcc.h
+$(TARGET)\prl.o: mcsys.h
+$(TARGET)\prl.o: mcsyspr.h
+$(TARGET)\prl.o: memory.h
+$(TARGET)\prl.o: msg.h
+$(TARGET)\prl.o: msm.h
+$(TARGET)\prl.o: msm50reg.h
+$(TARGET)\prl.o: nv.h
+$(TARGET)\prl.o: otaspi.h
+$(TARGET)\prl.o: prl.c
+$(TARGET)\prl.o: prl.h
+$(TARGET)\prl.o: prli.h
+$(TARGET)\prl.o: queue.h
+$(TARGET)\prl.o: qw.h
+$(TARGET)\prl.o: rex.h
+$(TARGET)\prl.o: target.h
+$(TARGET)\prl.o: targetg.h
+$(TARGET)\prl.o: task.h
+$(TARGET)\prl.o: tramp.h
+$(TARGET)\prl.o: uapi.h
+$(TARGET)\prl.o: uasms.h
+$(TARGET)\prl.o: uasmsi.h
+
+$(TARGET)\psctl.o: CUST4SPE.H
+$(TARGET)\psctl.o: addrdefs.h
+$(TARGET)\psctl.o: bit.h
+$(TARGET)\psctl.o: cai.h
+$(TARGET)\psctl.o: clk.h
+$(TARGET)\psctl.o: cm.h
+$(TARGET)\psctl.o: cmd.h
+$(TARGET)\psctl.o: comdef.h
+$(TARGET)\psctl.o: customer.h
+$(TARGET)\psctl.o: db.h
+$(TARGET)\psctl.o: dog.h
+$(TARGET)\psctl.o: ds.h
+$(TARGET)\psctl.o: dsm.h
+$(TARGET)\psctl.o: dsnetmdl.h
+$(TARGET)\psctl.o: dssocket.h
+$(TARGET)\psctl.o: dssocki.h
+$(TARGET)\psctl.o: err.h
+$(TARGET)\psctl.o: iface.h
+$(TARGET)\psctl.o: internet.h
+$(TARGET)\psctl.o: ip.h
+$(TARGET)\psctl.o: mc.h
+$(TARGET)\psctl.o: mdrrlp.h
+$(TARGET)\psctl.o: memory.h
+$(TARGET)\psctl.o: msg.h
+$(TARGET)\psctl.o: msm.h
+$(TARGET)\psctl.o: msm50reg.h
+$(TARGET)\psctl.o: netuser.h
+$(TARGET)\psctl.o: nv.h
+$(TARGET)\psctl.o: pppfsm.h
+$(TARGET)\psctl.o: ps.h
+$(TARGET)\psctl.o: psctl.c
+$(TARGET)\psctl.o: psglobal.h
+$(TARGET)\psctl.o: psi.h
+$(TARGET)\psctl.o: queue.h
+$(TARGET)\psctl.o: qw.h
+$(TARGET)\psctl.o: rex.h
+$(TARGET)\psctl.o: sio.h
+$(TARGET)\psctl.o: target.h
+$(TARGET)\psctl.o: targetg.h
+$(TARGET)\psctl.o: task.h
+$(TARGET)\psctl.o: tcp.h
+$(TARGET)\psctl.o: tramp.h
+
+$(TARGET)\psmgr.o: CUST4SPE.H
+$(TARGET)\psmgr.o: addrdefs.h
+$(TARGET)\psmgr.o: assert.h
+$(TARGET)\psmgr.o: cai.h
+$(TARGET)\psmgr.o: clk.h
+$(TARGET)\psmgr.o: cm.h
+$(TARGET)\psmgr.o: cmd.h
+$(TARGET)\psmgr.o: comdef.h
+$(TARGET)\psmgr.o: customer.h
+$(TARGET)\psmgr.o: db.h
+$(TARGET)\psmgr.o: dog.h
+$(TARGET)\psmgr.o: ds.h
+$(TARGET)\psmgr.o: ds_snoop.h
+$(TARGET)\psmgr.o: dsatcop.h
+$(TARGET)\psmgr.o: dsatcopi.h
+$(TARGET)\psmgr.o: dsi.h
+$(TARGET)\psmgr.o: dsm.h
+$(TARGET)\psmgr.o: dsmgr.h
+$(TARGET)\psmgr.o: dsnetmdl.h
+$(TARGET)\psmgr.o: dsrmio.h
+$(TARGET)\psmgr.o: dssnet.h
+$(TARGET)\psmgr.o: dssocket.h
+$(TARGET)\psmgr.o: dssocki.h
+$(TARGET)\psmgr.o: dsstcp.h
+$(TARGET)\psmgr.o: err.h
+$(TARGET)\psmgr.o: iface.h
+$(TARGET)\psmgr.o: internet.h
+$(TARGET)\psmgr.o: ip.h
+$(TARGET)\psmgr.o: mc.h
+$(TARGET)\psmgr.o: mdrrlp.h
+$(TARGET)\psmgr.o: memory.h
+$(TARGET)\psmgr.o: msg.h
+$(TARGET)\psmgr.o: msm.h
+$(TARGET)\psmgr.o: msm50reg.h
+$(TARGET)\psmgr.o: netuser.h
+$(TARGET)\psmgr.o: nv.h
+$(TARGET)\psmgr.o: ppp.h
+$(TARGET)\psmgr.o: pppfsm.h
+$(TARGET)\psmgr.o: pppipcp.h
+$(TARGET)\psmgr.o: ppplcp.h
+$(TARGET)\psmgr.o: ps.h
+$(TARGET)\psmgr.o: psglobal.h
+$(TARGET)\psmgr.o: psi.h
+$(TARGET)\psmgr.o: psmgr.c
+$(TARGET)\psmgr.o: psmisc.h
+$(TARGET)\psmgr.o: queue.h
+$(TARGET)\psmgr.o: qw.h
+$(TARGET)\psmgr.o: rex.h
+$(TARGET)\psmgr.o: rlp.h
+$(TARGET)\psmgr.o: sio.h
+$(TARGET)\psmgr.o: slhc.h
+$(TARGET)\psmgr.o: target.h
+$(TARGET)\psmgr.o: targetg.h
+$(TARGET)\psmgr.o: task.h
+$(TARGET)\psmgr.o: tcp.h
+$(TARGET)\psmgr.o: tramp.h
+$(TARGET)\psmgr.o: udp.h
+
+$(TARGET)\psmisc.o: CUST4SPE.H
+$(TARGET)\psmisc.o: addrdefs.h
+$(TARGET)\psmisc.o: clk.h
+$(TARGET)\psmisc.o: comdef.h
+$(TARGET)\psmisc.o: customer.h
+$(TARGET)\psmisc.o: dsm.h
+$(TARGET)\psmisc.o: dsnetmdl.h
+$(TARGET)\psmisc.o: iface.h
+$(TARGET)\psmisc.o: internet.h
+$(TARGET)\psmisc.o: ip.h
+$(TARGET)\psmisc.o: msm.h
+$(TARGET)\psmisc.o: msm50reg.h
+$(TARGET)\psmisc.o: pppfsm.h
+$(TARGET)\psmisc.o: psglobal.h
+$(TARGET)\psmisc.o: psmisc.c
+$(TARGET)\psmisc.o: queue.h
+$(TARGET)\psmisc.o: qw.h
+$(TARGET)\psmisc.o: rex.h
+$(TARGET)\psmisc.o: target.h
+$(TARGET)\psmisc.o: targetg.h
+$(TARGET)\psmisc.o: tramp.h
+
+$(TARGET)\queue.o: CUST4SPE.H
+$(TARGET)\queue.o: comdef.h
+$(TARGET)\queue.o: customer.h
+$(TARGET)\queue.o: queue.c
+$(TARGET)\queue.o: queue.h
+$(TARGET)\queue.o: rex.h
+$(TARGET)\queue.o: target.h
+$(TARGET)\queue.o: targetg.h
+
+$(TARGET)\qw.o: CUST4SPE.H
+$(TARGET)\qw.o: comdef.h
+$(TARGET)\qw.o: customer.h
+$(TARGET)\qw.o: qw.c
+$(TARGET)\qw.o: qw.h
+$(TARGET)\qw.o: rex.h
+$(TARGET)\qw.o: target.h
+$(TARGET)\qw.o: targetg.h
+
+$(TARGET)\ran.o: CUST4SPE.H
+$(TARGET)\ran.o: bootdata.h
+$(TARGET)\ran.o: comdef.h
+$(TARGET)\ran.o: customer.h
+$(TARGET)\ran.o: ran.c
+$(TARGET)\ran.o: ran.h
+$(TARGET)\ran.o: rex.h
+$(TARGET)\ran.o: target.h
+$(TARGET)\ran.o: targetg.h
+
+$(TARGET)\rex.o: CUST4SPE.H
+$(TARGET)\rex.o: armasm.h
+$(TARGET)\rex.o: comdef.h
+$(TARGET)\rex.o: customer.h
+$(TARGET)\rex.o: rex.c
+$(TARGET)\rex.o: rex.h
+$(TARGET)\rex.o: target.h
+$(TARGET)\rex.o: targetg.h
+
+$(TARGET)\rexarm.o: CUST4SPE.H
+$(TARGET)\rexarm.o: arm.h
+$(TARGET)\rexarm.o: armasm.h
+$(TARGET)\rexarm.o: customer.h
+$(TARGET)\rexarm.o: rexarm.h
+$(TARGET)\rexarm.o: rexarm.s
+$(TARGET)\rexarm.o: target.h
+$(TARGET)\rexarm.o: targetg.h
+
+$(TARGET)\rfcs.o: CUST4SPE.H
+$(TARGET)\rfcs.o: addrdefs.h
+$(TARGET)\rfcs.o: arm.h
+$(TARGET)\rfcs.o: bio.h
+$(TARGET)\rfcs.o: biog.h
+$(TARGET)\rfcs.o: cagc.h
+$(TARGET)\rfcs.o: clk.h
+$(TARGET)\rfcs.o: comdef.h
+$(TARGET)\rfcs.o: customer.h
+$(TARGET)\rfcs.o: deci.h
+$(TARGET)\rfcs.o: dmod.h
+$(TARGET)\rfcs.o: enci.h
+$(TARGET)\rfcs.o: err.h
+$(TARGET)\rfcs.o: msg.h
+$(TARGET)\rfcs.o: msm.h
+$(TARGET)\rfcs.o: msm50reg.h
+$(TARGET)\rfcs.o: nv.h
+$(TARGET)\rfcs.o: processor.h
+$(TARGET)\rfcs.o: queue.h
+$(TARGET)\rfcs.o: qw.h
+$(TARGET)\rfcs.o: rex.h
+$(TARGET)\rfcs.o: rfc.h
+$(TARGET)\rfcs.o: rfcs.c
+$(TARGET)\rfcs.o: rficap.h
+$(TARGET)\rfcs.o: rfifreq.h
+$(TARGET)\rfcs.o: rfigpio.h
+$(TARGET)\rfcs.o: target.h
+$(TARGET)\rfcs.o: targetg.h
+$(TARGET)\rfcs.o: tramp.h
+
+$(TARGET)\rfmsm.o: CUST4SPE.H
+$(TARGET)\rfmsm.o: adc.h
+$(TARGET)\rfmsm.o: addrdefs.h
+$(TARGET)\rfmsm.o: arm.h
+$(TARGET)\rfmsm.o: bio.h
+$(TARGET)\rfmsm.o: biog.h
+$(TARGET)\rfmsm.o: cagc.h
+$(TARGET)\rfmsm.o: cai.h
+$(TARGET)\rfmsm.o: clk.h
+$(TARGET)\rfmsm.o: clkregim.h
+$(TARGET)\rfmsm.o: cmd.h
+$(TARGET)\rfmsm.o: comdef.h
+$(TARGET)\rfmsm.o: customer.h
+$(TARGET)\rfmsm.o: db.h
+$(TARGET)\rfmsm.o: dec.h
+$(TARGET)\rfmsm.o: dec5000.h
+$(TARGET)\rfmsm.o: deci.h
+$(TARGET)\rfmsm.o: dfm.h
+$(TARGET)\rfmsm.o: dmod.h
+$(TARGET)\rfmsm.o: dog.h
+$(TARGET)\rfmsm.o: enc.h
+$(TARGET)\rfmsm.o: enci.h
+$(TARGET)\rfmsm.o: err.h
+$(TARGET)\rfmsm.o: hw.h
+$(TARGET)\rfmsm.o: mc.h
+$(TARGET)\rfmsm.o: msg.h
+$(TARGET)\rfmsm.o: msm.h
+$(TARGET)\rfmsm.o: msm50reg.h
+$(TARGET)\rfmsm.o: msm_drv.h
+$(TARGET)\rfmsm.o: msm_help.h
+$(TARGET)\rfmsm.o: nv.h
+$(TARGET)\rfmsm.o: processor.h
+$(TARGET)\rfmsm.o: queue.h
+$(TARGET)\rfmsm.o: qw.h
+$(TARGET)\rfmsm.o: rex.h
+$(TARGET)\rfmsm.o: rf.h
+$(TARGET)\rfmsm.o: rfc.h
+$(TARGET)\rfmsm.o: rficap.h
+$(TARGET)\rfmsm.o: rfifreq.h
+$(TARGET)\rfmsm.o: rfigpio.h
+$(TARGET)\rfmsm.o: rfmsm.c
+$(TARGET)\rfmsm.o: rfnv.h
+$(TARGET)\rfmsm.o: sbi.h
+$(TARGET)\rfmsm.o: sleep.h
+$(TARGET)\rfmsm.o: srch.h
+$(TARGET)\rfmsm.o: target.h
+$(TARGET)\rfmsm.o: targetg.h
+$(TARGET)\rfmsm.o: task.h
+$(TARGET)\rfmsm.o: therm.h
+$(TARGET)\rfmsm.o: tramp.h
+$(TARGET)\rfmsm.o: ulpn.h
+$(TARGET)\rfmsm.o: vbatt.h
+$(TARGET)\rfmsm.o: voc.h
+$(TARGET)\rfmsm.o: vocmux.h
+
+$(TARGET)\rfnv.o: CUST4SPE.H
+$(TARGET)\rfnv.o: addrdefs.h
+$(TARGET)\rfnv.o: arm.h
+$(TARGET)\rfnv.o: cagc.h
+$(TARGET)\rfnv.o: comdef.h
+$(TARGET)\rfnv.o: customer.h
+$(TARGET)\rfnv.o: err.h
+$(TARGET)\rfnv.o: memory.h
+$(TARGET)\rfnv.o: msg.h
+$(TARGET)\rfnv.o: msm.h
+$(TARGET)\rfnv.o: msm50reg.h
+$(TARGET)\rfnv.o: nv.h
+$(TARGET)\rfnv.o: processor.h
+$(TARGET)\rfnv.o: queue.h
+$(TARGET)\rfnv.o: qw.h
+$(TARGET)\rfnv.o: rex.h
+$(TARGET)\rfnv.o: rfc.h
+$(TARGET)\rfnv.o: rficap.h
+$(TARGET)\rfnv.o: rfnv.c
+$(TARGET)\rfnv.o: rfnv.h
+$(TARGET)\rfnv.o: target.h
+$(TARGET)\rfnv.o: targetg.h
+
+$(TARGET)\ring.o: CUST4SPE.H
+$(TARGET)\ring.o: addrdefs.h
+$(TARGET)\ring.o: arm.h
+$(TARGET)\ring.o: bio.h
+$(TARGET)\ring.o: biog.h
+$(TARGET)\ring.o: clk.h
+$(TARGET)\ring.o: comdef.h
+$(TARGET)\ring.o: customer.h
+$(TARGET)\ring.o: deci.h
+$(TARGET)\ring.o: dmod.h
+$(TARGET)\ring.o: enci.h
+$(TARGET)\ring.o: err.h
+$(TARGET)\ring.o: hw.h
+$(TARGET)\ring.o: msg.h
+$(TARGET)\ring.o: msm.h
+$(TARGET)\ring.o: msm50reg.h
+$(TARGET)\ring.o: nv.h
+$(TARGET)\ring.o: processor.h
+$(TARGET)\ring.o: queue.h
+$(TARGET)\ring.o: qw.h
+$(TARGET)\ring.o: rex.h
+$(TARGET)\ring.o: ring.c
+$(TARGET)\ring.o: ring.h
+$(TARGET)\ring.o: target.h
+$(TARGET)\ring.o: targetg.h
+$(TARGET)\ring.o: tramp.h
+
+$(TARGET)\rlp.o: CUST4SPE.H
+$(TARGET)\rlp.o: comdef.h
+$(TARGET)\rlp.o: customer.h
+$(TARGET)\rlp.o: rex.h
+$(TARGET)\rlp.o: rlp.c
+$(TARGET)\rlp.o: target.h
+$(TARGET)\rlp.o: targetg.h
+
+$(TARGET)\rx.o: CUST4SPE.H
+$(TARGET)\rx.o: acp553.h
+$(TARGET)\rx.o: acpcmdef.h
+$(TARGET)\rx.o: acprx.h
+$(TARGET)\rx.o: acprxi.h
+$(TARGET)\rx.o: addrdefs.h
+$(TARGET)\rx.o: bit.h
+$(TARGET)\rx.o: cai.h
+$(TARGET)\rx.o: clk.h
+$(TARGET)\rx.o: cmd.h
+$(TARGET)\rx.o: comdef.h
+$(TARGET)\rx.o: customer.h
+$(TARGET)\rx.o: dec.h
+$(TARGET)\rx.o: dec5000.h
+$(TARGET)\rx.o: deint.h
+$(TARGET)\rx.o: diagt.h
+$(TARGET)\rx.o: dog.h
+$(TARGET)\rx.o: dsm.h
+$(TARGET)\rx.o: enc.h
+$(TARGET)\rx.o: log.h
+$(TARGET)\rx.o: mc.h
+$(TARGET)\rx.o: mdrrlp.h
+$(TARGET)\rx.o: msg.h
+$(TARGET)\rx.o: msm.h
+$(TARGET)\rx.o: msm50reg.h
+$(TARGET)\rx.o: nv.h
+$(TARGET)\rx.o: psglobal.h
+$(TARGET)\rx.o: queue.h
+$(TARGET)\rx.o: qw.h
+$(TARGET)\rx.o: rex.h
+$(TARGET)\rx.o: rx.c
+$(TARGET)\rx.o: rx.h
+$(TARGET)\rx.o: rxc.h
+$(TARGET)\rx.o: srch.h
+$(TARGET)\rx.o: target.h
+$(TARGET)\rx.o: targetg.h
+$(TARGET)\rx.o: task.h
+$(TARGET)\rx.o: tramp.h
+$(TARGET)\rx.o: ulpn.h
+
+$(TARGET)\rxc.o: CUST4SPE.H
+$(TARGET)\rxc.o: acpmc.h
+$(TARGET)\rxc.o: addrdefs.h
+$(TARGET)\rxc.o: arm.h
+$(TARGET)\rxc.o: bio.h
+$(TARGET)\rxc.o: biog.h
+$(TARGET)\rxc.o: bit.h
+$(TARGET)\rxc.o: cai.h
+$(TARGET)\rxc.o: caii.h
+$(TARGET)\rxc.o: caix.h
+$(TARGET)\rxc.o: clk.h
+$(TARGET)\rxc.o: clkregim.h
+$(TARGET)\rxc.o: cm.h
+$(TARGET)\rxc.o: cmd.h
+$(TARGET)\rxc.o: cmmc.h
+$(TARGET)\rxc.o: comdef.h
+$(TARGET)\rxc.o: crc.h
+$(TARGET)\rxc.o: customer.h
+$(TARGET)\rxc.o: db.h
+$(TARGET)\rxc.o: dec.h
+$(TARGET)\rxc.o: dec5000.h
+$(TARGET)\rxc.o: deci.h
+$(TARGET)\rxc.o: deint.h
+$(TARGET)\rxc.o: diagt.h
+$(TARGET)\rxc.o: dmod.h
+$(TARGET)\rxc.o: dog.h
+$(TARGET)\rxc.o: ds.h
+$(TARGET)\rxc.o: dsm.h
+$(TARGET)\rxc.o: dsnetmdl.h
+$(TARGET)\rxc.o: dssocket.h
+$(TARGET)\rxc.o: dssocki.h
+$(TARGET)\rxc.o: enc.h
+$(TARGET)\rxc.o: enci.h
+$(TARGET)\rxc.o: err.h
+$(TARGET)\rxc.o: iface.h
+$(TARGET)\rxc.o: internet.h
+$(TARGET)\rxc.o: ip.h
+$(TARGET)\rxc.o: log.h
+$(TARGET)\rxc.o: loopback.h
+$(TARGET)\rxc.o: mar.h
+$(TARGET)\rxc.o: mc.h
+$(TARGET)\rxc.o: mcc.h
+$(TARGET)\rxc.o: mccdma.h
+$(TARGET)\rxc.o: mccrx.h
+$(TARGET)\rxc.o: mccrxtx.h
+$(TARGET)\rxc.o: mccscm.h
+$(TARGET)\rxc.o: mccsrch.h
+$(TARGET)\rxc.o: mdrrlp.h
+$(TARGET)\rxc.o: memory.h
+$(TARGET)\rxc.o: misc.h
+$(TARGET)\rxc.o: msg.h
+$(TARGET)\rxc.o: msm.h
+$(TARGET)\rxc.o: msm50reg.h
+$(TARGET)\rxc.o: msm_drv.h
+$(TARGET)\rxc.o: msm_help.h
+$(TARGET)\rxc.o: mux.h
+$(TARGET)\rxc.o: netuser.h
+$(TARGET)\rxc.o: nv.h
+$(TARGET)\rxc.o: otaspi.h
+$(TARGET)\rxc.o: parm.h
+$(TARGET)\rxc.o: pppfsm.h
+$(TARGET)\rxc.o: processor.h
+$(TARGET)\rxc.o: psglobal.h
+$(TARGET)\rxc.o: queue.h
+$(TARGET)\rxc.o: qw.h
+$(TARGET)\rxc.o: rex.h
+$(TARGET)\rxc.o: rf.h
+$(TARGET)\rxc.o: rfc.h
+$(TARGET)\rxc.o: rficap.h
+$(TARGET)\rxc.o: rx.h
+$(TARGET)\rxc.o: rxc.c
+$(TARGET)\rxc.o: rxc.h
+$(TARGET)\rxc.o: rxtx.h
+$(TARGET)\rxc.o: sleep.h
+$(TARGET)\rxc.o: snd.h
+$(TARGET)\rxc.o: srch.h
+$(TARGET)\rxc.o: target.h
+$(TARGET)\rxc.o: targetg.h
+$(TARGET)\rxc.o: task.h
+$(TARGET)\rxc.o: tcp.h
+$(TARGET)\rxc.o: tramp.h
+$(TARGET)\rxc.o: ts.h
+$(TARGET)\rxc.o: tx.h
+$(TARGET)\rxc.o: txc.h
+$(TARGET)\rxc.o: uapi.h
+$(TARGET)\rxc.o: uasms.h
+$(TARGET)\rxc.o: uasmsi.h
+$(TARGET)\rxc.o: ulpn.h
+$(TARGET)\rxc.o: voc.h
+$(TARGET)\rxc.o: vocmux.h
+
+$(TARGET)\rxtx.o: CUST4SPE.H
+$(TARGET)\rxtx.o: addrdefs.h
+$(TARGET)\rxtx.o: bit.h
+$(TARGET)\rxtx.o: cai.h
+$(TARGET)\rxtx.o: caii.h
+$(TARGET)\rxtx.o: caix.h
+$(TARGET)\rxtx.o: clk.h
+$(TARGET)\rxtx.o: cmd.h
+$(TARGET)\rxtx.o: comdef.h
+$(TARGET)\rxtx.o: customer.h
+$(TARGET)\rxtx.o: dec.h
+$(TARGET)\rxtx.o: dec5000.h
+$(TARGET)\rxtx.o: deint.h
+$(TARGET)\rxtx.o: dog.h
+$(TARGET)\rxtx.o: dsm.h
+$(TARGET)\rxtx.o: enc.h
+$(TARGET)\rxtx.o: err.h
+$(TARGET)\rxtx.o: mc.h
+$(TARGET)\rxtx.o: mccrxtx.h
+$(TARGET)\rxtx.o: mdrrlp.h
+$(TARGET)\rxtx.o: msg.h
+$(TARGET)\rxtx.o: msm.h
+$(TARGET)\rxtx.o: msm50reg.h
+$(TARGET)\rxtx.o: nv.h
+$(TARGET)\rxtx.o: parm.h
+$(TARGET)\rxtx.o: psglobal.h
+$(TARGET)\rxtx.o: queue.h
+$(TARGET)\rxtx.o: qw.h
+$(TARGET)\rxtx.o: rex.h
+$(TARGET)\rxtx.o: rxc.h
+$(TARGET)\rxtx.o: rxtx.c
+$(TARGET)\rxtx.o: rxtx.h
+$(TARGET)\rxtx.o: target.h
+$(TARGET)\rxtx.o: targetg.h
+$(TARGET)\rxtx.o: task.h
+$(TARGET)\rxtx.o: tramp.h
+$(TARGET)\rxtx.o: txc.h
+
+$(TARGET)\sbi.o: CUST4SPE.H
+$(TARGET)\sbi.o: addrdefs.h
+$(TARGET)\sbi.o: clk.h
+$(TARGET)\sbi.o: comdef.h
+$(TARGET)\sbi.o: customer.h
+$(TARGET)\sbi.o: err.h
+$(TARGET)\sbi.o: msg.h
+$(TARGET)\sbi.o: msm.h
+$(TARGET)\sbi.o: msm50reg.h
+$(TARGET)\sbi.o: nv.h
+$(TARGET)\sbi.o: queue.h
+$(TARGET)\sbi.o: qw.h
+$(TARGET)\sbi.o: rex.h
+$(TARGET)\sbi.o: sbi.c
+$(TARGET)\sbi.o: sbi.h
+$(TARGET)\sbi.o: target.h
+$(TARGET)\sbi.o: targetg.h
+$(TARGET)\sbi.o: tramp.h
+
+$(TARGET)\sdevmap.o: CUST4SPE.H
+$(TARGET)\sdevmap.o: addrdefs.h
+$(TARGET)\sdevmap.o: cai.h
+$(TARGET)\sdevmap.o: clk.h
+$(TARGET)\sdevmap.o: cm.h
+$(TARGET)\sdevmap.o: cmd.h
+$(TARGET)\sdevmap.o: comdef.h
+$(TARGET)\sdevmap.o: customer.h
+$(TARGET)\sdevmap.o: db.h
+$(TARGET)\sdevmap.o: dog.h
+$(TARGET)\sdevmap.o: ds.h
+$(TARGET)\sdevmap.o: dsm.h
+$(TARGET)\sdevmap.o: dsnetmdl.h
+$(TARGET)\sdevmap.o: dssocket.h
+$(TARGET)\sdevmap.o: dssocki.h
+$(TARGET)\sdevmap.o: err.h
+$(TARGET)\sdevmap.o: iface.h
+$(TARGET)\sdevmap.o: internet.h
+$(TARGET)\sdevmap.o: ip.h
+$(TARGET)\sdevmap.o: mc.h
+$(TARGET)\sdevmap.o: mdrrlp.h
+$(TARGET)\sdevmap.o: msg.h
+$(TARGET)\sdevmap.o: msm.h
+$(TARGET)\sdevmap.o: msm50reg.h
+$(TARGET)\sdevmap.o: netuser.h
+$(TARGET)\sdevmap.o: nv.h
+$(TARGET)\sdevmap.o: pppfsm.h
+$(TARGET)\sdevmap.o: psglobal.h
+$(TARGET)\sdevmap.o: queue.h
+$(TARGET)\sdevmap.o: qw.h
+$(TARGET)\sdevmap.o: rex.h
+$(TARGET)\sdevmap.o: sdevmap.c
+$(TARGET)\sdevmap.o: sdevmap.h
+$(TARGET)\sdevmap.o: sio.h
+$(TARGET)\sdevmap.o: target.h
+$(TARGET)\sdevmap.o: targetg.h
+$(TARGET)\sdevmap.o: task.h
+$(TARGET)\sdevmap.o: tcp.h
+$(TARGET)\sdevmap.o: tramp.h
+
+$(TARGET)\sio.o: CUST4SPE.H
+$(TARGET)\sio.o: addrdefs.h
+$(TARGET)\sio.o: assert.h
+$(TARGET)\sio.o: cai.h
+$(TARGET)\sio.o: clk.h
+$(TARGET)\sio.o: cm.h
+$(TARGET)\sio.o: cmd.h
+$(TARGET)\sio.o: comdef.h
+$(TARGET)\sio.o: customer.h
+$(TARGET)\sio.o: db.h
+$(TARGET)\sio.o: dog.h
+$(TARGET)\sio.o: ds.h
+$(TARGET)\sio.o: dsm.h
+$(TARGET)\sio.o: dsnetmdl.h
+$(TARGET)\sio.o: dssocket.h
+$(TARGET)\sio.o: dssocki.h
+$(TARGET)\sio.o: err.h
+$(TARGET)\sio.o: iface.h
+$(TARGET)\sio.o: internet.h
+$(TARGET)\sio.o: ip.h
+$(TARGET)\sio.o: mc.h
+$(TARGET)\sio.o: mdrrlp.h
+$(TARGET)\sio.o: memory.h
+$(TARGET)\sio.o: msg.h
+$(TARGET)\sio.o: msm.h
+$(TARGET)\sio.o: msm50reg.h
+$(TARGET)\sio.o: netuser.h
+$(TARGET)\sio.o: nv.h
+$(TARGET)\sio.o: pppfsm.h
+$(TARGET)\sio.o: psglobal.h
+$(TARGET)\sio.o: queue.h
+$(TARGET)\sio.o: qw.h
+$(TARGET)\sio.o: rex.h
+$(TARGET)\sio.o: sdevmap.h
+$(TARGET)\sio.o: sio.c
+$(TARGET)\sio.o: sio.h
+$(TARGET)\sio.o: siors232.h
+$(TARGET)\sio.o: target.h
+$(TARGET)\sio.o: targetg.h
+$(TARGET)\sio.o: task.h
+$(TARGET)\sio.o: tcp.h
+$(TARGET)\sio.o: tramp.h
+
+$(TARGET)\siog2.o: CUST4SPE.H
+$(TARGET)\siog2.o: comdef.h
+$(TARGET)\siog2.o: customer.h
+$(TARGET)\siog2.o: rex.h
+$(TARGET)\siog2.o: siog2.c
+$(TARGET)\siog2.o: target.h
+$(TARGET)\siog2.o: targetg.h
+
+$(TARGET)\siors232.o: CUST4SPE.H
+$(TARGET)\siors232.o: addrdefs.h
+$(TARGET)\siors232.o: arm.h
+$(TARGET)\siors232.o: assert.h
+$(TARGET)\siors232.o: bio.h
+$(TARGET)\siors232.o: biog.h
+$(TARGET)\siors232.o: cai.h
+$(TARGET)\siors232.o: clk.h
+$(TARGET)\siors232.o: clkregim.h
+$(TARGET)\siors232.o: cm.h
+$(TARGET)\siors232.o: cmd.h
+$(TARGET)\siors232.o: comdef.h
+$(TARGET)\siors232.o: customer.h
+$(TARGET)\siors232.o: db.h
+$(TARGET)\siors232.o: deci.h
+$(TARGET)\siors232.o: dmod.h
+$(TARGET)\siors232.o: dog.h
+$(TARGET)\siors232.o: ds.h
+$(TARGET)\siors232.o: dsatcop.h
+$(TARGET)\siors232.o: dsm.h
+$(TARGET)\siors232.o: dsnetmdl.h
+$(TARGET)\siors232.o: dssocket.h
+$(TARGET)\siors232.o: dssocki.h
+$(TARGET)\siors232.o: enc.h
+$(TARGET)\siors232.o: enci.h
+$(TARGET)\siors232.o: err.h
+$(TARGET)\siors232.o: hw.h
+$(TARGET)\siors232.o: iface.h
+$(TARGET)\siors232.o: internet.h
+$(TARGET)\siors232.o: ip.h
+$(TARGET)\siors232.o: mc.h
+$(TARGET)\siors232.o: mdrrlp.h
+$(TARGET)\siors232.o: memory.h
+$(TARGET)\siors232.o: msg.h
+$(TARGET)\siors232.o: msm.h
+$(TARGET)\siors232.o: msm50reg.h
+$(TARGET)\siors232.o: netuser.h
+$(TARGET)\siors232.o: nv.h
+$(TARGET)\siors232.o: pppfsm.h
+$(TARGET)\siors232.o: processor.h
+$(TARGET)\siors232.o: psglobal.h
+$(TARGET)\siors232.o: queue.h
+$(TARGET)\siors232.o: qw.h
+$(TARGET)\siors232.o: rex.h
+$(TARGET)\siors232.o: rf.h
+$(TARGET)\siors232.o: rfc.h
+$(TARGET)\siors232.o: rficap.h
+$(TARGET)\siors232.o: sio.h
+$(TARGET)\siors232.o: siors232.c
+$(TARGET)\siors232.o: siors232.h
+$(TARGET)\siors232.o: sleep.h
+$(TARGET)\siors232.o: srch.h
+$(TARGET)\siors232.o: target.h
+$(TARGET)\siors232.o: targetg.h
+$(TARGET)\siors232.o: task.h
+$(TARGET)\siors232.o: tcp.h
+$(TARGET)\siors232.o: tramp.h
+$(TARGET)\siors232.o: ulpn.h
+
+$(TARGET)\sleep.o: CUST4SPE.H
+$(TARGET)\sleep.o: addrdefs.h
+$(TARGET)\sleep.o: arm.h
+$(TARGET)\sleep.o: bio.h
+$(TARGET)\sleep.o: biog.h
+$(TARGET)\sleep.o: boothw.h
+$(TARGET)\sleep.o: cai.h
+$(TARGET)\sleep.o: clk.h
+$(TARGET)\sleep.o: clkregim.h
+$(TARGET)\sleep.o: cmd.h
+$(TARGET)\sleep.o: comdef.h
+$(TARGET)\sleep.o: customer.h
+$(TARGET)\sleep.o: db.h
+$(TARGET)\sleep.o: deci.h
+$(TARGET)\sleep.o: diagt.h
+$(TARGET)\sleep.o: dmod.h
+$(TARGET)\sleep.o: dog.h
+$(TARGET)\sleep.o: enc.h
+$(TARGET)\sleep.o: enci.h
+$(TARGET)\sleep.o: err.h
+$(TARGET)\sleep.o: hw.h
+$(TARGET)\sleep.o: log.h
+$(TARGET)\sleep.o: mc.h
+$(TARGET)\sleep.o: mccsrch.h
+$(TARGET)\sleep.o: msg.h
+$(TARGET)\sleep.o: msm.h
+$(TARGET)\sleep.o: msm50reg.h
+$(TARGET)\sleep.o: nv.h
+$(TARGET)\sleep.o: processor.h
+$(TARGET)\sleep.o: queue.h
+$(TARGET)\sleep.o: qw.h
+$(TARGET)\sleep.o: rex.h
+$(TARGET)\sleep.o: rf.h
+$(TARGET)\sleep.o: rfc.h
+$(TARGET)\sleep.o: rficap.h
+$(TARGET)\sleep.o: sleep.c
+$(TARGET)\sleep.o: sleep.h
+$(TARGET)\sleep.o: srch.h
+$(TARGET)\sleep.o: srchi.h
+$(TARGET)\sleep.o: target.h
+$(TARGET)\sleep.o: targetg.h
+$(TARGET)\sleep.o: task.h
+$(TARGET)\sleep.o: tramp.h
+$(TARGET)\sleep.o: ulpn.h
+$(TARGET)\sleep.o: voc.h
+$(TARGET)\sleep.o: vocm2.h
+$(TARGET)\sleep.o: vocmux.h
+
+$(TARGET)\slhc.o: CUST4SPE.H
+$(TARGET)\slhc.o: addrdefs.h
+$(TARGET)\slhc.o: clk.h
+$(TARGET)\slhc.o: comdef.h
+$(TARGET)\slhc.o: customer.h
+$(TARGET)\slhc.o: dsm.h
+$(TARGET)\slhc.o: dsnetmdl.h
+$(TARGET)\slhc.o: dssocket.h
+$(TARGET)\slhc.o: dssocki.h
+$(TARGET)\slhc.o: iface.h
+$(TARGET)\slhc.o: internet.h
+$(TARGET)\slhc.o: ip.h
+$(TARGET)\slhc.o: memory.h
+$(TARGET)\slhc.o: msg.h
+$(TARGET)\slhc.o: msm.h
+$(TARGET)\slhc.o: msm50reg.h
+$(TARGET)\slhc.o: netuser.h
+$(TARGET)\slhc.o: pppfsm.h
+$(TARGET)\slhc.o: psglobal.h
+$(TARGET)\slhc.o: psmisc.h
+$(TARGET)\slhc.o: queue.h
+$(TARGET)\slhc.o: qw.h
+$(TARGET)\slhc.o: rex.h
+$(TARGET)\slhc.o: slhc.c
+$(TARGET)\slhc.o: slhc.h
+$(TARGET)\slhc.o: target.h
+$(TARGET)\slhc.o: targetg.h
+$(TARGET)\slhc.o: tcp.h
+$(TARGET)\slhc.o: tramp.h
+
+$(TARGET)\snd.o: CUST4SPE.H
+$(TARGET)\snd.o: addrdefs.h
+$(TARGET)\snd.o: arm.h
+$(TARGET)\snd.o: bio.h
+$(TARGET)\snd.o: biog.h
+$(TARGET)\snd.o: cai.h
+$(TARGET)\snd.o: clk.h
+$(TARGET)\snd.o: cmd.h
+$(TARGET)\snd.o: comdef.h
+$(TARGET)\snd.o: customer.h
+$(TARGET)\snd.o: deci.h
+$(TARGET)\snd.o: dmod.h
+$(TARGET)\snd.o: dog.h
+$(TARGET)\snd.o: enc.h
+$(TARGET)\snd.o: enci.h
+$(TARGET)\snd.o: err.h
+$(TARGET)\snd.o: mc.h
+$(TARGET)\snd.o: memory.h
+$(TARGET)\snd.o: msg.h
+$(TARGET)\snd.o: msm.h
+$(TARGET)\snd.o: msm50reg.h
+$(TARGET)\snd.o: nv.h
+$(TARGET)\snd.o: processor.h
+$(TARGET)\snd.o: queue.h
+$(TARGET)\snd.o: qw.h
+$(TARGET)\snd.o: rex.h
+$(TARGET)\snd.o: rf.h
+$(TARGET)\snd.o: rfc.h
+$(TARGET)\snd.o: rficap.h
+$(TARGET)\snd.o: sleep.h
+$(TARGET)\snd.o: snd.c
+$(TARGET)\snd.o: snd.h
+$(TARGET)\snd.o: sndi.h
+$(TARGET)\snd.o: sndihw.h
+$(TARGET)\snd.o: snditab.h
+$(TARGET)\snd.o: srch.h
+$(TARGET)\snd.o: target.h
+$(TARGET)\snd.o: targetg.h
+$(TARGET)\snd.o: task.h
+$(TARGET)\snd.o: tramp.h
+$(TARGET)\snd.o: ulpn.h
+
+$(TARGET)\sndhwg2.o: CUST4SPE.H
+$(TARGET)\sndhwg2.o: addrdefs.h
+$(TARGET)\sndhwg2.o: arm.h
+$(TARGET)\sndhwg2.o: bio.h
+$(TARGET)\sndhwg2.o: biog.h
+$(TARGET)\sndhwg2.o: cai.h
+$(TARGET)\sndhwg2.o: clk.h
+$(TARGET)\sndhwg2.o: cmd.h
+$(TARGET)\sndhwg2.o: comdef.h
+$(TARGET)\sndhwg2.o: customer.h
+$(TARGET)\sndhwg2.o: db.h
+$(TARGET)\sndhwg2.o: deci.h
+$(TARGET)\sndhwg2.o: dmod.h
+$(TARGET)\sndhwg2.o: dog.h
+$(TARGET)\sndhwg2.o: enc.h
+$(TARGET)\sndhwg2.o: enci.h
+$(TARGET)\sndhwg2.o: err.h
+$(TARGET)\sndhwg2.o: hw.h
+$(TARGET)\sndhwg2.o: mc.h
+$(TARGET)\sndhwg2.o: msg.h
+$(TARGET)\sndhwg2.o: msm.h
+$(TARGET)\sndhwg2.o: msm50reg.h
+$(TARGET)\sndhwg2.o: nv.h
+$(TARGET)\sndhwg2.o: processor.h
+$(TARGET)\sndhwg2.o: queue.h
+$(TARGET)\sndhwg2.o: qw.h
+$(TARGET)\sndhwg2.o: rex.h
+$(TARGET)\sndhwg2.o: rf.h
+$(TARGET)\sndhwg2.o: rfc.h
+$(TARGET)\sndhwg2.o: rficap.h
+$(TARGET)\sndhwg2.o: ring.h
+$(TARGET)\sndhwg2.o: sleep.h
+$(TARGET)\sndhwg2.o: snd.h
+$(TARGET)\sndhwg2.o: sndhwg2.c
+$(TARGET)\sndhwg2.o: sndi.h
+$(TARGET)\sndhwg2.o: sndihw.h
+$(TARGET)\sndhwg2.o: srch.h
+$(TARGET)\sndhwg2.o: target.h
+$(TARGET)\sndhwg2.o: targetg.h
+$(TARGET)\sndhwg2.o: task.h
+$(TARGET)\sndhwg2.o: tramp.h
+$(TARGET)\sndhwg2.o: ulpn.h
+$(TARGET)\sndhwg2.o: voc.h
+$(TARGET)\sndhwg2.o: voc_core.h
+$(TARGET)\sndhwg2.o: vocmux.h
+
+$(TARGET)\snditab.o: CUST4SPE.H
+$(TARGET)\snditab.o: addrdefs.h
+$(TARGET)\snditab.o: arm.h
+$(TARGET)\snditab.o: bbsndtab.h
+$(TARGET)\snditab.o: bio.h
+$(TARGET)\snditab.o: biog.h
+$(TARGET)\snditab.o: cai.h
+$(TARGET)\snditab.o: clk.h
+$(TARGET)\snditab.o: cmd.h
+$(TARGET)\snditab.o: comdef.h
+$(TARGET)\snditab.o: customer.h
+$(TARGET)\snditab.o: deci.h
+$(TARGET)\snditab.o: dmod.h
+$(TARGET)\snditab.o: dog.h
+$(TARGET)\snditab.o: enc.h
+$(TARGET)\snditab.o: enci.h
+$(TARGET)\snditab.o: mc.h
+$(TARGET)\snditab.o: msm.h
+$(TARGET)\snditab.o: msm50reg.h
+$(TARGET)\snditab.o: nv.h
+$(TARGET)\snditab.o: processor.h
+$(TARGET)\snditab.o: queue.h
+$(TARGET)\snditab.o: qw.h
+$(TARGET)\snditab.o: rex.h
+$(TARGET)\snditab.o: rf.h
+$(TARGET)\snditab.o: rfc.h
+$(TARGET)\snditab.o: rficap.h
+$(TARGET)\snditab.o: sleep.h
+$(TARGET)\snditab.o: snd.h
+$(TARGET)\snditab.o: sndi.h
+$(TARGET)\snditab.o: snditab.c
+$(TARGET)\snditab.o: srch.h
+$(TARGET)\snditab.o: target.h
+$(TARGET)\snditab.o: targetg.h
+$(TARGET)\snditab.o: task.h
+$(TARGET)\snditab.o: tramp.h
+$(TARGET)\snditab.o: ulpn.h
+
+$(TARGET)\snm.o: CUST4SPE.H
+$(TARGET)\snm.o: addrdefs.h
+$(TARGET)\snm.o: cai.h
+$(TARGET)\snm.o: caii.h
+$(TARGET)\snm.o: clk.h
+$(TARGET)\snm.o: cmd.h
+$(TARGET)\snm.o: comdef.h
+$(TARGET)\snm.o: customer.h
+$(TARGET)\snm.o: dec.h
+$(TARGET)\snm.o: dec5000.h
+$(TARGET)\snm.o: dog.h
+$(TARGET)\snm.o: err.h
+$(TARGET)\snm.o: mc.h
+$(TARGET)\snm.o: msg.h
+$(TARGET)\snm.o: msm.h
+$(TARGET)\snm.o: msm50reg.h
+$(TARGET)\snm.o: nv.h
+$(TARGET)\snm.o: queue.h
+$(TARGET)\snm.o: qw.h
+$(TARGET)\snm.o: rex.h
+$(TARGET)\snm.o: snm.c
+$(TARGET)\snm.o: snm.h
+$(TARGET)\snm.o: srv.h
+$(TARGET)\snm.o: target.h
+$(TARGET)\snm.o: targetg.h
+$(TARGET)\snm.o: task.h
+$(TARGET)\snm.o: tramp.h
+
+$(TARGET)\srch.o: CUST4SPE.H
+$(TARGET)\srch.o: addrdefs.h
+$(TARGET)\srch.o: arm.h
+$(TARGET)\srch.o: bio.h
+$(TARGET)\srch.o: biog.h
+$(TARGET)\srch.o: cai.h
+$(TARGET)\srch.o: clk.h
+$(TARGET)\srch.o: cmd.h
+$(TARGET)\srch.o: comdef.h
+$(TARGET)\srch.o: customer.h
+$(TARGET)\srch.o: db.h
+$(TARGET)\srch.o: deci.h
+$(TARGET)\srch.o: diagt.h
+$(TARGET)\srch.o: dmod.h
+$(TARGET)\srch.o: dog.h
+$(TARGET)\srch.o: enc.h
+$(TARGET)\srch.o: enci.h
+$(TARGET)\srch.o: err.h
+$(TARGET)\srch.o: hw.h
+$(TARGET)\srch.o: log.h
+$(TARGET)\srch.o: mc.h
+$(TARGET)\srch.o: mccsrch.h
+$(TARGET)\srch.o: msg.h
+$(TARGET)\srch.o: msm.h
+$(TARGET)\srch.o: msm50reg.h
+$(TARGET)\srch.o: nv.h
+$(TARGET)\srch.o: processor.h
+$(TARGET)\srch.o: queue.h
+$(TARGET)\srch.o: qw.h
+$(TARGET)\srch.o: rex.h
+$(TARGET)\srch.o: rf.h
+$(TARGET)\srch.o: rfc.h
+$(TARGET)\srch.o: rficap.h
+$(TARGET)\srch.o: srch.c
+$(TARGET)\srch.o: srch.h
+$(TARGET)\srch.o: srchi.h
+$(TARGET)\srch.o: target.h
+$(TARGET)\srch.o: targetg.h
+$(TARGET)\srch.o: task.h
+$(TARGET)\srch.o: therm.h
+$(TARGET)\srch.o: tramp.h
+$(TARGET)\srch.o: ts.h
+$(TARGET)\srch.o: ulpn.h
+$(TARGET)\srch.o: vbatt.h
+
+$(TARGET)\srchaq.o: CUST4SPE.H
+$(TARGET)\srchaq.o: addrdefs.h
+$(TARGET)\srchaq.o: arm.h
+$(TARGET)\srchaq.o: bio.h
+$(TARGET)\srchaq.o: biog.h
+$(TARGET)\srchaq.o: cai.h
+$(TARGET)\srchaq.o: clk.h
+$(TARGET)\srchaq.o: cmd.h
+$(TARGET)\srchaq.o: comdef.h
+$(TARGET)\srchaq.o: customer.h
+$(TARGET)\srchaq.o: db.h
+$(TARGET)\srchaq.o: dec.h
+$(TARGET)\srchaq.o: dec5000.h
+$(TARGET)\srchaq.o: deci.h
+$(TARGET)\srchaq.o: diagt.h
+$(TARGET)\srchaq.o: dmod.h
+$(TARGET)\srchaq.o: dog.h
+$(TARGET)\srchaq.o: enc.h
+$(TARGET)\srchaq.o: enci.h
+$(TARGET)\srchaq.o: err.h
+$(TARGET)\srchaq.o: hw.h
+$(TARGET)\srchaq.o: log.h
+$(TARGET)\srchaq.o: mc.h
+$(TARGET)\srchaq.o: mccsrch.h
+$(TARGET)\srchaq.o: msg.h
+$(TARGET)\srchaq.o: msm.h
+$(TARGET)\srchaq.o: msm50reg.h
+$(TARGET)\srchaq.o: nv.h
+$(TARGET)\srchaq.o: processor.h
+$(TARGET)\srchaq.o: queue.h
+$(TARGET)\srchaq.o: qw.h
+$(TARGET)\srchaq.o: rex.h
+$(TARGET)\srchaq.o: srch.h
+$(TARGET)\srchaq.o: srchaq.c
+$(TARGET)\srchaq.o: srchi.h
+$(TARGET)\srchaq.o: target.h
+$(TARGET)\srchaq.o: targetg.h
+$(TARGET)\srchaq.o: task.h
+$(TARGET)\srchaq.o: tramp.h
+$(TARGET)\srchaq.o: ulpn.h
+
+$(TARGET)\srchcd.o: CUST4SPE.H
+$(TARGET)\srchcd.o: addrdefs.h
+$(TARGET)\srchcd.o: cai.h
+$(TARGET)\srchcd.o: clk.h
+$(TARGET)\srchcd.o: cmd.h
+$(TARGET)\srchcd.o: comdef.h
+$(TARGET)\srchcd.o: customer.h
+$(TARGET)\srchcd.o: diagt.h
+$(TARGET)\srchcd.o: dog.h
+$(TARGET)\srchcd.o: enc.h
+$(TARGET)\srchcd.o: err.h
+$(TARGET)\srchcd.o: log.h
+$(TARGET)\srchcd.o: mc.h
+$(TARGET)\srchcd.o: mccsrch.h
+$(TARGET)\srchcd.o: msg.h
+$(TARGET)\srchcd.o: msm.h
+$(TARGET)\srchcd.o: msm50reg.h
+$(TARGET)\srchcd.o: nv.h
+$(TARGET)\srchcd.o: queue.h
+$(TARGET)\srchcd.o: qw.h
+$(TARGET)\srchcd.o: rex.h
+$(TARGET)\srchcd.o: srch.h
+$(TARGET)\srchcd.o: srchcd.c
+$(TARGET)\srchcd.o: srchi.h
+$(TARGET)\srchcd.o: target.h
+$(TARGET)\srchcd.o: targetg.h
+$(TARGET)\srchcd.o: task.h
+$(TARGET)\srchcd.o: tramp.h
+$(TARGET)\srchcd.o: ulpn.h
+
+$(TARGET)\srchdrv.o: CUST4SPE.H
+$(TARGET)\srchdrv.o: adc.h
+$(TARGET)\srchdrv.o: addrdefs.h
+$(TARGET)\srchdrv.o: arm.h
+$(TARGET)\srchdrv.o: bio.h
+$(TARGET)\srchdrv.o: biog.h
+$(TARGET)\srchdrv.o: cai.h
+$(TARGET)\srchdrv.o: clk.h
+$(TARGET)\srchdrv.o: clkregim.h
+$(TARGET)\srchdrv.o: cmd.h
+$(TARGET)\srchdrv.o: comdef.h
+$(TARGET)\srchdrv.o: customer.h
+$(TARGET)\srchdrv.o: deci.h
+$(TARGET)\srchdrv.o: diagt.h
+$(TARGET)\srchdrv.o: dmod.h
+$(TARGET)\srchdrv.o: dog.h
+$(TARGET)\srchdrv.o: enc.h
+$(TARGET)\srchdrv.o: enci.h
+$(TARGET)\srchdrv.o: err.h
+$(TARGET)\srchdrv.o: hw.h
+$(TARGET)\srchdrv.o: log.h
+$(TARGET)\srchdrv.o: mc.h
+$(TARGET)\srchdrv.o: mccsrch.h
+$(TARGET)\srchdrv.o: msg.h
+$(TARGET)\srchdrv.o: msm.h
+$(TARGET)\srchdrv.o: msm50reg.h
+$(TARGET)\srchdrv.o: msm_drv.h
+$(TARGET)\srchdrv.o: msm_help.h
+$(TARGET)\srchdrv.o: nv.h
+$(TARGET)\srchdrv.o: pnmask.h
+$(TARGET)\srchdrv.o: processor.h
+$(TARGET)\srchdrv.o: queue.h
+$(TARGET)\srchdrv.o: qw.h
+$(TARGET)\srchdrv.o: rex.h
+$(TARGET)\srchdrv.o: rf.h
+$(TARGET)\srchdrv.o: rfc.h
+$(TARGET)\srchdrv.o: rficap.h
+$(TARGET)\srchdrv.o: srch.h
+$(TARGET)\srchdrv.o: srchdrv.c
+$(TARGET)\srchdrv.o: srchi.h
+$(TARGET)\srchdrv.o: target.h
+$(TARGET)\srchdrv.o: targetg.h
+$(TARGET)\srchdrv.o: task.h
+$(TARGET)\srchdrv.o: tramp.h
+$(TARGET)\srchdrv.o: ulpn.h
+
+$(TARGET)\srchdz.o: CUST4SPE.H
+$(TARGET)\srchdz.o: addrdefs.h
+$(TARGET)\srchdz.o: arm.h
+$(TARGET)\srchdz.o: cai.h
+$(TARGET)\srchdz.o: clk.h
+$(TARGET)\srchdz.o: clkregim.h
+$(TARGET)\srchdz.o: cm.h
+$(TARGET)\srchdz.o: cmd.h
+$(TARGET)\srchdz.o: comdef.h
+$(TARGET)\srchdz.o: customer.h
+$(TARGET)\srchdz.o: db.h
+$(TARGET)\srchdz.o: dec.h
+$(TARGET)\srchdz.o: dec5000.h
+$(TARGET)\srchdz.o: diagt.h
+$(TARGET)\srchdz.o: dmod.h
+$(TARGET)\srchdz.o: dog.h
+$(TARGET)\srchdz.o: ds.h
+$(TARGET)\srchdz.o: dsm.h
+$(TARGET)\srchdz.o: dsnetmdl.h
+$(TARGET)\srchdz.o: dssocket.h
+$(TARGET)\srchdz.o: dssocki.h
+$(TARGET)\srchdz.o: enc.h
+$(TARGET)\srchdz.o: err.h
+$(TARGET)\srchdz.o: hs.h
+$(TARGET)\srchdz.o: iface.h
+$(TARGET)\srchdz.o: internet.h
+$(TARGET)\srchdz.o: ip.h
+$(TARGET)\srchdz.o: log.h
+$(TARGET)\srchdz.o: mc.h
+$(TARGET)\srchdz.o: mccsrch.h
+$(TARGET)\srchdz.o: mdrrlp.h
+$(TARGET)\srchdz.o: msg.h
+$(TARGET)\srchdz.o: msm.h
+$(TARGET)\srchdz.o: msm50reg.h
+$(TARGET)\srchdz.o: netuser.h
+$(TARGET)\srchdz.o: nv.h
+$(TARGET)\srchdz.o: pppfsm.h
+$(TARGET)\srchdz.o: processor.h
+$(TARGET)\srchdz.o: psglobal.h
+$(TARGET)\srchdz.o: queue.h
+$(TARGET)\srchdz.o: qw.h
+$(TARGET)\srchdz.o: rex.h
+$(TARGET)\srchdz.o: rf.h
+$(TARGET)\srchdz.o: rfc.h
+$(TARGET)\srchdz.o: rficap.h
+$(TARGET)\srchdz.o: sio.h
+$(TARGET)\srchdz.o: sleep.h
+$(TARGET)\srchdz.o: snd.h
+$(TARGET)\srchdz.o: srch.h
+$(TARGET)\srchdz.o: srchdz.c
+$(TARGET)\srchdz.o: srchi.h
+$(TARGET)\srchdz.o: target.h
+$(TARGET)\srchdz.o: targetg.h
+$(TARGET)\srchdz.o: task.h
+$(TARGET)\srchdz.o: tcp.h
+$(TARGET)\srchdz.o: tramp.h
+$(TARGET)\srchdz.o: ts.h
+$(TARGET)\srchdz.o: ulpn.h
+
+$(TARGET)\srchint.o: CUST4SPE.H
+$(TARGET)\srchint.o: addrdefs.h
+$(TARGET)\srchint.o: cai.h
+$(TARGET)\srchint.o: clk.h
+$(TARGET)\srchint.o: clkregim.h
+$(TARGET)\srchint.o: cm.h
+$(TARGET)\srchint.o: cmd.h
+$(TARGET)\srchint.o: comdef.h
+$(TARGET)\srchint.o: customer.h
+$(TARGET)\srchint.o: db.h
+$(TARGET)\srchint.o: dec.h
+$(TARGET)\srchint.o: dec5000.h
+$(TARGET)\srchint.o: deint.h
+$(TARGET)\srchint.o: diagt.h
+$(TARGET)\srchint.o: dog.h
+$(TARGET)\srchint.o: ds.h
+$(TARGET)\srchint.o: dsm.h
+$(TARGET)\srchint.o: dsnetmdl.h
+$(TARGET)\srchint.o: dssocket.h
+$(TARGET)\srchint.o: dssocki.h
+$(TARGET)\srchint.o: enc.h
+$(TARGET)\srchint.o: err.h
+$(TARGET)\srchint.o: iface.h
+$(TARGET)\srchint.o: internet.h
+$(TARGET)\srchint.o: ip.h
+$(TARGET)\srchint.o: log.h
+$(TARGET)\srchint.o: mc.h
+$(TARGET)\srchint.o: mccsrch.h
+$(TARGET)\srchint.o: mdrrlp.h
+$(TARGET)\srchint.o: msg.h
+$(TARGET)\srchint.o: msm.h
+$(TARGET)\srchint.o: msm50reg.h
+$(TARGET)\srchint.o: netuser.h
+$(TARGET)\srchint.o: nv.h
+$(TARGET)\srchint.o: pppfsm.h
+$(TARGET)\srchint.o: psglobal.h
+$(TARGET)\srchint.o: queue.h
+$(TARGET)\srchint.o: qw.h
+$(TARGET)\srchint.o: rex.h
+$(TARGET)\srchint.o: rf.h
+$(TARGET)\srchint.o: rfc.h
+$(TARGET)\srchint.o: rficap.h
+$(TARGET)\srchint.o: rxc.h
+$(TARGET)\srchint.o: sio.h
+$(TARGET)\srchint.o: sleep.h
+$(TARGET)\srchint.o: srch.h
+$(TARGET)\srchint.o: srchi.h
+$(TARGET)\srchint.o: srchint.c
+$(TARGET)\srchint.o: target.h
+$(TARGET)\srchint.o: targetg.h
+$(TARGET)\srchint.o: task.h
+$(TARGET)\srchint.o: tcp.h
+$(TARGET)\srchint.o: therm.h
+$(TARGET)\srchint.o: tramp.h
+$(TARGET)\srchint.o: ts.h
+$(TARGET)\srchint.o: tx.h
+$(TARGET)\srchint.o: ulpn.h
+$(TARGET)\srchint.o: vbatt.h
+
+$(TARGET)\srchpc.o: CUST4SPE.H
+$(TARGET)\srchpc.o: addrdefs.h
+$(TARGET)\srchpc.o: arm.h
+$(TARGET)\srchpc.o: bio.h
+$(TARGET)\srchpc.o: biog.h
+$(TARGET)\srchpc.o: cai.h
+$(TARGET)\srchpc.o: clk.h
+$(TARGET)\srchpc.o: cmd.h
+$(TARGET)\srchpc.o: comdef.h
+$(TARGET)\srchpc.o: customer.h
+$(TARGET)\srchpc.o: db.h
+$(TARGET)\srchpc.o: dec.h
+$(TARGET)\srchpc.o: dec5000.h
+$(TARGET)\srchpc.o: deci.h
+$(TARGET)\srchpc.o: deint.h
+$(TARGET)\srchpc.o: diagt.h
+$(TARGET)\srchpc.o: dmod.h
+$(TARGET)\srchpc.o: dog.h
+$(TARGET)\srchpc.o: dsm.h
+$(TARGET)\srchpc.o: enc.h
+$(TARGET)\srchpc.o: enci.h
+$(TARGET)\srchpc.o: err.h
+$(TARGET)\srchpc.o: log.h
+$(TARGET)\srchpc.o: mc.h
+$(TARGET)\srchpc.o: mccsrch.h
+$(TARGET)\srchpc.o: mdrrlp.h
+$(TARGET)\srchpc.o: msg.h
+$(TARGET)\srchpc.o: msm.h
+$(TARGET)\srchpc.o: msm50reg.h
+$(TARGET)\srchpc.o: nv.h
+$(TARGET)\srchpc.o: processor.h
+$(TARGET)\srchpc.o: psglobal.h
+$(TARGET)\srchpc.o: queue.h
+$(TARGET)\srchpc.o: qw.h
+$(TARGET)\srchpc.o: rex.h
+$(TARGET)\srchpc.o: rxc.h
+$(TARGET)\srchpc.o: srch.h
+$(TARGET)\srchpc.o: srchi.h
+$(TARGET)\srchpc.o: srchpc.c
+$(TARGET)\srchpc.o: target.h
+$(TARGET)\srchpc.o: targetg.h
+$(TARGET)\srchpc.o: task.h
+$(TARGET)\srchpc.o: tramp.h
+$(TARGET)\srchpc.o: ts.h
+$(TARGET)\srchpc.o: ulpn.h
+
+$(TARGET)\srchsc.o: CUST4SPE.H
+$(TARGET)\srchsc.o: addrdefs.h
+$(TARGET)\srchsc.o: arm.h
+$(TARGET)\srchsc.o: cai.h
+$(TARGET)\srchsc.o: clk.h
+$(TARGET)\srchsc.o: cmd.h
+$(TARGET)\srchsc.o: comdef.h
+$(TARGET)\srchsc.o: customer.h
+$(TARGET)\srchsc.o: diagt.h
+$(TARGET)\srchsc.o: dmod.h
+$(TARGET)\srchsc.o: dog.h
+$(TARGET)\srchsc.o: enc.h
+$(TARGET)\srchsc.o: err.h
+$(TARGET)\srchsc.o: log.h
+$(TARGET)\srchsc.o: mc.h
+$(TARGET)\srchsc.o: mccsrch.h
+$(TARGET)\srchsc.o: msg.h
+$(TARGET)\srchsc.o: msm.h
+$(TARGET)\srchsc.o: msm50reg.h
+$(TARGET)\srchsc.o: nv.h
+$(TARGET)\srchsc.o: processor.h
+$(TARGET)\srchsc.o: queue.h
+$(TARGET)\srchsc.o: qw.h
+$(TARGET)\srchsc.o: rex.h
+$(TARGET)\srchsc.o: rf.h
+$(TARGET)\srchsc.o: rfc.h
+$(TARGET)\srchsc.o: rficap.h
+$(TARGET)\srchsc.o: sleep.h
+$(TARGET)\srchsc.o: srch.h
+$(TARGET)\srchsc.o: srchi.h
+$(TARGET)\srchsc.o: srchsc.c
+$(TARGET)\srchsc.o: target.h
+$(TARGET)\srchsc.o: targetg.h
+$(TARGET)\srchsc.o: task.h
+$(TARGET)\srchsc.o: tramp.h
+$(TARGET)\srchsc.o: ulpn.h
+
+$(TARGET)\srchsl.o: CUST4SPE.H
+$(TARGET)\srchsl.o: addrdefs.h
+$(TARGET)\srchsl.o: cai.h
+$(TARGET)\srchsl.o: clk.h
+$(TARGET)\srchsl.o: cmd.h
+$(TARGET)\srchsl.o: comdef.h
+$(TARGET)\srchsl.o: customer.h
+$(TARGET)\srchsl.o: diagt.h
+$(TARGET)\srchsl.o: dog.h
+$(TARGET)\srchsl.o: enc.h
+$(TARGET)\srchsl.o: err.h
+$(TARGET)\srchsl.o: hw.h
+$(TARGET)\srchsl.o: log.h
+$(TARGET)\srchsl.o: mc.h
+$(TARGET)\srchsl.o: mccsrch.h
+$(TARGET)\srchsl.o: msg.h
+$(TARGET)\srchsl.o: msm.h
+$(TARGET)\srchsl.o: msm50reg.h
+$(TARGET)\srchsl.o: nv.h
+$(TARGET)\srchsl.o: queue.h
+$(TARGET)\srchsl.o: qw.h
+$(TARGET)\srchsl.o: rex.h
+$(TARGET)\srchsl.o: srch.h
+$(TARGET)\srchsl.o: srchi.h
+$(TARGET)\srchsl.o: srchsl.c
+$(TARGET)\srchsl.o: target.h
+$(TARGET)\srchsl.o: targetg.h
+$(TARGET)\srchsl.o: task.h
+$(TARGET)\srchsl.o: tramp.h
+$(TARGET)\srchsl.o: ulpn.h
+
+$(TARGET)\srchst.o: CUST4SPE.H
+$(TARGET)\srchst.o: addrdefs.h
+$(TARGET)\srchst.o: cai.h
+$(TARGET)\srchst.o: clk.h
+$(TARGET)\srchst.o: cmd.h
+$(TARGET)\srchst.o: comdef.h
+$(TARGET)\srchst.o: customer.h
+$(TARGET)\srchst.o: diagt.h
+$(TARGET)\srchst.o: dog.h
+$(TARGET)\srchst.o: enc.h
+$(TARGET)\srchst.o: err.h
+$(TARGET)\srchst.o: log.h
+$(TARGET)\srchst.o: mc.h
+$(TARGET)\srchst.o: mccsrch.h
+$(TARGET)\srchst.o: msg.h
+$(TARGET)\srchst.o: msm.h
+$(TARGET)\srchst.o: msm50reg.h
+$(TARGET)\srchst.o: nv.h
+$(TARGET)\srchst.o: queue.h
+$(TARGET)\srchst.o: qw.h
+$(TARGET)\srchst.o: rex.h
+$(TARGET)\srchst.o: rf.h
+$(TARGET)\srchst.o: rfc.h
+$(TARGET)\srchst.o: rficap.h
+$(TARGET)\srchst.o: sleep.h
+$(TARGET)\srchst.o: srch.h
+$(TARGET)\srchst.o: srchi.h
+$(TARGET)\srchst.o: srchst.c
+$(TARGET)\srchst.o: target.h
+$(TARGET)\srchst.o: targetg.h
+$(TARGET)\srchst.o: task.h
+$(TARGET)\srchst.o: tramp.h
+$(TARGET)\srchst.o: ts.h
+$(TARGET)\srchst.o: ulpn.h
+
+$(TARGET)\srchtc.o: CUST4SPE.H
+$(TARGET)\srchtc.o: addrdefs.h
+$(TARGET)\srchtc.o: arm.h
+$(TARGET)\srchtc.o: cai.h
+$(TARGET)\srchtc.o: clk.h
+$(TARGET)\srchtc.o: cmd.h
+$(TARGET)\srchtc.o: comdef.h
+$(TARGET)\srchtc.o: customer.h
+$(TARGET)\srchtc.o: dec.h
+$(TARGET)\srchtc.o: dec5000.h
+$(TARGET)\srchtc.o: deint.h
+$(TARGET)\srchtc.o: diagt.h
+$(TARGET)\srchtc.o: dmod.h
+$(TARGET)\srchtc.o: dog.h
+$(TARGET)\srchtc.o: dsm.h
+$(TARGET)\srchtc.o: enc.h
+$(TARGET)\srchtc.o: err.h
+$(TARGET)\srchtc.o: log.h
+$(TARGET)\srchtc.o: mc.h
+$(TARGET)\srchtc.o: mccsrch.h
+$(TARGET)\srchtc.o: mdrrlp.h
+$(TARGET)\srchtc.o: msg.h
+$(TARGET)\srchtc.o: msm.h
+$(TARGET)\srchtc.o: msm50reg.h
+$(TARGET)\srchtc.o: nv.h
+$(TARGET)\srchtc.o: processor.h
+$(TARGET)\srchtc.o: psglobal.h
+$(TARGET)\srchtc.o: queue.h
+$(TARGET)\srchtc.o: qw.h
+$(TARGET)\srchtc.o: rex.h
+$(TARGET)\srchtc.o: rf.h
+$(TARGET)\srchtc.o: rfc.h
+$(TARGET)\srchtc.o: rficap.h
+$(TARGET)\srchtc.o: rxc.h
+$(TARGET)\srchtc.o: srch.h
+$(TARGET)\srchtc.o: srchi.h
+$(TARGET)\srchtc.o: srchtc.c
+$(TARGET)\srchtc.o: target.h
+$(TARGET)\srchtc.o: targetg.h
+$(TARGET)\srchtc.o: task.h
+$(TARGET)\srchtc.o: tramp.h
+$(TARGET)\srchtc.o: ulpn.h
+
+$(TARGET)\srchtri.o: CUST4SPE.H
+$(TARGET)\srchtri.o: addrdefs.h
+$(TARGET)\srchtri.o: cai.h
+$(TARGET)\srchtri.o: clk.h
+$(TARGET)\srchtri.o: cmd.h
+$(TARGET)\srchtri.o: comdef.h
+$(TARGET)\srchtri.o: customer.h
+$(TARGET)\srchtri.o: diagt.h
+$(TARGET)\srchtri.o: dog.h
+$(TARGET)\srchtri.o: enc.h
+$(TARGET)\srchtri.o: err.h
+$(TARGET)\srchtri.o: hw.h
+$(TARGET)\srchtri.o: log.h
+$(TARGET)\srchtri.o: mc.h
+$(TARGET)\srchtri.o: mccsrch.h
+$(TARGET)\srchtri.o: msg.h
+$(TARGET)\srchtri.o: msm.h
+$(TARGET)\srchtri.o: msm50reg.h
+$(TARGET)\srchtri.o: nv.h
+$(TARGET)\srchtri.o: queue.h
+$(TARGET)\srchtri.o: qw.h
+$(TARGET)\srchtri.o: rex.h
+$(TARGET)\srchtri.o: srch.h
+$(TARGET)\srchtri.o: srchi.h
+$(TARGET)\srchtri.o: srchtri.c
+$(TARGET)\srchtri.o: target.h
+$(TARGET)\srchtri.o: targetg.h
+$(TARGET)\srchtri.o: task.h
+$(TARGET)\srchtri.o: tramp.h
+$(TARGET)\srchtri.o: ulpn.h
+
+$(TARGET)\srchun.o: CUST4SPE.H
+$(TARGET)\srchun.o: addrdefs.h
+$(TARGET)\srchun.o: cai.h
+$(TARGET)\srchun.o: clk.h
+$(TARGET)\srchun.o: cmd.h
+$(TARGET)\srchun.o: comdef.h
+$(TARGET)\srchun.o: customer.h
+$(TARGET)\srchun.o: diagt.h
+$(TARGET)\srchun.o: dog.h
+$(TARGET)\srchun.o: enc.h
+$(TARGET)\srchun.o: err.h
+$(TARGET)\srchun.o: log.h
+$(TARGET)\srchun.o: mc.h
+$(TARGET)\srchun.o: mccsrch.h
+$(TARGET)\srchun.o: msg.h
+$(TARGET)\srchun.o: msm.h
+$(TARGET)\srchun.o: msm50reg.h
+$(TARGET)\srchun.o: nv.h
+$(TARGET)\srchun.o: queue.h
+$(TARGET)\srchun.o: qw.h
+$(TARGET)\srchun.o: rex.h
+$(TARGET)\srchun.o: srch.h
+$(TARGET)\srchun.o: srchi.h
+$(TARGET)\srchun.o: srchun.c
+$(TARGET)\srchun.o: target.h
+$(TARGET)\srchun.o: targetg.h
+$(TARGET)\srchun.o: task.h
+$(TARGET)\srchun.o: tramp.h
+$(TARGET)\srchun.o: ts.h
+$(TARGET)\srchun.o: ulpn.h
+
+$(TARGET)\srchzz.o: CUST4SPE.H
+$(TARGET)\srchzz.o: addrdefs.h
+$(TARGET)\srchzz.o: arm.h
+$(TARGET)\srchzz.o: bio.h
+$(TARGET)\srchzz.o: biog.h
+$(TARGET)\srchzz.o: cai.h
+$(TARGET)\srchzz.o: clk.h
+$(TARGET)\srchzz.o: clkregim.h
+$(TARGET)\srchzz.o: cm.h
+$(TARGET)\srchzz.o: cmd.h
+$(TARGET)\srchzz.o: comdef.h
+$(TARGET)\srchzz.o: customer.h
+$(TARGET)\srchzz.o: db.h
+$(TARGET)\srchzz.o: dec.h
+$(TARGET)\srchzz.o: dec5000.h
+$(TARGET)\srchzz.o: deci.h
+$(TARGET)\srchzz.o: diagt.h
+$(TARGET)\srchzz.o: dmod.h
+$(TARGET)\srchzz.o: dog.h
+$(TARGET)\srchzz.o: ds.h
+$(TARGET)\srchzz.o: dsm.h
+$(TARGET)\srchzz.o: dsnetmdl.h
+$(TARGET)\srchzz.o: dssocket.h
+$(TARGET)\srchzz.o: dssocki.h
+$(TARGET)\srchzz.o: enc.h
+$(TARGET)\srchzz.o: enci.h
+$(TARGET)\srchzz.o: err.h
+$(TARGET)\srchzz.o: hs.h
+$(TARGET)\srchzz.o: hw.h
+$(TARGET)\srchzz.o: iface.h
+$(TARGET)\srchzz.o: internet.h
+$(TARGET)\srchzz.o: ip.h
+$(TARGET)\srchzz.o: log.h
+$(TARGET)\srchzz.o: mc.h
+$(TARGET)\srchzz.o: mccsrch.h
+$(TARGET)\srchzz.o: mdrrlp.h
+$(TARGET)\srchzz.o: msg.h
+$(TARGET)\srchzz.o: msm.h
+$(TARGET)\srchzz.o: msm50reg.h
+$(TARGET)\srchzz.o: netuser.h
+$(TARGET)\srchzz.o: nv.h
+$(TARGET)\srchzz.o: pppfsm.h
+$(TARGET)\srchzz.o: processor.h
+$(TARGET)\srchzz.o: psglobal.h
+$(TARGET)\srchzz.o: queue.h
+$(TARGET)\srchzz.o: qw.h
+$(TARGET)\srchzz.o: rex.h
+$(TARGET)\srchzz.o: rf.h
+$(TARGET)\srchzz.o: rfc.h
+$(TARGET)\srchzz.o: rficap.h
+$(TARGET)\srchzz.o: sio.h
+$(TARGET)\srchzz.o: sleep.h
+$(TARGET)\srchzz.o: snd.h
+$(TARGET)\srchzz.o: srch.h
+$(TARGET)\srchzz.o: srchi.h
+$(TARGET)\srchzz.o: srchzz.c
+$(TARGET)\srchzz.o: target.h
+$(TARGET)\srchzz.o: targetg.h
+$(TARGET)\srchzz.o: task.h
+$(TARGET)\srchzz.o: tcp.h
+$(TARGET)\srchzz.o: tramp.h
+$(TARGET)\srchzz.o: ts.h
+$(TARGET)\srchzz.o: ulpn.h
+
+$(TARGET)\srv.o: CUST4SPE.H
+$(TARGET)\srv.o: acpmc.h
+$(TARGET)\srv.o: addrdefs.h
+$(TARGET)\srv.o: assert.h
+$(TARGET)\srv.o: cai.h
+$(TARGET)\srv.o: caii.h
+$(TARGET)\srv.o: clk.h
+$(TARGET)\srv.o: cm.h
+$(TARGET)\srv.o: cmd.h
+$(TARGET)\srv.o: cmmc.h
+$(TARGET)\srv.o: comdef.h
+$(TARGET)\srv.o: customer.h
+$(TARGET)\srv.o: db.h
+$(TARGET)\srv.o: dec.h
+$(TARGET)\srv.o: dec5000.h
+$(TARGET)\srv.o: deint.h
+$(TARGET)\srv.o: dog.h
+$(TARGET)\srv.o: ds.h
+$(TARGET)\srv.o: dsm.h
+$(TARGET)\srv.o: dsnetmdl.h
+$(TARGET)\srv.o: dssocket.h
+$(TARGET)\srv.o: dssocki.h
+$(TARGET)\srv.o: enc.h
+$(TARGET)\srv.o: err.h
+$(TARGET)\srv.o: iface.h
+$(TARGET)\srv.o: internet.h
+$(TARGET)\srv.o: ip.h
+$(TARGET)\srv.o: mc.h
+$(TARGET)\srv.o: mcc.h
+$(TARGET)\srv.o: mccdma.h
+$(TARGET)\srv.o: mccsrch.h
+$(TARGET)\srv.o: mdrrlp.h
+$(TARGET)\srv.o: msg.h
+$(TARGET)\srv.o: msm.h
+$(TARGET)\srv.o: msm50reg.h
+$(TARGET)\srv.o: netuser.h
+$(TARGET)\srv.o: nv.h
+$(TARGET)\srv.o: otaspi.h
+$(TARGET)\srv.o: pppfsm.h
+$(TARGET)\srv.o: psglobal.h
+$(TARGET)\srv.o: queue.h
+$(TARGET)\srv.o: qw.h
+$(TARGET)\srv.o: rex.h
+$(TARGET)\srv.o: rxc.h
+$(TARGET)\srv.o: rxtx.h
+$(TARGET)\srv.o: snm.h
+$(TARGET)\srv.o: srch.h
+$(TARGET)\srv.o: srv.c
+$(TARGET)\srv.o: srv.h
+$(TARGET)\srv.o: target.h
+$(TARGET)\srv.o: targetg.h
+$(TARGET)\srv.o: task.h
+$(TARGET)\srv.o: tcp.h
+$(TARGET)\srv.o: tramp.h
+$(TARGET)\srv.o: ts.h
+$(TARGET)\srv.o: txc.h
+$(TARGET)\srv.o: uapi.h
+$(TARGET)\srv.o: uasms.h
+$(TARGET)\srv.o: uasmsi.h
+$(TARGET)\srv.o: ulpn.h
+$(TARGET)\srv.o: voc.h
+$(TARGET)\srv.o: vocmux.h
+
+$(TARGET)\task.o: CUST4SPE.H
+$(TARGET)\task.o: addrdefs.h
+$(TARGET)\task.o: cai.h
+$(TARGET)\task.o: clk.h
+$(TARGET)\task.o: cmd.h
+$(TARGET)\task.o: comdef.h
+$(TARGET)\task.o: customer.h
+$(TARGET)\task.o: dog.h
+$(TARGET)\task.o: mc.h
+$(TARGET)\task.o: msm.h
+$(TARGET)\task.o: msm50reg.h
+$(TARGET)\task.o: nv.h
+$(TARGET)\task.o: queue.h
+$(TARGET)\task.o: qw.h
+$(TARGET)\task.o: rex.h
+$(TARGET)\task.o: target.h
+$(TARGET)\task.o: targetg.h
+$(TARGET)\task.o: task.c
+$(TARGET)\task.o: task.h
+$(TARGET)\task.o: tramp.h
+
+$(TARGET)\tcphdr.o: CUST4SPE.H
+$(TARGET)\tcphdr.o: addrdefs.h
+$(TARGET)\tcphdr.o: clk.h
+$(TARGET)\tcphdr.o: comdef.h
+$(TARGET)\tcphdr.o: customer.h
+$(TARGET)\tcphdr.o: dsm.h
+$(TARGET)\tcphdr.o: dsnetmdl.h
+$(TARGET)\tcphdr.o: dssocket.h
+$(TARGET)\tcphdr.o: dssocki.h
+$(TARGET)\tcphdr.o: iface.h
+$(TARGET)\tcphdr.o: internet.h
+$(TARGET)\tcphdr.o: ip.h
+$(TARGET)\tcphdr.o: memory.h
+$(TARGET)\tcphdr.o: msm.h
+$(TARGET)\tcphdr.o: msm50reg.h
+$(TARGET)\tcphdr.o: netuser.h
+$(TARGET)\tcphdr.o: pppfsm.h
+$(TARGET)\tcphdr.o: psglobal.h
+$(TARGET)\tcphdr.o: psmisc.h
+$(TARGET)\tcphdr.o: queue.h
+$(TARGET)\tcphdr.o: qw.h
+$(TARGET)\tcphdr.o: rex.h
+$(TARGET)\tcphdr.o: target.h
+$(TARGET)\tcphdr.o: targetg.h
+$(TARGET)\tcphdr.o: tcp.h
+$(TARGET)\tcphdr.o: tcphdr.c
+$(TARGET)\tcphdr.o: tramp.h
+
+$(TARGET)\tcpin.o: CUST4SPE.H
+$(TARGET)\tcpin.o: addrdefs.h
+$(TARGET)\tcpin.o: assert.h
+$(TARGET)\tcpin.o: cai.h
+$(TARGET)\tcpin.o: clk.h
+$(TARGET)\tcpin.o: cm.h
+$(TARGET)\tcpin.o: cmd.h
+$(TARGET)\tcpin.o: comdef.h
+$(TARGET)\tcpin.o: customer.h
+$(TARGET)\tcpin.o: db.h
+$(TARGET)\tcpin.o: dog.h
+$(TARGET)\tcpin.o: ds.h
+$(TARGET)\tcpin.o: dsm.h
+$(TARGET)\tcpin.o: dsnetmdl.h
+$(TARGET)\tcpin.o: dssocket.h
+$(TARGET)\tcpin.o: dssocki.h
+$(TARGET)\tcpin.o: dsstcp.h
+$(TARGET)\tcpin.o: err.h
+$(TARGET)\tcpin.o: icmp.h
+$(TARGET)\tcpin.o: iface.h
+$(TARGET)\tcpin.o: internet.h
+$(TARGET)\tcpin.o: ip.h
+$(TARGET)\tcpin.o: mc.h
+$(TARGET)\tcpin.o: mdrrlp.h
+$(TARGET)\tcpin.o: memory.h
+$(TARGET)\tcpin.o: msg.h
+$(TARGET)\tcpin.o: msm.h
+$(TARGET)\tcpin.o: msm50reg.h
+$(TARGET)\tcpin.o: netuser.h
+$(TARGET)\tcpin.o: nv.h
+$(TARGET)\tcpin.o: pppfsm.h
+$(TARGET)\tcpin.o: ps.h
+$(TARGET)\tcpin.o: psglobal.h
+$(TARGET)\tcpin.o: psi.h
+$(TARGET)\tcpin.o: psmisc.h
+$(TARGET)\tcpin.o: queue.h
+$(TARGET)\tcpin.o: qw.h
+$(TARGET)\tcpin.o: rex.h
+$(TARGET)\tcpin.o: target.h
+$(TARGET)\tcpin.o: targetg.h
+$(TARGET)\tcpin.o: task.h
+$(TARGET)\tcpin.o: tcp.h
+$(TARGET)\tcpin.o: tcpin.c
+$(TARGET)\tcpin.o: tramp.h
+
+$(TARGET)\tcpout.o: CUST4SPE.H
+$(TARGET)\tcpout.o: addrdefs.h
+$(TARGET)\tcpout.o: cai.h
+$(TARGET)\tcpout.o: clk.h
+$(TARGET)\tcpout.o: cm.h
+$(TARGET)\tcpout.o: cmd.h
+$(TARGET)\tcpout.o: comdef.h
+$(TARGET)\tcpout.o: customer.h
+$(TARGET)\tcpout.o: db.h
+$(TARGET)\tcpout.o: dog.h
+$(TARGET)\tcpout.o: ds.h
+$(TARGET)\tcpout.o: dsm.h
+$(TARGET)\tcpout.o: dsnetmdl.h
+$(TARGET)\tcpout.o: dssocket.h
+$(TARGET)\tcpout.o: dssocki.h
+$(TARGET)\tcpout.o: err.h
+$(TARGET)\tcpout.o: iface.h
+$(TARGET)\tcpout.o: internet.h
+$(TARGET)\tcpout.o: ip.h
+$(TARGET)\tcpout.o: mc.h
+$(TARGET)\tcpout.o: mdrrlp.h
+$(TARGET)\tcpout.o: msg.h
+$(TARGET)\tcpout.o: msm.h
+$(TARGET)\tcpout.o: msm50reg.h
+$(TARGET)\tcpout.o: netuser.h
+$(TARGET)\tcpout.o: nv.h
+$(TARGET)\tcpout.o: pppfsm.h
+$(TARGET)\tcpout.o: ps.h
+$(TARGET)\tcpout.o: psglobal.h
+$(TARGET)\tcpout.o: psi.h
+$(TARGET)\tcpout.o: psmisc.h
+$(TARGET)\tcpout.o: queue.h
+$(TARGET)\tcpout.o: qw.h
+$(TARGET)\tcpout.o: rex.h
+$(TARGET)\tcpout.o: target.h
+$(TARGET)\tcpout.o: targetg.h
+$(TARGET)\tcpout.o: task.h
+$(TARGET)\tcpout.o: tcp.h
+$(TARGET)\tcpout.o: tcpout.c
+$(TARGET)\tcpout.o: tramp.h
+
+$(TARGET)\tcpshell.o: CUST4SPE.H
+$(TARGET)\tcpshell.o: comdef.h
+$(TARGET)\tcpshell.o: customer.h
+$(TARGET)\tcpshell.o: dsm.h
+$(TARGET)\tcpshell.o: dsnetmdl.h
+$(TARGET)\tcpshell.o: dssocket.h
+$(TARGET)\tcpshell.o: dssocki.h
+$(TARGET)\tcpshell.o: err.h
+$(TARGET)\tcpshell.o: iface.h
+$(TARGET)\tcpshell.o: internet.h
+$(TARGET)\tcpshell.o: ip.h
+$(TARGET)\tcpshell.o: memory.h
+$(TARGET)\tcpshell.o: msg.h
+$(TARGET)\tcpshell.o: netuser.h
+$(TARGET)\tcpshell.o: nv.h
+$(TARGET)\tcpshell.o: pppfsm.h
+$(TARGET)\tcpshell.o: ps.h
+$(TARGET)\tcpshell.o: psglobal.h
+$(TARGET)\tcpshell.o: queue.h
+$(TARGET)\tcpshell.o: qw.h
+$(TARGET)\tcpshell.o: rex.h
+$(TARGET)\tcpshell.o: target.h
+$(TARGET)\tcpshell.o: targetg.h
+$(TARGET)\tcpshell.o: tcp.h
+$(TARGET)\tcpshell.o: tcpshell.c
+
+$(TARGET)\tcpsubr.o: CUST4SPE.H
+$(TARGET)\tcpsubr.o: addrdefs.h
+$(TARGET)\tcpsubr.o: cai.h
+$(TARGET)\tcpsubr.o: clk.h
+$(TARGET)\tcpsubr.o: cm.h
+$(TARGET)\tcpsubr.o: cmd.h
+$(TARGET)\tcpsubr.o: comdef.h
+$(TARGET)\tcpsubr.o: customer.h
+$(TARGET)\tcpsubr.o: db.h
+$(TARGET)\tcpsubr.o: dog.h
+$(TARGET)\tcpsubr.o: ds.h
+$(TARGET)\tcpsubr.o: dsi.h
+$(TARGET)\tcpsubr.o: dsm.h
+$(TARGET)\tcpsubr.o: dsnetmdl.h
+$(TARGET)\tcpsubr.o: dssocket.h
+$(TARGET)\tcpsubr.o: dssocki.h
+$(TARGET)\tcpsubr.o: err.h
+$(TARGET)\tcpsubr.o: iface.h
+$(TARGET)\tcpsubr.o: internet.h
+$(TARGET)\tcpsubr.o: ip.h
+$(TARGET)\tcpsubr.o: mc.h
+$(TARGET)\tcpsubr.o: mdrrlp.h
+$(TARGET)\tcpsubr.o: memory.h
+$(TARGET)\tcpsubr.o: msg.h
+$(TARGET)\tcpsubr.o: msm.h
+$(TARGET)\tcpsubr.o: msm50reg.h
+$(TARGET)\tcpsubr.o: netuser.h
+$(TARGET)\tcpsubr.o: nv.h
+$(TARGET)\tcpsubr.o: pppfsm.h
+$(TARGET)\tcpsubr.o: ps.h
+$(TARGET)\tcpsubr.o: psglobal.h
+$(TARGET)\tcpsubr.o: psi.h
+$(TARGET)\tcpsubr.o: queue.h
+$(TARGET)\tcpsubr.o: qw.h
+$(TARGET)\tcpsubr.o: rex.h
+$(TARGET)\tcpsubr.o: sio.h
+$(TARGET)\tcpsubr.o: target.h
+$(TARGET)\tcpsubr.o: targetg.h
+$(TARGET)\tcpsubr.o: task.h
+$(TARGET)\tcpsubr.o: tcp.h
+$(TARGET)\tcpsubr.o: tcpsubr.c
+$(TARGET)\tcpsubr.o: tramp.h
+
+$(TARGET)\tcptimer.o: CUST4SPE.H
+$(TARGET)\tcptimer.o: addrdefs.h
+$(TARGET)\tcptimer.o: cai.h
+$(TARGET)\tcptimer.o: clk.h
+$(TARGET)\tcptimer.o: cm.h
+$(TARGET)\tcptimer.o: cmd.h
+$(TARGET)\tcptimer.o: comdef.h
+$(TARGET)\tcptimer.o: customer.h
+$(TARGET)\tcptimer.o: db.h
+$(TARGET)\tcptimer.o: dog.h
+$(TARGET)\tcptimer.o: ds.h
+$(TARGET)\tcptimer.o: dsm.h
+$(TARGET)\tcptimer.o: dsnetmdl.h
+$(TARGET)\tcptimer.o: dssocket.h
+$(TARGET)\tcptimer.o: dssocki.h
+$(TARGET)\tcptimer.o: err.h
+$(TARGET)\tcptimer.o: iface.h
+$(TARGET)\tcptimer.o: internet.h
+$(TARGET)\tcptimer.o: ip.h
+$(TARGET)\tcptimer.o: mc.h
+$(TARGET)\tcptimer.o: mdrrlp.h
+$(TARGET)\tcptimer.o: msg.h
+$(TARGET)\tcptimer.o: msm.h
+$(TARGET)\tcptimer.o: msm50reg.h
+$(TARGET)\tcptimer.o: netuser.h
+$(TARGET)\tcptimer.o: nv.h
+$(TARGET)\tcptimer.o: pppfsm.h
+$(TARGET)\tcptimer.o: ps.h
+$(TARGET)\tcptimer.o: psglobal.h
+$(TARGET)\tcptimer.o: psi.h
+$(TARGET)\tcptimer.o: queue.h
+$(TARGET)\tcptimer.o: qw.h
+$(TARGET)\tcptimer.o: rex.h
+$(TARGET)\tcptimer.o: target.h
+$(TARGET)\tcptimer.o: targetg.h
+$(TARGET)\tcptimer.o: task.h
+$(TARGET)\tcptimer.o: tcp.h
+$(TARGET)\tcptimer.o: tcptimer.c
+$(TARGET)\tcptimer.o: tramp.h
+
+$(TARGET)\therm.o: CUST4SPE.H
+$(TARGET)\therm.o: adc.h
+$(TARGET)\therm.o: addrdefs.h
+$(TARGET)\therm.o: arm.h
+$(TARGET)\therm.o: bio.h
+$(TARGET)\therm.o: biog.h
+$(TARGET)\therm.o: clk.h
+$(TARGET)\therm.o: comdef.h
+$(TARGET)\therm.o: customer.h
+$(TARGET)\therm.o: deci.h
+$(TARGET)\therm.o: dmod.h
+$(TARGET)\therm.o: enci.h
+$(TARGET)\therm.o: err.h
+$(TARGET)\therm.o: msg.h
+$(TARGET)\therm.o: msm.h
+$(TARGET)\therm.o: msm50reg.h
+$(TARGET)\therm.o: nv.h
+$(TARGET)\therm.o: processor.h
+$(TARGET)\therm.o: queue.h
+$(TARGET)\therm.o: qw.h
+$(TARGET)\therm.o: rex.h
+$(TARGET)\therm.o: target.h
+$(TARGET)\therm.o: targetg.h
+$(TARGET)\therm.o: therm.c
+$(TARGET)\therm.o: therm.h
+$(TARGET)\therm.o: tramp.h
+
+$(TARGET)\tmsi.o: CUST4SPE.H
+$(TARGET)\tmsi.o: acpmc.h
+$(TARGET)\tmsi.o: addrdefs.h
+$(TARGET)\tmsi.o: cai.h
+$(TARGET)\tmsi.o: caii.h
+$(TARGET)\tmsi.o: clk.h
+$(TARGET)\tmsi.o: cm.h
+$(TARGET)\tmsi.o: cmd.h
+$(TARGET)\tmsi.o: cmmc.h
+$(TARGET)\tmsi.o: comdef.h
+$(TARGET)\tmsi.o: customer.h
+$(TARGET)\tmsi.o: db.h
+$(TARGET)\tmsi.o: dec.h
+$(TARGET)\tmsi.o: dec5000.h
+$(TARGET)\tmsi.o: deint.h
+$(TARGET)\tmsi.o: dog.h
+$(TARGET)\tmsi.o: ds.h
+$(TARGET)\tmsi.o: dsm.h
+$(TARGET)\tmsi.o: dsnetmdl.h
+$(TARGET)\tmsi.o: dssocket.h
+$(TARGET)\tmsi.o: dssocki.h
+$(TARGET)\tmsi.o: enc.h
+$(TARGET)\tmsi.o: iface.h
+$(TARGET)\tmsi.o: internet.h
+$(TARGET)\tmsi.o: ip.h
+$(TARGET)\tmsi.o: mc.h
+$(TARGET)\tmsi.o: mcc.h
+$(TARGET)\tmsi.o: mccdma.h
+$(TARGET)\tmsi.o: mccreg.h
+$(TARGET)\tmsi.o: mccsrch.h
+$(TARGET)\tmsi.o: mdrrlp.h
+$(TARGET)\tmsi.o: memory.h
+$(TARGET)\tmsi.o: msg.h
+$(TARGET)\tmsi.o: msm.h
+$(TARGET)\tmsi.o: msm50reg.h
+$(TARGET)\tmsi.o: netuser.h
+$(TARGET)\tmsi.o: nv.h
+$(TARGET)\tmsi.o: otaspi.h
+$(TARGET)\tmsi.o: pppfsm.h
+$(TARGET)\tmsi.o: psglobal.h
+$(TARGET)\tmsi.o: queue.h
+$(TARGET)\tmsi.o: qw.h
+$(TARGET)\tmsi.o: rex.h
+$(TARGET)\tmsi.o: rxc.h
+$(TARGET)\tmsi.o: rxtx.h
+$(TARGET)\tmsi.o: srch.h
+$(TARGET)\tmsi.o: target.h
+$(TARGET)\tmsi.o: targetg.h
+$(TARGET)\tmsi.o: task.h
+$(TARGET)\tmsi.o: tcp.h
+$(TARGET)\tmsi.o: tmsi.c
+$(TARGET)\tmsi.o: tmsi.h
+$(TARGET)\tmsi.o: tramp.h
+$(TARGET)\tmsi.o: ts.h
+$(TARGET)\tmsi.o: txc.h
+$(TARGET)\tmsi.o: uapi.h
+$(TARGET)\tmsi.o: uasms.h
+$(TARGET)\tmsi.o: uasmsi.h
+$(TARGET)\tmsi.o: ulpn.h
+$(TARGET)\tmsi.o: voc.h
+$(TARGET)\tmsi.o: vocmux.h
+
+$(TARGET)\trampm3.o: CUST4SPE.H
+$(TARGET)\trampm3.o: addrdefs.h
+$(TARGET)\trampm3.o: arm.h
+$(TARGET)\trampm3.o: clk.h
+$(TARGET)\trampm3.o: comdef.h
+$(TARGET)\trampm3.o: customer.h
+$(TARGET)\trampm3.o: dmod.h
+$(TARGET)\trampm3.o: err.h
+$(TARGET)\trampm3.o: msg.h
+$(TARGET)\trampm3.o: msm.h
+$(TARGET)\trampm3.o: msm50reg.h
+$(TARGET)\trampm3.o: nv.h
+$(TARGET)\trampm3.o: processor.h
+$(TARGET)\trampm3.o: queue.h
+$(TARGET)\trampm3.o: qw.h
+$(TARGET)\trampm3.o: rex.h
+$(TARGET)\trampm3.o: target.h
+$(TARGET)\trampm3.o: targetg.h
+$(TARGET)\trampm3.o: tramp.h
+$(TARGET)\trampm3.o: trampm3.c
+
+$(TARGET)\ts.o: CUST4SPE.H
+$(TARGET)\ts.o: addrdefs.h
+$(TARGET)\ts.o: arm.h
+$(TARGET)\ts.o: bootdata.h
+$(TARGET)\ts.o: cai.h
+$(TARGET)\ts.o: clk.h
+$(TARGET)\ts.o: cmd.h
+$(TARGET)\ts.o: comdef.h
+$(TARGET)\ts.o: customer.h
+$(TARGET)\ts.o: dec.h
+$(TARGET)\ts.o: dec5000.h
+$(TARGET)\ts.o: deint.h
+$(TARGET)\ts.o: dmod.h
+$(TARGET)\ts.o: dog.h
+$(TARGET)\ts.o: dsm.h
+$(TARGET)\ts.o: enc.h
+$(TARGET)\ts.o: mc.h
+$(TARGET)\ts.o: mdrrlp.h
+$(TARGET)\ts.o: msm.h
+$(TARGET)\ts.o: msm50reg.h
+$(TARGET)\ts.o: nv.h
+$(TARGET)\ts.o: processor.h
+$(TARGET)\ts.o: psglobal.h
+$(TARGET)\ts.o: queue.h
+$(TARGET)\ts.o: qw.h
+$(TARGET)\ts.o: rex.h
+$(TARGET)\ts.o: rxc.h
+$(TARGET)\ts.o: srch.h
+$(TARGET)\ts.o: target.h
+$(TARGET)\ts.o: targetg.h
+$(TARGET)\ts.o: task.h
+$(TARGET)\ts.o: tramp.h
+$(TARGET)\ts.o: ts.c
+$(TARGET)\ts.o: ulpn.h
+
+$(TARGET)\tx.o: CUST4SPE.H
+$(TARGET)\tx.o: acp553.h
+$(TARGET)\tx.o: acptx.h
+$(TARGET)\tx.o: addrdefs.h
+$(TARGET)\tx.o: bit.h
+$(TARGET)\tx.o: cai.h
+$(TARGET)\tx.o: clk.h
+$(TARGET)\tx.o: cmd.h
+$(TARGET)\tx.o: comdef.h
+$(TARGET)\tx.o: customer.h
+$(TARGET)\tx.o: dog.h
+$(TARGET)\tx.o: enc.h
+$(TARGET)\tx.o: mc.h
+$(TARGET)\tx.o: msg.h
+$(TARGET)\tx.o: msm.h
+$(TARGET)\tx.o: msm50reg.h
+$(TARGET)\tx.o: nv.h
+$(TARGET)\tx.o: queue.h
+$(TARGET)\tx.o: qw.h
+$(TARGET)\tx.o: rex.h
+$(TARGET)\tx.o: target.h
+$(TARGET)\tx.o: targetg.h
+$(TARGET)\tx.o: task.h
+$(TARGET)\tx.o: tramp.h
+$(TARGET)\tx.o: tx.c
+$(TARGET)\tx.o: tx.h
+$(TARGET)\tx.o: txc.h
+
+$(TARGET)\txc.o: CUST4SPE.H
+$(TARGET)\txc.o: addrdefs.h
+$(TARGET)\txc.o: arm.h
+$(TARGET)\txc.o: assert.h
+$(TARGET)\txc.o: bio.h
+$(TARGET)\txc.o: biog.h
+$(TARGET)\txc.o: bit.h
+$(TARGET)\txc.o: cai.h
+$(TARGET)\txc.o: clk.h
+$(TARGET)\txc.o: cm.h
+$(TARGET)\txc.o: cmd.h
+$(TARGET)\txc.o: comdef.h
+$(TARGET)\txc.o: crc.h
+$(TARGET)\txc.o: customer.h
+$(TARGET)\txc.o: db.h
+$(TARGET)\txc.o: dec.h
+$(TARGET)\txc.o: dec5000.h
+$(TARGET)\txc.o: deci.h
+$(TARGET)\txc.o: deint.h
+$(TARGET)\txc.o: diagt.h
+$(TARGET)\txc.o: dmod.h
+$(TARGET)\txc.o: dog.h
+$(TARGET)\txc.o: ds.h
+$(TARGET)\txc.o: dsm.h
+$(TARGET)\txc.o: dsnetmdl.h
+$(TARGET)\txc.o: dssocket.h
+$(TARGET)\txc.o: dssocki.h
+$(TARGET)\txc.o: enc.h
+$(TARGET)\txc.o: enci.h
+$(TARGET)\txc.o: err.h
+$(TARGET)\txc.o: iface.h
+$(TARGET)\txc.o: internet.h
+$(TARGET)\txc.o: ip.h
+$(TARGET)\txc.o: log.h
+$(TARGET)\txc.o: loopback.h
+$(TARGET)\txc.o: mar.h
+$(TARGET)\txc.o: mc.h
+$(TARGET)\txc.o: mdrrlp.h
+$(TARGET)\txc.o: memory.h
+$(TARGET)\txc.o: msg.h
+$(TARGET)\txc.o: msm.h
+$(TARGET)\txc.o: msm50reg.h
+$(TARGET)\txc.o: msm_drv.h
+$(TARGET)\txc.o: msm_help.h
+$(TARGET)\txc.o: mux.h
+$(TARGET)\txc.o: netuser.h
+$(TARGET)\txc.o: nv.h
+$(TARGET)\txc.o: parm.h
+$(TARGET)\txc.o: pppfsm.h
+$(TARGET)\txc.o: processor.h
+$(TARGET)\txc.o: psglobal.h
+$(TARGET)\txc.o: queue.h
+$(TARGET)\txc.o: qw.h
+$(TARGET)\txc.o: ran.h
+$(TARGET)\txc.o: rex.h
+$(TARGET)\txc.o: rf.h
+$(TARGET)\txc.o: rfc.h
+$(TARGET)\txc.o: rficap.h
+$(TARGET)\txc.o: rxc.h
+$(TARGET)\txc.o: srch.h
+$(TARGET)\txc.o: target.h
+$(TARGET)\txc.o: targetg.h
+$(TARGET)\txc.o: task.h
+$(TARGET)\txc.o: tcp.h
+$(TARGET)\txc.o: tramp.h
+$(TARGET)\txc.o: ts.h
+$(TARGET)\txc.o: tx.h
+$(TARGET)\txc.o: txc.c
+$(TARGET)\txc.o: txc.h
+$(TARGET)\txc.o: ulpn.h
+$(TARGET)\txc.o: voc.h
+$(TARGET)\txc.o: vocmux.h
+
+$(TARGET)\uasms.o: CUST4SPE.H
+$(TARGET)\uasms.o: acpmc.h
+$(TARGET)\uasms.o: addrdefs.h
+$(TARGET)\uasms.o: assert.h
+$(TARGET)\uasms.o: bit.h
+$(TARGET)\uasms.o: cai.h
+$(TARGET)\uasms.o: caii.h
+$(TARGET)\uasms.o: clk.h
+$(TARGET)\uasms.o: cm.h
+$(TARGET)\uasms.o: cmcall.h
+$(TARGET)\uasms.o: cmd.h
+$(TARGET)\uasms.o: cmi.h
+$(TARGET)\uasms.o: cmmc.h
+$(TARGET)\uasms.o: cmph.h
+$(TARGET)\uasms.o: comdef.h
+$(TARGET)\uasms.o: customer.h
+$(TARGET)\uasms.o: db.h
+$(TARGET)\uasms.o: dec.h
+$(TARGET)\uasms.o: dec5000.h
+$(TARGET)\uasms.o: deint.h
+$(TARGET)\uasms.o: dog.h
+$(TARGET)\uasms.o: ds.h
+$(TARGET)\uasms.o: dsm.h
+$(TARGET)\uasms.o: dsnetmdl.h
+$(TARGET)\uasms.o: dssocket.h
+$(TARGET)\uasms.o: dssocki.h
+$(TARGET)\uasms.o: enc.h
+$(TARGET)\uasms.o: err.h
+$(TARGET)\uasms.o: iface.h
+$(TARGET)\uasms.o: internet.h
+$(TARGET)\uasms.o: ip.h
+$(TARGET)\uasms.o: mc.h
+$(TARGET)\uasms.o: mcc.h
+$(TARGET)\uasms.o: mccdma.h
+$(TARGET)\uasms.o: mccsrch.h
+$(TARGET)\uasms.o: mdrrlp.h
+$(TARGET)\uasms.o: msg.h
+$(TARGET)\uasms.o: msm.h
+$(TARGET)\uasms.o: msm50reg.h
+$(TARGET)\uasms.o: netuser.h
+$(TARGET)\uasms.o: nv.h
+$(TARGET)\uasms.o: otaspi.h
+$(TARGET)\uasms.o: pppfsm.h
+$(TARGET)\uasms.o: psglobal.h
+$(TARGET)\uasms.o: queue.h
+$(TARGET)\uasms.o: qw.h
+$(TARGET)\uasms.o: rex.h
+$(TARGET)\uasms.o: rxc.h
+$(TARGET)\uasms.o: rxtx.h
+$(TARGET)\uasms.o: snd.h
+$(TARGET)\uasms.o: srch.h
+$(TARGET)\uasms.o: target.h
+$(TARGET)\uasms.o: targetg.h
+$(TARGET)\uasms.o: task.h
+$(TARGET)\uasms.o: tcp.h
+$(TARGET)\uasms.o: tramp.h
+$(TARGET)\uasms.o: txc.h
+$(TARGET)\uasms.o: uapi.h
+$(TARGET)\uasms.o: uasms.c
+$(TARGET)\uasms.o: uasms.h
+$(TARGET)\uasms.o: uasmsi.h
+$(TARGET)\uasms.o: uasmsx.h
+$(TARGET)\uasms.o: ulpn.h
+$(TARGET)\uasms.o: voc.h
+$(TARGET)\uasms.o: vocmux.h
+
+$(TARGET)\uasmsx.o: CUST4SPE.H
+$(TARGET)\uasmsx.o: addrdefs.h
+$(TARGET)\uasmsx.o: bit.h
+$(TARGET)\uasmsx.o: cai.h
+$(TARGET)\uasmsx.o: clk.h
+$(TARGET)\uasmsx.o: cm.h
+$(TARGET)\uasmsx.o: cmd.h
+$(TARGET)\uasmsx.o: comdef.h
+$(TARGET)\uasmsx.o: customer.h
+$(TARGET)\uasmsx.o: db.h
+$(TARGET)\uasmsx.o: dog.h
+$(TARGET)\uasmsx.o: err.h
+$(TARGET)\uasmsx.o: mc.h
+$(TARGET)\uasmsx.o: msg.h
+$(TARGET)\uasmsx.o: msm.h
+$(TARGET)\uasmsx.o: msm50reg.h
+$(TARGET)\uasmsx.o: nv.h
+$(TARGET)\uasmsx.o: queue.h
+$(TARGET)\uasmsx.o: qw.h
+$(TARGET)\uasmsx.o: rex.h
+$(TARGET)\uasmsx.o: target.h
+$(TARGET)\uasmsx.o: targetg.h
+$(TARGET)\uasmsx.o: task.h
+$(TARGET)\uasmsx.o: tramp.h
+$(TARGET)\uasmsx.o: uapi.h
+$(TARGET)\uasmsx.o: uasms.h
+$(TARGET)\uasmsx.o: uasmsi.h
+$(TARGET)\uasmsx.o: uasmsx.c
+$(TARGET)\uasmsx.o: uasmsx.h
+
+$(TARGET)\udp.o: CUST4SPE.H
+$(TARGET)\udp.o: addrdefs.h
+$(TARGET)\udp.o: assert.h
+$(TARGET)\udp.o: cai.h
+$(TARGET)\udp.o: clk.h
+$(TARGET)\udp.o: cm.h
+$(TARGET)\udp.o: cmd.h
+$(TARGET)\udp.o: comdef.h
+$(TARGET)\udp.o: customer.h
+$(TARGET)\udp.o: db.h
+$(TARGET)\udp.o: dog.h
+$(TARGET)\udp.o: ds.h
+$(TARGET)\udp.o: dsm.h
+$(TARGET)\udp.o: dsnetmdl.h
+$(TARGET)\udp.o: dssocket.h
+$(TARGET)\udp.o: dssocki.h
+$(TARGET)\udp.o: err.h
+$(TARGET)\udp.o: iface.h
+$(TARGET)\udp.o: internet.h
+$(TARGET)\udp.o: ip.h
+$(TARGET)\udp.o: mc.h
+$(TARGET)\udp.o: mdrrlp.h
+$(TARGET)\udp.o: msg.h
+$(TARGET)\udp.o: msm.h
+$(TARGET)\udp.o: msm50reg.h
+$(TARGET)\udp.o: netuser.h
+$(TARGET)\udp.o: nv.h
+$(TARGET)\udp.o: pppfsm.h
+$(TARGET)\udp.o: ps.h
+$(TARGET)\udp.o: psglobal.h
+$(TARGET)\udp.o: psi.h
+$(TARGET)\udp.o: psmisc.h
+$(TARGET)\udp.o: queue.h
+$(TARGET)\udp.o: qw.h
+$(TARGET)\udp.o: rex.h
+$(TARGET)\udp.o: target.h
+$(TARGET)\udp.o: targetg.h
+$(TARGET)\udp.o: task.h
+$(TARGET)\udp.o: tcp.h
+$(TARGET)\udp.o: tramp.h
+$(TARGET)\udp.o: udp.c
+$(TARGET)\udp.o: udp.h
+
+$(TARGET)\ui.o: CUST4SPE.H
+$(TARGET)\ui.o: addrdefs.h
+$(TARGET)\ui.o: cai.h
+$(TARGET)\ui.o: clk.h
+$(TARGET)\ui.o: cm.h
+$(TARGET)\ui.o: cmd.h
+$(TARGET)\ui.o: comdef.h
+$(TARGET)\ui.o: customer.h
+$(TARGET)\ui.o: db.h
+$(TARGET)\ui.o: dec.h
+$(TARGET)\ui.o: dec5000.h
+$(TARGET)\ui.o: deint.h
+$(TARGET)\ui.o: dog.h
+$(TARGET)\ui.o: dsm.h
+$(TARGET)\ui.o: enc.h
+$(TARGET)\ui.o: err.h
+$(TARGET)\ui.o: hs.h
+$(TARGET)\ui.o: mc.h
+$(TARGET)\ui.o: mdrrlp.h
+$(TARGET)\ui.o: mod.h
+$(TARGET)\ui.o: msg.h
+$(TARGET)\ui.o: msm.h
+$(TARGET)\ui.o: msm50reg.h
+$(TARGET)\ui.o: nv.h
+$(TARGET)\ui.o: psglobal.h
+$(TARGET)\ui.o: queue.h
+$(TARGET)\ui.o: qw.h
+$(TARGET)\ui.o: rex.h
+$(TARGET)\ui.o: rf.h
+$(TARGET)\ui.o: rfc.h
+$(TARGET)\ui.o: rficap.h
+$(TARGET)\ui.o: rxc.h
+$(TARGET)\ui.o: sleep.h
+$(TARGET)\ui.o: smsi.h
+$(TARGET)\ui.o: snd.h
+$(TARGET)\ui.o: srch.h
+$(TARGET)\ui.o: target.h
+$(TARGET)\ui.o: targetg.h
+$(TARGET)\ui.o: task.h
+$(TARGET)\ui.o: tramp.h
+$(TARGET)\ui.o: uapi.h
+$(TARGET)\ui.o: uasms.h
+$(TARGET)\ui.o: ui.c
+$(TARGET)\ui.o: ui.h
+$(TARGET)\ui.o: uih.h
+$(TARGET)\ui.o: uihcmd.h
+$(TARGET)\ui.o: uiscall.h
+$(TARGET)\ui.o: uistate.h
+$(TARGET)\ui.o: uiuint.h
+$(TARGET)\ui.o: uiutxt.h
+$(TARGET)\ui.o: uiutxti.h
+$(TARGET)\ui.o: uixcm.h
+$(TARGET)\ui.o: uixscrn.h
+$(TARGET)\ui.o: uixsnd.h
+$(TARGET)\ui.o: uixuasms.h
+$(TARGET)\ui.o: ulpn.h
+
+$(TARGET)\uihcbt.o: CUST4SPE.H
+$(TARGET)\uihcbt.o: addrdefs.h
+$(TARGET)\uihcbt.o: cai.h
+$(TARGET)\uihcbt.o: clk.h
+$(TARGET)\uihcbt.o: cm.h
+$(TARGET)\uihcbt.o: cmd.h
+$(TARGET)\uihcbt.o: comdef.h
+$(TARGET)\uihcbt.o: customer.h
+$(TARGET)\uihcbt.o: db.h
+$(TARGET)\uihcbt.o: dog.h
+$(TARGET)\uihcbt.o: dsm.h
+$(TARGET)\uihcbt.o: hs.h
+$(TARGET)\uihcbt.o: mc.h
+$(TARGET)\uihcbt.o: mod.h
+$(TARGET)\uihcbt.o: msg.h
+$(TARGET)\uihcbt.o: msm.h
+$(TARGET)\uihcbt.o: msm50reg.h
+$(TARGET)\uihcbt.o: nv.h
+$(TARGET)\uihcbt.o: psglobal.h
+$(TARGET)\uihcbt.o: queue.h
+$(TARGET)\uihcbt.o: qw.h
+$(TARGET)\uihcbt.o: rex.h
+$(TARGET)\uihcbt.o: smsi.h
+$(TARGET)\uihcbt.o: snd.h
+$(TARGET)\uihcbt.o: target.h
+$(TARGET)\uihcbt.o: targetg.h
+$(TARGET)\uihcbt.o: task.h
+$(TARGET)\uihcbt.o: tramp.h
+$(TARGET)\uihcbt.o: uapi.h
+$(TARGET)\uihcbt.o: uasms.h
+$(TARGET)\uihcbt.o: ui.h
+$(TARGET)\uihcbt.o: uih.h
+$(TARGET)\uihcbt.o: uihcbt.c
+$(TARGET)\uihcbt.o: uiscall.h
+$(TARGET)\uihcbt.o: uistate.h
+$(TARGET)\uihcbt.o: uiuint.h
+$(TARGET)\uihcbt.o: uiutxt.h
+$(TARGET)\uihcbt.o: uiutxti.h
+$(TARGET)\uihcbt.o: uixscrn.h
+$(TARGET)\uihcbt.o: uixsnd.h
+$(TARGET)\uihcbt.o: uixuasms.h
+
+$(TARGET)\uihcmd.o: CUST4SPE.H
+$(TARGET)\uihcmd.o: addrdefs.h
+$(TARGET)\uihcmd.o: assert.h
+$(TARGET)\uihcmd.o: cai.h
+$(TARGET)\uihcmd.o: clk.h
+$(TARGET)\uihcmd.o: cm.h
+$(TARGET)\uihcmd.o: cmd.h
+$(TARGET)\uihcmd.o: comdef.h
+$(TARGET)\uihcmd.o: customer.h
+$(TARGET)\uihcmd.o: db.h
+$(TARGET)\uihcmd.o: dec.h
+$(TARGET)\uihcmd.o: dec5000.h
+$(TARGET)\uihcmd.o: deint.h
+$(TARGET)\uihcmd.o: dog.h
+$(TARGET)\uihcmd.o: ds.h
+$(TARGET)\uihcmd.o: dsm.h
+$(TARGET)\uihcmd.o: dsnetmdl.h
+$(TARGET)\uihcmd.o: dssocket.h
+$(TARGET)\uihcmd.o: dssocki.h
+$(TARGET)\uihcmd.o: err.h
+$(TARGET)\uihcmd.o: hs.h
+$(TARGET)\uihcmd.o: iface.h
+$(TARGET)\uihcmd.o: internet.h
+$(TARGET)\uihcmd.o: ip.h
+$(TARGET)\uihcmd.o: mc.h
+$(TARGET)\uihcmd.o: mdrrlp.h
+$(TARGET)\uihcmd.o: mod.h
+$(TARGET)\uihcmd.o: msg.h
+$(TARGET)\uihcmd.o: msm.h
+$(TARGET)\uihcmd.o: msm50reg.h
+$(TARGET)\uihcmd.o: netuser.h
+$(TARGET)\uihcmd.o: nv.h
+$(TARGET)\uihcmd.o: pppfsm.h
+$(TARGET)\uihcmd.o: psglobal.h
+$(TARGET)\uihcmd.o: queue.h
+$(TARGET)\uihcmd.o: qw.h
+$(TARGET)\uihcmd.o: rex.h
+$(TARGET)\uihcmd.o: rxc.h
+$(TARGET)\uihcmd.o: smsi.h
+$(TARGET)\uihcmd.o: snd.h
+$(TARGET)\uihcmd.o: target.h
+$(TARGET)\uihcmd.o: targetg.h
+$(TARGET)\uihcmd.o: task.h
+$(TARGET)\uihcmd.o: tcp.h
+$(TARGET)\uihcmd.o: tramp.h
+$(TARGET)\uihcmd.o: uapi.h
+$(TARGET)\uihcmd.o: uasms.h
+$(TARGET)\uihcmd.o: ui.h
+$(TARGET)\uihcmd.o: uihcmd.c
+$(TARGET)\uihcmd.o: uihcmd.h
+$(TARGET)\uihcmd.o: uiscall.h
+$(TARGET)\uihcmd.o: uissms.h
+$(TARGET)\uihcmd.o: uistate.h
+$(TARGET)\uihcmd.o: uiudata.h
+$(TARGET)\uihcmd.o: uiuint.h
+$(TARGET)\uihcmd.o: uiusmsl.h
+$(TARGET)\uihcmd.o: uiutxt.h
+$(TARGET)\uihcmd.o: uiutxti.h
+$(TARGET)\uihcmd.o: uixcm.h
+$(TARGET)\uihcmd.o: uixscrn.h
+$(TARGET)\uihcmd.o: uixsnd.h
+
+$(TARGET)\uihkey.o: CUST4SPE.H
+$(TARGET)\uihkey.o: addrdefs.h
+$(TARGET)\uihkey.o: cai.h
+$(TARGET)\uihkey.o: clk.h
+$(TARGET)\uihkey.o: cm.h
+$(TARGET)\uihkey.o: cmd.h
+$(TARGET)\uihkey.o: comdef.h
+$(TARGET)\uihkey.o: customer.h
+$(TARGET)\uihkey.o: db.h
+$(TARGET)\uihkey.o: dog.h
+$(TARGET)\uihkey.o: dsm.h
+$(TARGET)\uihkey.o: hs.h
+$(TARGET)\uihkey.o: mc.h
+$(TARGET)\uihkey.o: mod.h
+$(TARGET)\uihkey.o: msg.h
+$(TARGET)\uihkey.o: msm.h
+$(TARGET)\uihkey.o: msm50reg.h
+$(TARGET)\uihkey.o: nv.h
+$(TARGET)\uihkey.o: psglobal.h
+$(TARGET)\uihkey.o: queue.h
+$(TARGET)\uihkey.o: qw.h
+$(TARGET)\uihkey.o: rex.h
+$(TARGET)\uihkey.o: smsi.h
+$(TARGET)\uihkey.o: snd.h
+$(TARGET)\uihkey.o: target.h
+$(TARGET)\uihkey.o: targetg.h
+$(TARGET)\uihkey.o: task.h
+$(TARGET)\uihkey.o: tramp.h
+$(TARGET)\uihkey.o: uapi.h
+$(TARGET)\uihkey.o: uasms.h
+$(TARGET)\uihkey.o: ui.h
+$(TARGET)\uihkey.o: uih.h
+$(TARGET)\uihkey.o: uihkey.c
+$(TARGET)\uihkey.o: uiscall.h
+$(TARGET)\uihkey.o: uistate.h
+$(TARGET)\uihkey.o: uiuint.h
+$(TARGET)\uihkey.o: uiutxt.h
+$(TARGET)\uihkey.o: uiutxti.h
+$(TARGET)\uihkey.o: uixcm.h
+$(TARGET)\uihkey.o: uixscrn.h
+$(TARGET)\uihkey.o: uixsnd.h
+
+$(TARGET)\uihsig.o: CUST4SPE.H
+$(TARGET)\uihsig.o: addrdefs.h
+$(TARGET)\uihsig.o: cai.h
+$(TARGET)\uihsig.o: clk.h
+$(TARGET)\uihsig.o: cm.h
+$(TARGET)\uihsig.o: cmd.h
+$(TARGET)\uihsig.o: comdef.h
+$(TARGET)\uihsig.o: customer.h
+$(TARGET)\uihsig.o: db.h
+$(TARGET)\uihsig.o: dog.h
+$(TARGET)\uihsig.o: dsm.h
+$(TARGET)\uihsig.o: hs.h
+$(TARGET)\uihsig.o: mc.h
+$(TARGET)\uihsig.o: mod.h
+$(TARGET)\uihsig.o: msg.h
+$(TARGET)\uihsig.o: msm.h
+$(TARGET)\uihsig.o: msm50reg.h
+$(TARGET)\uihsig.o: nv.h
+$(TARGET)\uihsig.o: psglobal.h
+$(TARGET)\uihsig.o: queue.h
+$(TARGET)\uihsig.o: qw.h
+$(TARGET)\uihsig.o: rex.h
+$(TARGET)\uihsig.o: smsi.h
+$(TARGET)\uihsig.o: snd.h
+$(TARGET)\uihsig.o: target.h
+$(TARGET)\uihsig.o: targetg.h
+$(TARGET)\uihsig.o: task.h
+$(TARGET)\uihsig.o: tramp.h
+$(TARGET)\uihsig.o: uapi.h
+$(TARGET)\uihsig.o: uasms.h
+$(TARGET)\uihsig.o: ui.h
+$(TARGET)\uihsig.o: uih.h
+$(TARGET)\uihsig.o: uihcmd.h
+$(TARGET)\uihsig.o: uihsig.c
+$(TARGET)\uihsig.o: uiscall.h
+$(TARGET)\uihsig.o: uistate.h
+$(TARGET)\uihsig.o: uiuint.h
+$(TARGET)\uihsig.o: uiutxt.h
+$(TARGET)\uihsig.o: uiutxti.h
+$(TARGET)\uihsig.o: uixsnd.h
+
+$(TARGET)\uisalph.o: CUST4SPE.H
+$(TARGET)\uisalph.o: addrdefs.h
+$(TARGET)\uisalph.o: cai.h
+$(TARGET)\uisalph.o: clk.h
+$(TARGET)\uisalph.o: cm.h
+$(TARGET)\uisalph.o: cmd.h
+$(TARGET)\uisalph.o: comdef.h
+$(TARGET)\uisalph.o: customer.h
+$(TARGET)\uisalph.o: db.h
+$(TARGET)\uisalph.o: dog.h
+$(TARGET)\uisalph.o: dsm.h
+$(TARGET)\uisalph.o: err.h
+$(TARGET)\uisalph.o: hs.h
+$(TARGET)\uisalph.o: mc.h
+$(TARGET)\uisalph.o: memory.h
+$(TARGET)\uisalph.o: mod.h
+$(TARGET)\uisalph.o: msg.h
+$(TARGET)\uisalph.o: msm.h
+$(TARGET)\uisalph.o: msm50reg.h
+$(TARGET)\uisalph.o: nv.h
+$(TARGET)\uisalph.o: psglobal.h
+$(TARGET)\uisalph.o: queue.h
+$(TARGET)\uisalph.o: qw.h
+$(TARGET)\uisalph.o: rex.h
+$(TARGET)\uisalph.o: smsi.h
+$(TARGET)\uisalph.o: snd.h
+$(TARGET)\uisalph.o: target.h
+$(TARGET)\uisalph.o: targetg.h
+$(TARGET)\uisalph.o: task.h
+$(TARGET)\uisalph.o: tramp.h
+$(TARGET)\uisalph.o: uapi.h
+$(TARGET)\uisalph.o: uasms.h
+$(TARGET)\uisalph.o: ui.h
+$(TARGET)\uisalph.o: uisalph.c
+$(TARGET)\uisalph.o: uiscall.h
+$(TARGET)\uisalph.o: uistate.h
+$(TARGET)\uisalph.o: uiuint.h
+$(TARGET)\uisalph.o: uiutxt.h
+$(TARGET)\uisalph.o: uiutxti.h
+$(TARGET)\uisalph.o: uixscrn.h
+$(TARGET)\uisalph.o: uixsnd.h
+
+$(TARGET)\uiscall.o: CUST4SPE.H
+$(TARGET)\uiscall.o: addrdefs.h
+$(TARGET)\uiscall.o: assert.h
+$(TARGET)\uiscall.o: cai.h
+$(TARGET)\uiscall.o: clk.h
+$(TARGET)\uiscall.o: cm.h
+$(TARGET)\uiscall.o: cmd.h
+$(TARGET)\uiscall.o: comdef.h
+$(TARGET)\uiscall.o: customer.h
+$(TARGET)\uiscall.o: db.h
+$(TARGET)\uiscall.o: dog.h
+$(TARGET)\uiscall.o: ds.h
+$(TARGET)\uiscall.o: dsm.h
+$(TARGET)\uiscall.o: dsnetmdl.h
+$(TARGET)\uiscall.o: dssocket.h
+$(TARGET)\uiscall.o: dssocki.h
+$(TARGET)\uiscall.o: err.h
+$(TARGET)\uiscall.o: hs.h
+$(TARGET)\uiscall.o: iface.h
+$(TARGET)\uiscall.o: internet.h
+$(TARGET)\uiscall.o: ip.h
+$(TARGET)\uiscall.o: mar.h
+$(TARGET)\uiscall.o: mc.h
+$(TARGET)\uiscall.o: mdrrlp.h
+$(TARGET)\uiscall.o: mod.h
+$(TARGET)\uiscall.o: msg.h
+$(TARGET)\uiscall.o: msm.h
+$(TARGET)\uiscall.o: msm50reg.h
+$(TARGET)\uiscall.o: netuser.h
+$(TARGET)\uiscall.o: nv.h
+$(TARGET)\uiscall.o: pppfsm.h
+$(TARGET)\uiscall.o: psglobal.h
+$(TARGET)\uiscall.o: queue.h
+$(TARGET)\uiscall.o: qw.h
+$(TARGET)\uiscall.o: rex.h
+$(TARGET)\uiscall.o: smsi.h
+$(TARGET)\uiscall.o: snd.h
+$(TARGET)\uiscall.o: target.h
+$(TARGET)\uiscall.o: targetg.h
+$(TARGET)\uiscall.o: task.h
+$(TARGET)\uiscall.o: tcp.h
+$(TARGET)\uiscall.o: tramp.h
+$(TARGET)\uiscall.o: uapi.h
+$(TARGET)\uiscall.o: uasms.h
+$(TARGET)\uiscall.o: ui.h
+$(TARGET)\uiscall.o: uiscall.c
+$(TARGET)\uiscall.o: uiscall.h
+$(TARGET)\uiscall.o: uistate.h
+$(TARGET)\uiscall.o: uiudata.h
+$(TARGET)\uiscall.o: uiuint.h
+$(TARGET)\uiscall.o: uiumenu.h
+$(TARGET)\uiscall.o: uiutxt.h
+$(TARGET)\uiscall.o: uiutxti.h
+$(TARGET)\uiscall.o: uixcm.h
+$(TARGET)\uiscall.o: uixscrn.h
+$(TARGET)\uiscall.o: uixsnd.h
+$(TARGET)\uiscall.o: uixuasms.h
+
+$(TARGET)\uiscli.o: CUST4SPE.H
+$(TARGET)\uiscli.o: addrdefs.h
+$(TARGET)\uiscli.o: assert.h
+$(TARGET)\uiscli.o: cai.h
+$(TARGET)\uiscli.o: clk.h
+$(TARGET)\uiscli.o: cm.h
+$(TARGET)\uiscli.o: cmd.h
+$(TARGET)\uiscli.o: comdef.h
+$(TARGET)\uiscli.o: customer.h
+$(TARGET)\uiscli.o: db.h
+$(TARGET)\uiscli.o: dog.h
+$(TARGET)\uiscli.o: dsm.h
+$(TARGET)\uiscli.o: err.h
+$(TARGET)\uiscli.o: hs.h
+$(TARGET)\uiscli.o: mc.h
+$(TARGET)\uiscli.o: memory.h
+$(TARGET)\uiscli.o: mod.h
+$(TARGET)\uiscli.o: msg.h
+$(TARGET)\uiscli.o: msm.h
+$(TARGET)\uiscli.o: msm50reg.h
+$(TARGET)\uiscli.o: nv.h
+$(TARGET)\uiscli.o: psglobal.h
+$(TARGET)\uiscli.o: queue.h
+$(TARGET)\uiscli.o: qw.h
+$(TARGET)\uiscli.o: rex.h
+$(TARGET)\uiscli.o: smsi.h
+$(TARGET)\uiscli.o: snd.h
+$(TARGET)\uiscli.o: target.h
+$(TARGET)\uiscli.o: targetg.h
+$(TARGET)\uiscli.o: task.h
+$(TARGET)\uiscli.o: tramp.h
+$(TARGET)\uiscli.o: uapi.h
+$(TARGET)\uiscli.o: uasms.h
+$(TARGET)\uiscli.o: ui.h
+$(TARGET)\uiscli.o: uiscall.h
+$(TARGET)\uiscli.o: uiscli.c
+$(TARGET)\uiscli.o: uistate.h
+$(TARGET)\uiscli.o: uiuint.h
+$(TARGET)\uiscli.o: uiutxt.h
+$(TARGET)\uiscli.o: uiutxti.h
+$(TARGET)\uiscli.o: uixcm.h
+$(TARGET)\uiscli.o: uixscrn.h
+$(TARGET)\uiscli.o: uixsnd.h
+
+$(TARGET)\uiscode.o: CUST4SPE.H
+$(TARGET)\uiscode.o: addrdefs.h
+$(TARGET)\uiscode.o: cai.h
+$(TARGET)\uiscode.o: clk.h
+$(TARGET)\uiscode.o: cm.h
+$(TARGET)\uiscode.o: cmd.h
+$(TARGET)\uiscode.o: comdef.h
+$(TARGET)\uiscode.o: customer.h
+$(TARGET)\uiscode.o: db.h
+$(TARGET)\uiscode.o: dog.h
+$(TARGET)\uiscode.o: dsm.h
+$(TARGET)\uiscode.o: err.h
+$(TARGET)\uiscode.o: hs.h
+$(TARGET)\uiscode.o: mc.h
+$(TARGET)\uiscode.o: memory.h
+$(TARGET)\uiscode.o: mod.h
+$(TARGET)\uiscode.o: msg.h
+$(TARGET)\uiscode.o: msm.h
+$(TARGET)\uiscode.o: msm50reg.h
+$(TARGET)\uiscode.o: nv.h
+$(TARGET)\uiscode.o: psglobal.h
+$(TARGET)\uiscode.o: queue.h
+$(TARGET)\uiscode.o: qw.h
+$(TARGET)\uiscode.o: rex.h
+$(TARGET)\uiscode.o: smsi.h
+$(TARGET)\uiscode.o: snd.h
+$(TARGET)\uiscode.o: target.h
+$(TARGET)\uiscode.o: targetg.h
+$(TARGET)\uiscode.o: task.h
+$(TARGET)\uiscode.o: tramp.h
+$(TARGET)\uiscode.o: uapi.h
+$(TARGET)\uiscode.o: uasms.h
+$(TARGET)\uiscode.o: ui.h
+$(TARGET)\uiscode.o: uiscall.h
+$(TARGET)\uiscode.o: uiscode.c
+$(TARGET)\uiscode.o: uistate.h
+$(TARGET)\uiscode.o: uiuint.h
+$(TARGET)\uiscode.o: uiutxt.h
+$(TARGET)\uiscode.o: uiutxti.h
+$(TARGET)\uiscode.o: uixscrn.h
+$(TARGET)\uiscode.o: uixsnd.h
+
+$(TARGET)\uishelp.o: CUST4SPE.H
+$(TARGET)\uishelp.o: addrdefs.h
+$(TARGET)\uishelp.o: cai.h
+$(TARGET)\uishelp.o: clk.h
+$(TARGET)\uishelp.o: cm.h
+$(TARGET)\uishelp.o: cmd.h
+$(TARGET)\uishelp.o: comdef.h
+$(TARGET)\uishelp.o: customer.h
+$(TARGET)\uishelp.o: db.h
+$(TARGET)\uishelp.o: dog.h
+$(TARGET)\uishelp.o: dsm.h
+$(TARGET)\uishelp.o: err.h
+$(TARGET)\uishelp.o: hs.h
+$(TARGET)\uishelp.o: mc.h
+$(TARGET)\uishelp.o: memory.h
+$(TARGET)\uishelp.o: mod.h
+$(TARGET)\uishelp.o: msg.h
+$(TARGET)\uishelp.o: msm.h
+$(TARGET)\uishelp.o: msm50reg.h
+$(TARGET)\uishelp.o: nv.h
+$(TARGET)\uishelp.o: psglobal.h
+$(TARGET)\uishelp.o: queue.h
+$(TARGET)\uishelp.o: qw.h
+$(TARGET)\uishelp.o: rex.h
+$(TARGET)\uishelp.o: smsi.h
+$(TARGET)\uishelp.o: snd.h
+$(TARGET)\uishelp.o: target.h
+$(TARGET)\uishelp.o: targetg.h
+$(TARGET)\uishelp.o: task.h
+$(TARGET)\uishelp.o: tramp.h
+$(TARGET)\uishelp.o: uapi.h
+$(TARGET)\uishelp.o: uasms.h
+$(TARGET)\uishelp.o: ui.h
+$(TARGET)\uishelp.o: uiscall.h
+$(TARGET)\uishelp.o: uishelp.c
+$(TARGET)\uishelp.o: uistate.h
+$(TARGET)\uishelp.o: uiuint.h
+$(TARGET)\uishelp.o: uiutxt.h
+$(TARGET)\uishelp.o: uiutxti.h
+$(TARGET)\uishelp.o: uixscrn.h
+$(TARGET)\uishelp.o: uixsnd.h
+
+$(TARGET)\uisidle.o: CUST4SPE.H
+$(TARGET)\uisidle.o: addrdefs.h
+$(TARGET)\uisidle.o: assert.h
+$(TARGET)\uisidle.o: bbver.h
+$(TARGET)\uisidle.o: cai.h
+$(TARGET)\uisidle.o: clk.h
+$(TARGET)\uisidle.o: cm.h
+$(TARGET)\uisidle.o: cmd.h
+$(TARGET)\uisidle.o: comdef.h
+$(TARGET)\uisidle.o: customer.h
+$(TARGET)\uisidle.o: db.h
+$(TARGET)\uisidle.o: dog.h
+$(TARGET)\uisidle.o: ds.h
+$(TARGET)\uisidle.o: dsm.h
+$(TARGET)\uisidle.o: dsnetmdl.h
+$(TARGET)\uisidle.o: dssocket.h
+$(TARGET)\uisidle.o: dssocki.h
+$(TARGET)\uisidle.o: err.h
+$(TARGET)\uisidle.o: hs.h
+$(TARGET)\uisidle.o: iface.h
+$(TARGET)\uisidle.o: internet.h
+$(TARGET)\uisidle.o: ip.h
+$(TARGET)\uisidle.o: mc.h
+$(TARGET)\uisidle.o: mdrrlp.h
+$(TARGET)\uisidle.o: memory.h
+$(TARGET)\uisidle.o: mobile.h
+$(TARGET)\uisidle.o: mod.h
+$(TARGET)\uisidle.o: msg.h
+$(TARGET)\uisidle.o: msm.h
+$(TARGET)\uisidle.o: msm50reg.h
+$(TARGET)\uisidle.o: netuser.h
+$(TARGET)\uisidle.o: nv.h
+$(TARGET)\uisidle.o: pppfsm.h
+$(TARGET)\uisidle.o: psglobal.h
+$(TARGET)\uisidle.o: queue.h
+$(TARGET)\uisidle.o: qw.h
+$(TARGET)\uisidle.o: rex.h
+$(TARGET)\uisidle.o: sio.h
+$(TARGET)\uisidle.o: smsi.h
+$(TARGET)\uisidle.o: snd.h
+$(TARGET)\uisidle.o: target.h
+$(TARGET)\uisidle.o: targetg.h
+$(TARGET)\uisidle.o: task.h
+$(TARGET)\uisidle.o: tcp.h
+$(TARGET)\uisidle.o: tramp.h
+$(TARGET)\uisidle.o: uapi.h
+$(TARGET)\uisidle.o: uasms.h
+$(TARGET)\uisidle.o: ui.h
+$(TARGET)\uisidle.o: uiscall.h
+$(TARGET)\uisidle.o: uisidle.c
+$(TARGET)\uisidle.o: uistate.h
+$(TARGET)\uisidle.o: uiudata.h
+$(TARGET)\uisidle.o: uiuint.h
+$(TARGET)\uisidle.o: uiumenu.h
+$(TARGET)\uisidle.o: uiutxt.h
+$(TARGET)\uisidle.o: uiutxti.h
+$(TARGET)\uisidle.o: uixcm.h
+$(TARGET)\uisidle.o: uixscrn.h
+$(TARGET)\uisidle.o: uixsnd.h
+$(TARGET)\uisidle.o: uixuasms.h
+$(TARGET)\uisidle.o: voc.h
+$(TARGET)\uisidle.o: vocmux.h
+
+$(TARGET)\uisinfo.o: CUST4SPE.H
+$(TARGET)\uisinfo.o: addrdefs.h
+$(TARGET)\uisinfo.o: cai.h
+$(TARGET)\uisinfo.o: clk.h
+$(TARGET)\uisinfo.o: cm.h
+$(TARGET)\uisinfo.o: cmd.h
+$(TARGET)\uisinfo.o: comdef.h
+$(TARGET)\uisinfo.o: customer.h
+$(TARGET)\uisinfo.o: db.h
+$(TARGET)\uisinfo.o: dog.h
+$(TARGET)\uisinfo.o: dsm.h
+$(TARGET)\uisinfo.o: err.h
+$(TARGET)\uisinfo.o: hs.h
+$(TARGET)\uisinfo.o: mc.h
+$(TARGET)\uisinfo.o: memory.h
+$(TARGET)\uisinfo.o: mod.h
+$(TARGET)\uisinfo.o: msg.h
+$(TARGET)\uisinfo.o: msm.h
+$(TARGET)\uisinfo.o: msm50reg.h
+$(TARGET)\uisinfo.o: nv.h
+$(TARGET)\uisinfo.o: psglobal.h
+$(TARGET)\uisinfo.o: queue.h
+$(TARGET)\uisinfo.o: qw.h
+$(TARGET)\uisinfo.o: rex.h
+$(TARGET)\uisinfo.o: smsi.h
+$(TARGET)\uisinfo.o: snd.h
+$(TARGET)\uisinfo.o: target.h
+$(TARGET)\uisinfo.o: targetg.h
+$(TARGET)\uisinfo.o: task.h
+$(TARGET)\uisinfo.o: tramp.h
+$(TARGET)\uisinfo.o: uapi.h
+$(TARGET)\uisinfo.o: uasms.h
+$(TARGET)\uisinfo.o: ui.h
+$(TARGET)\uisinfo.o: uiscall.h
+$(TARGET)\uisinfo.o: uisinfo.c
+$(TARGET)\uisinfo.o: uistate.h
+$(TARGET)\uisinfo.o: uiuint.h
+$(TARGET)\uisinfo.o: uiutxt.h
+$(TARGET)\uisinfo.o: uiutxti.h
+$(TARGET)\uisinfo.o: uixscrn.h
+$(TARGET)\uisinfo.o: uixsnd.h
+
+$(TARGET)\uislist.o: CUST4SPE.H
+$(TARGET)\uislist.o: addrdefs.h
+$(TARGET)\uislist.o: cai.h
+$(TARGET)\uislist.o: clk.h
+$(TARGET)\uislist.o: cm.h
+$(TARGET)\uislist.o: cmd.h
+$(TARGET)\uislist.o: comdef.h
+$(TARGET)\uislist.o: customer.h
+$(TARGET)\uislist.o: db.h
+$(TARGET)\uislist.o: dog.h
+$(TARGET)\uislist.o: dsm.h
+$(TARGET)\uislist.o: err.h
+$(TARGET)\uislist.o: hs.h
+$(TARGET)\uislist.o: mc.h
+$(TARGET)\uislist.o: memory.h
+$(TARGET)\uislist.o: mod.h
+$(TARGET)\uislist.o: msg.h
+$(TARGET)\uislist.o: msm.h
+$(TARGET)\uislist.o: msm50reg.h
+$(TARGET)\uislist.o: nv.h
+$(TARGET)\uislist.o: psglobal.h
+$(TARGET)\uislist.o: queue.h
+$(TARGET)\uislist.o: qw.h
+$(TARGET)\uislist.o: rex.h
+$(TARGET)\uislist.o: smsi.h
+$(TARGET)\uislist.o: snd.h
+$(TARGET)\uislist.o: target.h
+$(TARGET)\uislist.o: targetg.h
+$(TARGET)\uislist.o: task.h
+$(TARGET)\uislist.o: tramp.h
+$(TARGET)\uislist.o: uapi.h
+$(TARGET)\uislist.o: uasms.h
+$(TARGET)\uislist.o: ui.h
+$(TARGET)\uislist.o: uiscall.h
+$(TARGET)\uislist.o: uislist.c
+$(TARGET)\uislist.o: uistate.h
+$(TARGET)\uislist.o: uiuint.h
+$(TARGET)\uislist.o: uiutxt.h
+$(TARGET)\uislist.o: uiutxti.h
+$(TARGET)\uislist.o: uixcm.h
+$(TARGET)\uislist.o: uixscrn.h
+$(TARGET)\uislist.o: uixsnd.h
+
+$(TARGET)\uislock.o: CUST4SPE.H
+$(TARGET)\uislock.o: addrdefs.h
+$(TARGET)\uislock.o: cai.h
+$(TARGET)\uislock.o: clk.h
+$(TARGET)\uislock.o: cm.h
+$(TARGET)\uislock.o: cmd.h
+$(TARGET)\uislock.o: comdef.h
+$(TARGET)\uislock.o: customer.h
+$(TARGET)\uislock.o: db.h
+$(TARGET)\uislock.o: dog.h
+$(TARGET)\uislock.o: dsm.h
+$(TARGET)\uislock.o: err.h
+$(TARGET)\uislock.o: hs.h
+$(TARGET)\uislock.o: mar.h
+$(TARGET)\uislock.o: mc.h
+$(TARGET)\uislock.o: memory.h
+$(TARGET)\uislock.o: mod.h
+$(TARGET)\uislock.o: msg.h
+$(TARGET)\uislock.o: msm.h
+$(TARGET)\uislock.o: msm50reg.h
+$(TARGET)\uislock.o: nv.h
+$(TARGET)\uislock.o: psglobal.h
+$(TARGET)\uislock.o: queue.h
+$(TARGET)\uislock.o: qw.h
+$(TARGET)\uislock.o: rex.h
+$(TARGET)\uislock.o: smsi.h
+$(TARGET)\uislock.o: snd.h
+$(TARGET)\uislock.o: target.h
+$(TARGET)\uislock.o: targetg.h
+$(TARGET)\uislock.o: task.h
+$(TARGET)\uislock.o: tramp.h
+$(TARGET)\uislock.o: uapi.h
+$(TARGET)\uislock.o: uasms.h
+$(TARGET)\uislock.o: ui.h
+$(TARGET)\uislock.o: uiscall.h
+$(TARGET)\uislock.o: uislock.c
+$(TARGET)\uislock.o: uistate.h
+$(TARGET)\uislock.o: uiuint.h
+$(TARGET)\uislock.o: uiutxt.h
+$(TARGET)\uislock.o: uiutxti.h
+$(TARGET)\uislock.o: uixscrn.h
+$(TARGET)\uislock.o: uixsnd.h
+
+$(TARGET)\uislpm.o: CUST4SPE.H
+$(TARGET)\uislpm.o: comdef.h
+$(TARGET)\uislpm.o: customer.h
+$(TARGET)\uislpm.o: rex.h
+$(TARGET)\uislpm.o: target.h
+$(TARGET)\uislpm.o: targetg.h
+$(TARGET)\uislpm.o: uislpm.c
+
+$(TARGET)\uismenu.o: CUST4SPE.H
+$(TARGET)\uismenu.o: addrdefs.h
+$(TARGET)\uismenu.o: assert.h
+$(TARGET)\uismenu.o: bbver.h
+$(TARGET)\uismenu.o: cai.h
+$(TARGET)\uismenu.o: clk.h
+$(TARGET)\uismenu.o: cm.h
+$(TARGET)\uismenu.o: cmd.h
+$(TARGET)\uismenu.o: comdef.h
+$(TARGET)\uismenu.o: customer.h
+$(TARGET)\uismenu.o: db.h
+$(TARGET)\uismenu.o: dog.h
+$(TARGET)\uismenu.o: ds.h
+$(TARGET)\uismenu.o: dsm.h
+$(TARGET)\uismenu.o: dsnetmdl.h
+$(TARGET)\uismenu.o: dssocket.h
+$(TARGET)\uismenu.o: dssocki.h
+$(TARGET)\uismenu.o: err.h
+$(TARGET)\uismenu.o: hs.h
+$(TARGET)\uismenu.o: iface.h
+$(TARGET)\uismenu.o: internet.h
+$(TARGET)\uismenu.o: ip.h
+$(TARGET)\uismenu.o: mc.h
+$(TARGET)\uismenu.o: mdrrlp.h
+$(TARGET)\uismenu.o: memory.h
+$(TARGET)\uismenu.o: mobile.h
+$(TARGET)\uismenu.o: mod.h
+$(TARGET)\uismenu.o: msg.h
+$(TARGET)\uismenu.o: msm.h
+$(TARGET)\uismenu.o: msm50reg.h
+$(TARGET)\uismenu.o: netuser.h
+$(TARGET)\uismenu.o: nv.h
+$(TARGET)\uismenu.o: pppfsm.h
+$(TARGET)\uismenu.o: psglobal.h
+$(TARGET)\uismenu.o: queue.h
+$(TARGET)\uismenu.o: qw.h
+$(TARGET)\uismenu.o: rex.h
+$(TARGET)\uismenu.o: sio.h
+$(TARGET)\uismenu.o: smsi.h
+$(TARGET)\uismenu.o: snd.h
+$(TARGET)\uismenu.o: target.h
+$(TARGET)\uismenu.o: targetg.h
+$(TARGET)\uismenu.o: task.h
+$(TARGET)\uismenu.o: tcp.h
+$(TARGET)\uismenu.o: tramp.h
+$(TARGET)\uismenu.o: uapi.h
+$(TARGET)\uismenu.o: uasms.h
+$(TARGET)\uismenu.o: ui.h
+$(TARGET)\uismenu.o: uiscall.h
+$(TARGET)\uismenu.o: uismenu.c
+$(TARGET)\uismenu.o: uistate.h
+$(TARGET)\uismenu.o: uiudata.h
+$(TARGET)\uismenu.o: uiuint.h
+$(TARGET)\uismenu.o: uiumenu.h
+$(TARGET)\uismenu.o: uiutxt.h
+$(TARGET)\uismenu.o: uiutxti.h
+$(TARGET)\uismenu.o: uixcm.h
+$(TARGET)\uismenu.o: uixscrn.h
+$(TARGET)\uismenu.o: uixsnd.h
+$(TARGET)\uismenu.o: voc.h
+$(TARGET)\uismenu.o: vocmux.h
+
+$(TARGET)\uismsg.o: CUST4SPE.H
+$(TARGET)\uismsg.o: addrdefs.h
+$(TARGET)\uismsg.o: cai.h
+$(TARGET)\uismsg.o: clk.h
+$(TARGET)\uismsg.o: cm.h
+$(TARGET)\uismsg.o: cmd.h
+$(TARGET)\uismsg.o: comdef.h
+$(TARGET)\uismsg.o: customer.h
+$(TARGET)\uismsg.o: db.h
+$(TARGET)\uismsg.o: dog.h
+$(TARGET)\uismsg.o: dsm.h
+$(TARGET)\uismsg.o: err.h
+$(TARGET)\uismsg.o: hs.h
+$(TARGET)\uismsg.o: mc.h
+$(TARGET)\uismsg.o: mod.h
+$(TARGET)\uismsg.o: msg.h
+$(TARGET)\uismsg.o: msm.h
+$(TARGET)\uismsg.o: msm50reg.h
+$(TARGET)\uismsg.o: nv.h
+$(TARGET)\uismsg.o: psglobal.h
+$(TARGET)\uismsg.o: queue.h
+$(TARGET)\uismsg.o: qw.h
+$(TARGET)\uismsg.o: rex.h
+$(TARGET)\uismsg.o: smsi.h
+$(TARGET)\uismsg.o: snd.h
+$(TARGET)\uismsg.o: target.h
+$(TARGET)\uismsg.o: targetg.h
+$(TARGET)\uismsg.o: task.h
+$(TARGET)\uismsg.o: tramp.h
+$(TARGET)\uismsg.o: uapi.h
+$(TARGET)\uismsg.o: uasms.h
+$(TARGET)\uismsg.o: ui.h
+$(TARGET)\uismsg.o: uiscall.h
+$(TARGET)\uismsg.o: uismsg.c
+$(TARGET)\uismsg.o: uistate.h
+$(TARGET)\uismsg.o: uiuint.h
+$(TARGET)\uismsg.o: uiutxt.h
+$(TARGET)\uismsg.o: uiutxti.h
+$(TARGET)\uismsg.o: uixscrn.h
+$(TARGET)\uismsg.o: uixsnd.h
+
+$(TARGET)\uisnum.o: CUST4SPE.H
+$(TARGET)\uisnum.o: addrdefs.h
+$(TARGET)\uisnum.o: cai.h
+$(TARGET)\uisnum.o: clk.h
+$(TARGET)\uisnum.o: cm.h
+$(TARGET)\uisnum.o: cmd.h
+$(TARGET)\uisnum.o: comdef.h
+$(TARGET)\uisnum.o: customer.h
+$(TARGET)\uisnum.o: db.h
+$(TARGET)\uisnum.o: dog.h
+$(TARGET)\uisnum.o: dsm.h
+$(TARGET)\uisnum.o: err.h
+$(TARGET)\uisnum.o: hs.h
+$(TARGET)\uisnum.o: mc.h
+$(TARGET)\uisnum.o: memory.h
+$(TARGET)\uisnum.o: mod.h
+$(TARGET)\uisnum.o: msg.h
+$(TARGET)\uisnum.o: msm.h
+$(TARGET)\uisnum.o: msm50reg.h
+$(TARGET)\uisnum.o: nv.h
+$(TARGET)\uisnum.o: psglobal.h
+$(TARGET)\uisnum.o: queue.h
+$(TARGET)\uisnum.o: qw.h
+$(TARGET)\uisnum.o: rex.h
+$(TARGET)\uisnum.o: smsi.h
+$(TARGET)\uisnum.o: snd.h
+$(TARGET)\uisnum.o: target.h
+$(TARGET)\uisnum.o: targetg.h
+$(TARGET)\uisnum.o: task.h
+$(TARGET)\uisnum.o: tramp.h
+$(TARGET)\uisnum.o: uapi.h
+$(TARGET)\uisnum.o: uasms.h
+$(TARGET)\uisnum.o: ui.h
+$(TARGET)\uisnum.o: uiscall.h
+$(TARGET)\uisnum.o: uisnum.c
+$(TARGET)\uisnum.o: uistate.h
+$(TARGET)\uisnum.o: uiuint.h
+$(TARGET)\uisnum.o: uiutxt.h
+$(TARGET)\uisnum.o: uiutxti.h
+$(TARGET)\uisnum.o: uixscrn.h
+$(TARGET)\uisnum.o: uixsnd.h
+
+$(TARGET)\uisoff.o: CUST4SPE.H
+$(TARGET)\uisoff.o: addrdefs.h
+$(TARGET)\uisoff.o: cai.h
+$(TARGET)\uisoff.o: clk.h
+$(TARGET)\uisoff.o: cm.h
+$(TARGET)\uisoff.o: cmd.h
+$(TARGET)\uisoff.o: comdef.h
+$(TARGET)\uisoff.o: customer.h
+$(TARGET)\uisoff.o: db.h
+$(TARGET)\uisoff.o: dog.h
+$(TARGET)\uisoff.o: dsm.h
+$(TARGET)\uisoff.o: hs.h
+$(TARGET)\uisoff.o: mc.h
+$(TARGET)\uisoff.o: mod.h
+$(TARGET)\uisoff.o: msm.h
+$(TARGET)\uisoff.o: msm50reg.h
+$(TARGET)\uisoff.o: nv.h
+$(TARGET)\uisoff.o: psglobal.h
+$(TARGET)\uisoff.o: queue.h
+$(TARGET)\uisoff.o: qw.h
+$(TARGET)\uisoff.o: rex.h
+$(TARGET)\uisoff.o: smsi.h
+$(TARGET)\uisoff.o: snd.h
+$(TARGET)\uisoff.o: target.h
+$(TARGET)\uisoff.o: targetg.h
+$(TARGET)\uisoff.o: task.h
+$(TARGET)\uisoff.o: tramp.h
+$(TARGET)\uisoff.o: uapi.h
+$(TARGET)\uisoff.o: uasms.h
+$(TARGET)\uisoff.o: ui.h
+$(TARGET)\uisoff.o: uiscall.h
+$(TARGET)\uisoff.o: uisoff.c
+$(TARGET)\uisoff.o: uistate.h
+$(TARGET)\uisoff.o: uiuint.h
+$(TARGET)\uisoff.o: uiutxt.h
+$(TARGET)\uisoff.o: uiutxti.h
+$(TARGET)\uisoff.o: uixcm.h
+$(TARGET)\uisoff.o: uixscrn.h
+$(TARGET)\uisoff.o: uixsnd.h
+
+$(TARGET)\uisrcl.o: CUST4SPE.H
+$(TARGET)\uisrcl.o: addrdefs.h
+$(TARGET)\uisrcl.o: cai.h
+$(TARGET)\uisrcl.o: clk.h
+$(TARGET)\uisrcl.o: cm.h
+$(TARGET)\uisrcl.o: cmd.h
+$(TARGET)\uisrcl.o: comdef.h
+$(TARGET)\uisrcl.o: customer.h
+$(TARGET)\uisrcl.o: db.h
+$(TARGET)\uisrcl.o: dog.h
+$(TARGET)\uisrcl.o: dsm.h
+$(TARGET)\uisrcl.o: err.h
+$(TARGET)\uisrcl.o: hs.h
+$(TARGET)\uisrcl.o: mc.h
+$(TARGET)\uisrcl.o: memory.h
+$(TARGET)\uisrcl.o: mod.h
+$(TARGET)\uisrcl.o: msg.h
+$(TARGET)\uisrcl.o: msm.h
+$(TARGET)\uisrcl.o: msm50reg.h
+$(TARGET)\uisrcl.o: nv.h
+$(TARGET)\uisrcl.o: psglobal.h
+$(TARGET)\uisrcl.o: queue.h
+$(TARGET)\uisrcl.o: qw.h
+$(TARGET)\uisrcl.o: rex.h
+$(TARGET)\uisrcl.o: smsi.h
+$(TARGET)\uisrcl.o: snd.h
+$(TARGET)\uisrcl.o: target.h
+$(TARGET)\uisrcl.o: targetg.h
+$(TARGET)\uisrcl.o: task.h
+$(TARGET)\uisrcl.o: tramp.h
+$(TARGET)\uisrcl.o: uapi.h
+$(TARGET)\uisrcl.o: uasms.h
+$(TARGET)\uisrcl.o: ui.h
+$(TARGET)\uisrcl.o: uiscall.h
+$(TARGET)\uisrcl.o: uisrcl.c
+$(TARGET)\uisrcl.o: uistate.h
+$(TARGET)\uisrcl.o: uiuint.h
+$(TARGET)\uisrcl.o: uiutxt.h
+$(TARGET)\uisrcl.o: uiutxti.h
+$(TARGET)\uisrcl.o: uixscrn.h
+$(TARGET)\uisrcl.o: uixsnd.h
+
+$(TARGET)\uisserv.o: CUST4SPE.H
+$(TARGET)\uisserv.o: acpmc.h
+$(TARGET)\uisserv.o: addrdefs.h
+$(TARGET)\uisserv.o: assert.h
+$(TARGET)\uisserv.o: cai.h
+$(TARGET)\uisserv.o: caii.h
+$(TARGET)\uisserv.o: clk.h
+$(TARGET)\uisserv.o: cm.h
+$(TARGET)\uisserv.o: cmd.h
+$(TARGET)\uisserv.o: cmmc.h
+$(TARGET)\uisserv.o: comdef.h
+$(TARGET)\uisserv.o: customer.h
+$(TARGET)\uisserv.o: db.h
+$(TARGET)\uisserv.o: dec.h
+$(TARGET)\uisserv.o: dec5000.h
+$(TARGET)\uisserv.o: deint.h
+$(TARGET)\uisserv.o: dog.h
+$(TARGET)\uisserv.o: ds.h
+$(TARGET)\uisserv.o: dsm.h
+$(TARGET)\uisserv.o: dsnetmdl.h
+$(TARGET)\uisserv.o: dssocket.h
+$(TARGET)\uisserv.o: dssocki.h
+$(TARGET)\uisserv.o: enc.h
+$(TARGET)\uisserv.o: err.h
+$(TARGET)\uisserv.o: hs.h
+$(TARGET)\uisserv.o: iface.h
+$(TARGET)\uisserv.o: internet.h
+$(TARGET)\uisserv.o: ip.h
+$(TARGET)\uisserv.o: mc.h
+$(TARGET)\uisserv.o: mcc.h
+$(TARGET)\uisserv.o: mccdma.h
+$(TARGET)\uisserv.o: mccreg.h
+$(TARGET)\uisserv.o: mccsrch.h
+$(TARGET)\uisserv.o: mdrrlp.h
+$(TARGET)\uisserv.o: mod.h
+$(TARGET)\uisserv.o: msg.h
+$(TARGET)\uisserv.o: msm.h
+$(TARGET)\uisserv.o: msm50reg.h
+$(TARGET)\uisserv.o: netuser.h
+$(TARGET)\uisserv.o: nv.h
+$(TARGET)\uisserv.o: otaspi.h
+$(TARGET)\uisserv.o: pppfsm.h
+$(TARGET)\uisserv.o: psglobal.h
+$(TARGET)\uisserv.o: queue.h
+$(TARGET)\uisserv.o: qw.h
+$(TARGET)\uisserv.o: rex.h
+$(TARGET)\uisserv.o: rxc.h
+$(TARGET)\uisserv.o: rxtx.h
+$(TARGET)\uisserv.o: smsi.h
+$(TARGET)\uisserv.o: snd.h
+$(TARGET)\uisserv.o: srch.h
+$(TARGET)\uisserv.o: target.h
+$(TARGET)\uisserv.o: targetg.h
+$(TARGET)\uisserv.o: task.h
+$(TARGET)\uisserv.o: tcp.h
+$(TARGET)\uisserv.o: tramp.h
+$(TARGET)\uisserv.o: txc.h
+$(TARGET)\uisserv.o: uapi.h
+$(TARGET)\uisserv.o: uasms.h
+$(TARGET)\uisserv.o: uasmsi.h
+$(TARGET)\uisserv.o: ui.h
+$(TARGET)\uisserv.o: uiscall.h
+$(TARGET)\uisserv.o: uisserv.c
+$(TARGET)\uisserv.o: uistate.h
+$(TARGET)\uisserv.o: uiuint.h
+$(TARGET)\uisserv.o: uiutxt.h
+$(TARGET)\uisserv.o: uiutxti.h
+$(TARGET)\uisserv.o: uixcm.h
+$(TARGET)\uisserv.o: uixscrn.h
+$(TARGET)\uisserv.o: uixsnd.h
+$(TARGET)\uisserv.o: ulpn.h
+$(TARGET)\uisserv.o: voc.h
+$(TARGET)\uisserv.o: vocmux.h
+
+$(TARGET)\uissms.o: CUST4SPE.H
+$(TARGET)\uissms.o: addrdefs.h
+$(TARGET)\uissms.o: cai.h
+$(TARGET)\uissms.o: clk.h
+$(TARGET)\uissms.o: cm.h
+$(TARGET)\uissms.o: cmd.h
+$(TARGET)\uissms.o: comdef.h
+$(TARGET)\uissms.o: customer.h
+$(TARGET)\uissms.o: db.h
+$(TARGET)\uissms.o: dog.h
+$(TARGET)\uissms.o: dsm.h
+$(TARGET)\uissms.o: err.h
+$(TARGET)\uissms.o: hs.h
+$(TARGET)\uissms.o: mc.h
+$(TARGET)\uissms.o: memory.h
+$(TARGET)\uissms.o: mod.h
+$(TARGET)\uissms.o: msg.h
+$(TARGET)\uissms.o: msm.h
+$(TARGET)\uissms.o: msm50reg.h
+$(TARGET)\uissms.o: nv.h
+$(TARGET)\uissms.o: psglobal.h
+$(TARGET)\uissms.o: queue.h
+$(TARGET)\uissms.o: qw.h
+$(TARGET)\uissms.o: rex.h
+$(TARGET)\uissms.o: smsi.h
+$(TARGET)\uissms.o: snd.h
+$(TARGET)\uissms.o: target.h
+$(TARGET)\uissms.o: targetg.h
+$(TARGET)\uissms.o: task.h
+$(TARGET)\uissms.o: tramp.h
+$(TARGET)\uissms.o: uapi.h
+$(TARGET)\uissms.o: uasms.h
+$(TARGET)\uissms.o: ui.h
+$(TARGET)\uissms.o: uiscall.h
+$(TARGET)\uissms.o: uissms.c
+$(TARGET)\uissms.o: uissms.h
+$(TARGET)\uissms.o: uistate.h
+$(TARGET)\uissms.o: uiuint.h
+$(TARGET)\uissms.o: uiusmsd.h
+$(TARGET)\uissms.o: uiusmsl.h
+$(TARGET)\uissms.o: uiutxt.h
+$(TARGET)\uissms.o: uiutxti.h
+$(TARGET)\uissms.o: uixscrn.h
+$(TARGET)\uissms.o: uixsnd.h
+
+$(TARGET)\uissto.o: CUST4SPE.H
+$(TARGET)\uissto.o: addrdefs.h
+$(TARGET)\uissto.o: cai.h
+$(TARGET)\uissto.o: clk.h
+$(TARGET)\uissto.o: cm.h
+$(TARGET)\uissto.o: cmd.h
+$(TARGET)\uissto.o: comdef.h
+$(TARGET)\uissto.o: customer.h
+$(TARGET)\uissto.o: db.h
+$(TARGET)\uissto.o: dog.h
+$(TARGET)\uissto.o: dsm.h
+$(TARGET)\uissto.o: err.h
+$(TARGET)\uissto.o: hs.h
+$(TARGET)\uissto.o: mc.h
+$(TARGET)\uissto.o: memory.h
+$(TARGET)\uissto.o: mod.h
+$(TARGET)\uissto.o: msg.h
+$(TARGET)\uissto.o: msm.h
+$(TARGET)\uissto.o: msm50reg.h
+$(TARGET)\uissto.o: nv.h
+$(TARGET)\uissto.o: psglobal.h
+$(TARGET)\uissto.o: queue.h
+$(TARGET)\uissto.o: qw.h
+$(TARGET)\uissto.o: rex.h
+$(TARGET)\uissto.o: smsi.h
+$(TARGET)\uissto.o: snd.h
+$(TARGET)\uissto.o: target.h
+$(TARGET)\uissto.o: targetg.h
+$(TARGET)\uissto.o: task.h
+$(TARGET)\uissto.o: tramp.h
+$(TARGET)\uissto.o: uapi.h
+$(TARGET)\uissto.o: uasms.h
+$(TARGET)\uissto.o: ui.h
+$(TARGET)\uissto.o: uiscall.h
+$(TARGET)\uissto.o: uissto.c
+$(TARGET)\uissto.o: uistate.h
+$(TARGET)\uissto.o: uiuint.h
+$(TARGET)\uissto.o: uiutxt.h
+$(TARGET)\uissto.o: uiutxti.h
+$(TARGET)\uissto.o: uixscrn.h
+$(TARGET)\uissto.o: uixsnd.h
+
+$(TARGET)\uisstrt.o: CUST4SPE.H
+$(TARGET)\uisstrt.o: addrdefs.h
+$(TARGET)\uisstrt.o: cai.h
+$(TARGET)\uisstrt.o: clk.h
+$(TARGET)\uisstrt.o: cm.h
+$(TARGET)\uisstrt.o: cmd.h
+$(TARGET)\uisstrt.o: comdef.h
+$(TARGET)\uisstrt.o: customer.h
+$(TARGET)\uisstrt.o: db.h
+$(TARGET)\uisstrt.o: dog.h
+$(TARGET)\uisstrt.o: dsm.h
+$(TARGET)\uisstrt.o: err.h
+$(TARGET)\uisstrt.o: hs.h
+$(TARGET)\uisstrt.o: hw.h
+$(TARGET)\uisstrt.o: mc.h
+$(TARGET)\uisstrt.o: memory.h
+$(TARGET)\uisstrt.o: mod.h
+$(TARGET)\uisstrt.o: msg.h
+$(TARGET)\uisstrt.o: msm.h
+$(TARGET)\uisstrt.o: msm50reg.h
+$(TARGET)\uisstrt.o: nv.h
+$(TARGET)\uisstrt.o: psglobal.h
+$(TARGET)\uisstrt.o: queue.h
+$(TARGET)\uisstrt.o: qw.h
+$(TARGET)\uisstrt.o: rex.h
+$(TARGET)\uisstrt.o: smsi.h
+$(TARGET)\uisstrt.o: snd.h
+$(TARGET)\uisstrt.o: target.h
+$(TARGET)\uisstrt.o: targetg.h
+$(TARGET)\uisstrt.o: task.h
+$(TARGET)\uisstrt.o: tramp.h
+$(TARGET)\uisstrt.o: uapi.h
+$(TARGET)\uisstrt.o: uasms.h
+$(TARGET)\uisstrt.o: ui.h
+$(TARGET)\uisstrt.o: uiscall.h
+$(TARGET)\uisstrt.o: uissms.h
+$(TARGET)\uisstrt.o: uisstrt.c
+$(TARGET)\uisstrt.o: uistate.h
+$(TARGET)\uisstrt.o: uiuint.h
+$(TARGET)\uisstrt.o: uiusmsl.h
+$(TARGET)\uisstrt.o: uiutxt.h
+$(TARGET)\uisstrt.o: uiutxti.h
+$(TARGET)\uisstrt.o: uixcm.h
+$(TARGET)\uisstrt.o: uixscrn.h
+$(TARGET)\uisstrt.o: uixsnd.h
+$(TARGET)\uisstrt.o: voc.h
+$(TARGET)\uisstrt.o: vocmux.h
+
+$(TARGET)\uistate.o: CUST4SPE.H
+$(TARGET)\uistate.o: addrdefs.h
+$(TARGET)\uistate.o: arm.h
+$(TARGET)\uistate.o: assert.h
+$(TARGET)\uistate.o: bio.h
+$(TARGET)\uistate.o: biog.h
+$(TARGET)\uistate.o: cai.h
+$(TARGET)\uistate.o: clk.h
+$(TARGET)\uistate.o: cm.h
+$(TARGET)\uistate.o: cmd.h
+$(TARGET)\uistate.o: comdef.h
+$(TARGET)\uistate.o: customer.h
+$(TARGET)\uistate.o: db.h
+$(TARGET)\uistate.o: deci.h
+$(TARGET)\uistate.o: dmod.h
+$(TARGET)\uistate.o: dog.h
+$(TARGET)\uistate.o: ds.h
+$(TARGET)\uistate.o: dsm.h
+$(TARGET)\uistate.o: dsnetmdl.h
+$(TARGET)\uistate.o: dssocket.h
+$(TARGET)\uistate.o: dssocki.h
+$(TARGET)\uistate.o: enc.h
+$(TARGET)\uistate.o: enci.h
+$(TARGET)\uistate.o: err.h
+$(TARGET)\uistate.o: hs.h
+$(TARGET)\uistate.o: iface.h
+$(TARGET)\uistate.o: internet.h
+$(TARGET)\uistate.o: ip.h
+$(TARGET)\uistate.o: mc.h
+$(TARGET)\uistate.o: mdrrlp.h
+$(TARGET)\uistate.o: memory.h
+$(TARGET)\uistate.o: mod.h
+$(TARGET)\uistate.o: msg.h
+$(TARGET)\uistate.o: msm.h
+$(TARGET)\uistate.o: msm50reg.h
+$(TARGET)\uistate.o: netuser.h
+$(TARGET)\uistate.o: nv.h
+$(TARGET)\uistate.o: pppfsm.h
+$(TARGET)\uistate.o: processor.h
+$(TARGET)\uistate.o: psglobal.h
+$(TARGET)\uistate.o: queue.h
+$(TARGET)\uistate.o: qw.h
+$(TARGET)\uistate.o: rex.h
+$(TARGET)\uistate.o: smsi.h
+$(TARGET)\uistate.o: snd.h
+$(TARGET)\uistate.o: srch.h
+$(TARGET)\uistate.o: target.h
+$(TARGET)\uistate.o: targetg.h
+$(TARGET)\uistate.o: task.h
+$(TARGET)\uistate.o: tcp.h
+$(TARGET)\uistate.o: tramp.h
+$(TARGET)\uistate.o: uapi.h
+$(TARGET)\uistate.o: uasms.h
+$(TARGET)\uistate.o: ui.h
+$(TARGET)\uistate.o: uiscall.h
+$(TARGET)\uistate.o: uissms.h
+$(TARGET)\uistate.o: uistate.c
+$(TARGET)\uistate.o: uistate.h
+$(TARGET)\uistate.o: uiudata.h
+$(TARGET)\uistate.o: uiuint.h
+$(TARGET)\uistate.o: uiusmsl.h
+$(TARGET)\uistate.o: uiutxt.h
+$(TARGET)\uistate.o: uiutxti.h
+$(TARGET)\uistate.o: uixcm.h
+$(TARGET)\uistate.o: uixscrn.h
+$(TARGET)\uistate.o: uixsnd.h
+$(TARGET)\uistate.o: uixuasms.h
+$(TARGET)\uistate.o: ulpn.h
+$(TARGET)\uistate.o: vbatt.h
+
+$(TARGET)\uisview.o: CUST4SPE.H
+$(TARGET)\uisview.o: addrdefs.h
+$(TARGET)\uisview.o: cai.h
+$(TARGET)\uisview.o: clk.h
+$(TARGET)\uisview.o: cm.h
+$(TARGET)\uisview.o: cmd.h
+$(TARGET)\uisview.o: comdef.h
+$(TARGET)\uisview.o: customer.h
+$(TARGET)\uisview.o: db.h
+$(TARGET)\uisview.o: dog.h
+$(TARGET)\uisview.o: dsm.h
+$(TARGET)\uisview.o: hs.h
+$(TARGET)\uisview.o: mc.h
+$(TARGET)\uisview.o: memory.h
+$(TARGET)\uisview.o: mod.h
+$(TARGET)\uisview.o: msm.h
+$(TARGET)\uisview.o: msm50reg.h
+$(TARGET)\uisview.o: nv.h
+$(TARGET)\uisview.o: psglobal.h
+$(TARGET)\uisview.o: queue.h
+$(TARGET)\uisview.o: qw.h
+$(TARGET)\uisview.o: rex.h
+$(TARGET)\uisview.o: smsi.h
+$(TARGET)\uisview.o: snd.h
+$(TARGET)\uisview.o: target.h
+$(TARGET)\uisview.o: targetg.h
+$(TARGET)\uisview.o: task.h
+$(TARGET)\uisview.o: tramp.h
+$(TARGET)\uisview.o: uapi.h
+$(TARGET)\uisview.o: uasms.h
+$(TARGET)\uisview.o: ui.h
+$(TARGET)\uisview.o: uiscall.h
+$(TARGET)\uisview.o: uistate.h
+$(TARGET)\uisview.o: uisview.c
+$(TARGET)\uisview.o: uiuint.h
+$(TARGET)\uisview.o: uiutxt.h
+$(TARGET)\uisview.o: uiutxti.h
+$(TARGET)\uisview.o: uixscrn.h
+$(TARGET)\uisview.o: uixsnd.h
+
+$(TARGET)\uiudata.o: CUST4SPE.H
+$(TARGET)\uiudata.o: addrdefs.h
+$(TARGET)\uiudata.o: assert.h
+$(TARGET)\uiudata.o: cai.h
+$(TARGET)\uiudata.o: caii.h
+$(TARGET)\uiudata.o: clk.h
+$(TARGET)\uiudata.o: cm.h
+$(TARGET)\uiudata.o: cmd.h
+$(TARGET)\uiudata.o: comdef.h
+$(TARGET)\uiudata.o: customer.h
+$(TARGET)\uiudata.o: db.h
+$(TARGET)\uiudata.o: dog.h
+$(TARGET)\uiudata.o: ds.h
+$(TARGET)\uiudata.o: dsm.h
+$(TARGET)\uiudata.o: dsnetmdl.h
+$(TARGET)\uiudata.o: dssocket.h
+$(TARGET)\uiudata.o: dssocki.h
+$(TARGET)\uiudata.o: enc.h
+$(TARGET)\uiudata.o: err.h
+$(TARGET)\uiudata.o: hs.h
+$(TARGET)\uiudata.o: iface.h
+$(TARGET)\uiudata.o: internet.h
+$(TARGET)\uiudata.o: ip.h
+$(TARGET)\uiudata.o: mc.h
+$(TARGET)\uiudata.o: mccccl.h
+$(TARGET)\uiudata.o: mdrrlp.h
+$(TARGET)\uiudata.o: mod.h
+$(TARGET)\uiudata.o: msg.h
+$(TARGET)\uiudata.o: msm.h
+$(TARGET)\uiudata.o: msm50reg.h
+$(TARGET)\uiudata.o: netuser.h
+$(TARGET)\uiudata.o: nv.h
+$(TARGET)\uiudata.o: ppp.h
+$(TARGET)\uiudata.o: pppfsm.h
+$(TARGET)\uiudata.o: ps.h
+$(TARGET)\uiudata.o: psglobal.h
+$(TARGET)\uiudata.o: psi.h
+$(TARGET)\uiudata.o: queue.h
+$(TARGET)\uiudata.o: qw.h
+$(TARGET)\uiudata.o: rex.h
+$(TARGET)\uiudata.o: rlp.h
+$(TARGET)\uiudata.o: smsi.h
+$(TARGET)\uiudata.o: snd.h
+$(TARGET)\uiudata.o: srch.h
+$(TARGET)\uiudata.o: target.h
+$(TARGET)\uiudata.o: targetg.h
+$(TARGET)\uiudata.o: task.h
+$(TARGET)\uiudata.o: tcp.h
+$(TARGET)\uiudata.o: tramp.h
+$(TARGET)\uiudata.o: uapi.h
+$(TARGET)\uiudata.o: uasms.h
+$(TARGET)\uiudata.o: ui.h
+$(TARGET)\uiudata.o: uiscall.h
+$(TARGET)\uiudata.o: uistate.h
+$(TARGET)\uiudata.o: uiudata.c
+$(TARGET)\uiudata.o: uiudata.h
+$(TARGET)\uiudata.o: uiuint.h
+$(TARGET)\uiudata.o: uiutxt.h
+$(TARGET)\uiudata.o: uiutxti.h
+$(TARGET)\uiudata.o: uixscrn.h
+$(TARGET)\uiudata.o: uixsnd.h
+$(TARGET)\uiudata.o: ulpn.h
+
+$(TARGET)\uiumenu.o: CUST4SPE.H
+$(TARGET)\uiumenu.o: comdef.h
+$(TARGET)\uiumenu.o: customer.h
+$(TARGET)\uiumenu.o: hs.h
+$(TARGET)\uiumenu.o: nv.h
+$(TARGET)\uiumenu.o: queue.h
+$(TARGET)\uiumenu.o: qw.h
+$(TARGET)\uiumenu.o: rex.h
+$(TARGET)\uiumenu.o: target.h
+$(TARGET)\uiumenu.o: targetg.h
+$(TARGET)\uiumenu.o: uiumenu.c
+$(TARGET)\uiumenu.o: uiumenu.h
+$(TARGET)\uiumenu.o: uiutstmn.h
+$(TARGET)\uiumenu.o: uiutxt.h
+$(TARGET)\uiumenu.o: uiutxti.h
+
+$(TARGET)\uiusmsd.o: CUST4SPE.H
+$(TARGET)\uiusmsd.o: addrdefs.h
+$(TARGET)\uiusmsd.o: bit.h
+$(TARGET)\uiusmsd.o: cai.h
+$(TARGET)\uiusmsd.o: clk.h
+$(TARGET)\uiusmsd.o: cm.h
+$(TARGET)\uiusmsd.o: cmd.h
+$(TARGET)\uiusmsd.o: comdef.h
+$(TARGET)\uiusmsd.o: customer.h
+$(TARGET)\uiusmsd.o: db.h
+$(TARGET)\uiusmsd.o: dog.h
+$(TARGET)\uiusmsd.o: dsm.h
+$(TARGET)\uiusmsd.o: hs.h
+$(TARGET)\uiusmsd.o: mc.h
+$(TARGET)\uiusmsd.o: memory.h
+$(TARGET)\uiusmsd.o: mod.h
+$(TARGET)\uiusmsd.o: msm.h
+$(TARGET)\uiusmsd.o: msm50reg.h
+$(TARGET)\uiusmsd.o: nv.h
+$(TARGET)\uiusmsd.o: psglobal.h
+$(TARGET)\uiusmsd.o: queue.h
+$(TARGET)\uiusmsd.o: qw.h
+$(TARGET)\uiusmsd.o: rex.h
+$(TARGET)\uiusmsd.o: smsi.h
+$(TARGET)\uiusmsd.o: snd.h
+$(TARGET)\uiusmsd.o: target.h
+$(TARGET)\uiusmsd.o: targetg.h
+$(TARGET)\uiusmsd.o: task.h
+$(TARGET)\uiusmsd.o: tramp.h
+$(TARGET)\uiusmsd.o: uapi.h
+$(TARGET)\uiusmsd.o: uasms.h
+$(TARGET)\uiusmsd.o: ui.h
+$(TARGET)\uiusmsd.o: uiscall.h
+$(TARGET)\uiusmsd.o: uissms.h
+$(TARGET)\uiusmsd.o: uistate.h
+$(TARGET)\uiusmsd.o: uiuint.h
+$(TARGET)\uiusmsd.o: uiusmsd.c
+$(TARGET)\uiusmsd.o: uiusmsd.h
+$(TARGET)\uiusmsd.o: uiusmsl.h
+$(TARGET)\uiusmsd.o: uiutxt.h
+$(TARGET)\uiusmsd.o: uiutxti.h
+$(TARGET)\uiusmsd.o: uixscrn.h
+$(TARGET)\uiusmsd.o: uixsnd.h
+
+$(TARGET)\uiusmsl.o: CUST4SPE.H
+$(TARGET)\uiusmsl.o: addrdefs.h
+$(TARGET)\uiusmsl.o: cai.h
+$(TARGET)\uiusmsl.o: clk.h
+$(TARGET)\uiusmsl.o: cm.h
+$(TARGET)\uiusmsl.o: cmd.h
+$(TARGET)\uiusmsl.o: comdef.h
+$(TARGET)\uiusmsl.o: customer.h
+$(TARGET)\uiusmsl.o: db.h
+$(TARGET)\uiusmsl.o: dog.h
+$(TARGET)\uiusmsl.o: dsm.h
+$(TARGET)\uiusmsl.o: err.h
+$(TARGET)\uiusmsl.o: hs.h
+$(TARGET)\uiusmsl.o: mc.h
+$(TARGET)\uiusmsl.o: memory.h
+$(TARGET)\uiusmsl.o: mod.h
+$(TARGET)\uiusmsl.o: msg.h
+$(TARGET)\uiusmsl.o: msm.h
+$(TARGET)\uiusmsl.o: msm50reg.h
+$(TARGET)\uiusmsl.o: nv.h
+$(TARGET)\uiusmsl.o: psglobal.h
+$(TARGET)\uiusmsl.o: queue.h
+$(TARGET)\uiusmsl.o: qw.h
+$(TARGET)\uiusmsl.o: rex.h
+$(TARGET)\uiusmsl.o: smsi.h
+$(TARGET)\uiusmsl.o: snd.h
+$(TARGET)\uiusmsl.o: target.h
+$(TARGET)\uiusmsl.o: targetg.h
+$(TARGET)\uiusmsl.o: task.h
+$(TARGET)\uiusmsl.o: tramp.h
+$(TARGET)\uiusmsl.o: uapi.h
+$(TARGET)\uiusmsl.o: uasms.h
+$(TARGET)\uiusmsl.o: ui.h
+$(TARGET)\uiusmsl.o: uiscall.h
+$(TARGET)\uiusmsl.o: uissms.h
+$(TARGET)\uiusmsl.o: uistate.h
+$(TARGET)\uiusmsl.o: uiuint.h
+$(TARGET)\uiusmsl.o: uiusmsd.h
+$(TARGET)\uiusmsl.o: uiusmsl.c
+$(TARGET)\uiusmsl.o: uiusmsl.h
+$(TARGET)\uiusmsl.o: uiutxt.h
+$(TARGET)\uiusmsl.o: uiutxti.h
+$(TARGET)\uiusmsl.o: uixscrn.h
+$(TARGET)\uiusmsl.o: uixsnd.h
+
+$(TARGET)\uiutstmn.o: CUST4SPE.H
+$(TARGET)\uiutstmn.o: addrdefs.h
+$(TARGET)\uiutstmn.o: cai.h
+$(TARGET)\uiutstmn.o: clk.h
+$(TARGET)\uiutstmn.o: cm.h
+$(TARGET)\uiutstmn.o: cmd.h
+$(TARGET)\uiutstmn.o: comdef.h
+$(TARGET)\uiutstmn.o: customer.h
+$(TARGET)\uiutstmn.o: db.h
+$(TARGET)\uiutstmn.o: dog.h
+$(TARGET)\uiutstmn.o: dsm.h
+$(TARGET)\uiutstmn.o: hs.h
+$(TARGET)\uiutstmn.o: mc.h
+$(TARGET)\uiutstmn.o: mod.h
+$(TARGET)\uiutstmn.o: msg.h
+$(TARGET)\uiutstmn.o: msm.h
+$(TARGET)\uiutstmn.o: msm50reg.h
+$(TARGET)\uiutstmn.o: nv.h
+$(TARGET)\uiutstmn.o: psglobal.h
+$(TARGET)\uiutstmn.o: queue.h
+$(TARGET)\uiutstmn.o: qw.h
+$(TARGET)\uiutstmn.o: rex.h
+$(TARGET)\uiutstmn.o: smsi.h
+$(TARGET)\uiutstmn.o: snd.h
+$(TARGET)\uiutstmn.o: target.h
+$(TARGET)\uiutstmn.o: targetg.h
+$(TARGET)\uiutstmn.o: task.h
+$(TARGET)\uiutstmn.o: tramp.h
+$(TARGET)\uiutstmn.o: uapi.h
+$(TARGET)\uiutstmn.o: uasms.h
+$(TARGET)\uiutstmn.o: uasmsi.h
+$(TARGET)\uiutstmn.o: ui.h
+$(TARGET)\uiutstmn.o: uiscall.h
+$(TARGET)\uiutstmn.o: uistate.h
+$(TARGET)\uiutstmn.o: uiuint.h
+$(TARGET)\uiutstmn.o: uiumenu.h
+$(TARGET)\uiutstmn.o: uiutstmn.c
+$(TARGET)\uiutstmn.o: uiutstmn.h
+$(TARGET)\uiutstmn.o: uiutxt.h
+$(TARGET)\uiutstmn.o: uiutxti.h
+$(TARGET)\uiutstmn.o: uixcm.h
+$(TARGET)\uiutstmn.o: uixscrn.h
+$(TARGET)\uiutstmn.o: uixsnd.h
+$(TARGET)\uiutstmn.o: uixuasms.h
+
+$(TARGET)\uiutxt.o: CUST4SPE.H
+$(TARGET)\uiutxt.o: addrdefs.h
+$(TARGET)\uiutxt.o: cai.h
+$(TARGET)\uiutxt.o: clk.h
+$(TARGET)\uiutxt.o: cm.h
+$(TARGET)\uiutxt.o: cmd.h
+$(TARGET)\uiutxt.o: comdef.h
+$(TARGET)\uiutxt.o: customer.h
+$(TARGET)\uiutxt.o: db.h
+$(TARGET)\uiutxt.o: dog.h
+$(TARGET)\uiutxt.o: ds.h
+$(TARGET)\uiutxt.o: dsm.h
+$(TARGET)\uiutxt.o: dsnetmdl.h
+$(TARGET)\uiutxt.o: dssocket.h
+$(TARGET)\uiutxt.o: dssocki.h
+$(TARGET)\uiutxt.o: hs.h
+$(TARGET)\uiutxt.o: iface.h
+$(TARGET)\uiutxt.o: internet.h
+$(TARGET)\uiutxt.o: ip.h
+$(TARGET)\uiutxt.o: mc.h
+$(TARGET)\uiutxt.o: mdrrlp.h
+$(TARGET)\uiutxt.o: mod.h
+$(TARGET)\uiutxt.o: msm.h
+$(TARGET)\uiutxt.o: msm50reg.h
+$(TARGET)\uiutxt.o: netuser.h
+$(TARGET)\uiutxt.o: nv.h
+$(TARGET)\uiutxt.o: pppfsm.h
+$(TARGET)\uiutxt.o: psglobal.h
+$(TARGET)\uiutxt.o: queue.h
+$(TARGET)\uiutxt.o: qw.h
+$(TARGET)\uiutxt.o: rex.h
+$(TARGET)\uiutxt.o: sio.h
+$(TARGET)\uiutxt.o: smsi.h
+$(TARGET)\uiutxt.o: snd.h
+$(TARGET)\uiutxt.o: target.h
+$(TARGET)\uiutxt.o: targetg.h
+$(TARGET)\uiutxt.o: task.h
+$(TARGET)\uiutxt.o: tcp.h
+$(TARGET)\uiutxt.o: tramp.h
+$(TARGET)\uiutxt.o: uapi.h
+$(TARGET)\uiutxt.o: uasms.h
+$(TARGET)\uiutxt.o: ui.h
+$(TARGET)\uiutxt.o: uiscall.h
+$(TARGET)\uiutxt.o: uistate.h
+$(TARGET)\uiutxt.o: uiuint.h
+$(TARGET)\uiutxt.o: uiumenu.h
+$(TARGET)\uiutxt.o: uiutxt.c
+$(TARGET)\uiutxt.o: uiutxt.h
+$(TARGET)\uiutxt.o: uiutxti.h
+$(TARGET)\uiutxt.o: uixsnd.h
+
+$(TARGET)\uixcm.o: CUST4SPE.H
+$(TARGET)\uixcm.o: addrdefs.h
+$(TARGET)\uixcm.o: assert.h
+$(TARGET)\uixcm.o: cai.h
+$(TARGET)\uixcm.o: clk.h
+$(TARGET)\uixcm.o: cm.h
+$(TARGET)\uixcm.o: cmd.h
+$(TARGET)\uixcm.o: comdef.h
+$(TARGET)\uixcm.o: customer.h
+$(TARGET)\uixcm.o: db.h
+$(TARGET)\uixcm.o: dog.h
+$(TARGET)\uixcm.o: dsm.h
+$(TARGET)\uixcm.o: err.h
+$(TARGET)\uixcm.o: hs.h
+$(TARGET)\uixcm.o: mc.h
+$(TARGET)\uixcm.o: mod.h
+$(TARGET)\uixcm.o: msg.h
+$(TARGET)\uixcm.o: msm.h
+$(TARGET)\uixcm.o: msm50reg.h
+$(TARGET)\uixcm.o: nv.h
+$(TARGET)\uixcm.o: psglobal.h
+$(TARGET)\uixcm.o: queue.h
+$(TARGET)\uixcm.o: qw.h
+$(TARGET)\uixcm.o: rex.h
+$(TARGET)\uixcm.o: smsi.h
+$(TARGET)\uixcm.o: snd.h
+$(TARGET)\uixcm.o: target.h
+$(TARGET)\uixcm.o: targetg.h
+$(TARGET)\uixcm.o: task.h
+$(TARGET)\uixcm.o: tramp.h
+$(TARGET)\uixcm.o: uapi.h
+$(TARGET)\uixcm.o: uasms.h
+$(TARGET)\uixcm.o: ui.h
+$(TARGET)\uixcm.o: uiscall.h
+$(TARGET)\uixcm.o: uistate.h
+$(TARGET)\uixcm.o: uiuint.h
+$(TARGET)\uixcm.o: uiutxt.h
+$(TARGET)\uixcm.o: uiutxti.h
+$(TARGET)\uixcm.o: uixcm.c
+$(TARGET)\uixcm.o: uixcm.h
+$(TARGET)\uixcm.o: uixsnd.h
+$(TARGET)\uixcm.o: uixuasms.h
+
+$(TARGET)\uixnv.o: CUST4SPE.H
+$(TARGET)\uixnv.o: addrdefs.h
+$(TARGET)\uixnv.o: cai.h
+$(TARGET)\uixnv.o: clk.h
+$(TARGET)\uixnv.o: cm.h
+$(TARGET)\uixnv.o: cmd.h
+$(TARGET)\uixnv.o: comdef.h
+$(TARGET)\uixnv.o: customer.h
+$(TARGET)\uixnv.o: db.h
+$(TARGET)\uixnv.o: dog.h
+$(TARGET)\uixnv.o: dsm.h
+$(TARGET)\uixnv.o: err.h
+$(TARGET)\uixnv.o: hs.h
+$(TARGET)\uixnv.o: mc.h
+$(TARGET)\uixnv.o: memory.h
+$(TARGET)\uixnv.o: mod.h
+$(TARGET)\uixnv.o: msg.h
+$(TARGET)\uixnv.o: msm.h
+$(TARGET)\uixnv.o: msm50reg.h
+$(TARGET)\uixnv.o: nv.h
+$(TARGET)\uixnv.o: psglobal.h
+$(TARGET)\uixnv.o: queue.h
+$(TARGET)\uixnv.o: qw.h
+$(TARGET)\uixnv.o: rex.h
+$(TARGET)\uixnv.o: smsi.h
+$(TARGET)\uixnv.o: snd.h
+$(TARGET)\uixnv.o: target.h
+$(TARGET)\uixnv.o: targetg.h
+$(TARGET)\uixnv.o: task.h
+$(TARGET)\uixnv.o: tramp.h
+$(TARGET)\uixnv.o: uapi.h
+$(TARGET)\uixnv.o: uasms.h
+$(TARGET)\uixnv.o: ui.h
+$(TARGET)\uixnv.o: uih.h
+$(TARGET)\uixnv.o: uiscall.h
+$(TARGET)\uixnv.o: uistate.h
+$(TARGET)\uixnv.o: uiuint.h
+$(TARGET)\uixnv.o: uiutxt.h
+$(TARGET)\uixnv.o: uiutxti.h
+$(TARGET)\uixnv.o: uixnv.c
+$(TARGET)\uixnv.o: uixsnd.h
+
+$(TARGET)\uixscrn.o: CUST4SPE.H
+$(TARGET)\uixscrn.o: addrdefs.h
+$(TARGET)\uixscrn.o: cai.h
+$(TARGET)\uixscrn.o: clk.h
+$(TARGET)\uixscrn.o: cm.h
+$(TARGET)\uixscrn.o: cmd.h
+$(TARGET)\uixscrn.o: comdef.h
+$(TARGET)\uixscrn.o: customer.h
+$(TARGET)\uixscrn.o: db.h
+$(TARGET)\uixscrn.o: dog.h
+$(TARGET)\uixscrn.o: dsm.h
+$(TARGET)\uixscrn.o: err.h
+$(TARGET)\uixscrn.o: hs.h
+$(TARGET)\uixscrn.o: mc.h
+$(TARGET)\uixscrn.o: memory.h
+$(TARGET)\uixscrn.o: mod.h
+$(TARGET)\uixscrn.o: msg.h
+$(TARGET)\uixscrn.o: msm.h
+$(TARGET)\uixscrn.o: msm50reg.h
+$(TARGET)\uixscrn.o: nv.h
+$(TARGET)\uixscrn.o: psglobal.h
+$(TARGET)\uixscrn.o: queue.h
+$(TARGET)\uixscrn.o: qw.h
+$(TARGET)\uixscrn.o: rex.h
+$(TARGET)\uixscrn.o: smsi.h
+$(TARGET)\uixscrn.o: snd.h
+$(TARGET)\uixscrn.o: target.h
+$(TARGET)\uixscrn.o: targetg.h
+$(TARGET)\uixscrn.o: task.h
+$(TARGET)\uixscrn.o: tramp.h
+$(TARGET)\uixscrn.o: uapi.h
+$(TARGET)\uixscrn.o: uasms.h
+$(TARGET)\uixscrn.o: ui.h
+$(TARGET)\uixscrn.o: uiscall.h
+$(TARGET)\uixscrn.o: uistate.h
+$(TARGET)\uixscrn.o: uiuint.h
+$(TARGET)\uixscrn.o: uiutxt.h
+$(TARGET)\uixscrn.o: uiutxti.h
+$(TARGET)\uixscrn.o: uixscrn.c
+$(TARGET)\uixscrn.o: uixscrn.h
+$(TARGET)\uixscrn.o: uixsnd.h
+
+$(TARGET)\uixsnd.o: CUST4SPE.H
+$(TARGET)\uixsnd.o: addrdefs.h
+$(TARGET)\uixsnd.o: assert.h
+$(TARGET)\uixsnd.o: cai.h
+$(TARGET)\uixsnd.o: clk.h
+$(TARGET)\uixsnd.o: cm.h
+$(TARGET)\uixsnd.o: cmd.h
+$(TARGET)\uixsnd.o: comdef.h
+$(TARGET)\uixsnd.o: customer.h
+$(TARGET)\uixsnd.o: db.h
+$(TARGET)\uixsnd.o: dog.h
+$(TARGET)\uixsnd.o: ds.h
+$(TARGET)\uixsnd.o: dsm.h
+$(TARGET)\uixsnd.o: dsnetmdl.h
+$(TARGET)\uixsnd.o: dssocket.h
+$(TARGET)\uixsnd.o: dssocki.h
+$(TARGET)\uixsnd.o: err.h
+$(TARGET)\uixsnd.o: hs.h
+$(TARGET)\uixsnd.o: iface.h
+$(TARGET)\uixsnd.o: internet.h
+$(TARGET)\uixsnd.o: ip.h
+$(TARGET)\uixsnd.o: mc.h
+$(TARGET)\uixsnd.o: mdrrlp.h
+$(TARGET)\uixsnd.o: mod.h
+$(TARGET)\uixsnd.o: msg.h
+$(TARGET)\uixsnd.o: msm.h
+$(TARGET)\uixsnd.o: msm50reg.h
+$(TARGET)\uixsnd.o: netuser.h
+$(TARGET)\uixsnd.o: nv.h
+$(TARGET)\uixsnd.o: pppfsm.h
+$(TARGET)\uixsnd.o: psglobal.h
+$(TARGET)\uixsnd.o: queue.h
+$(TARGET)\uixsnd.o: qw.h
+$(TARGET)\uixsnd.o: rex.h
+$(TARGET)\uixsnd.o: smsi.h
+$(TARGET)\uixsnd.o: snd.h
+$(TARGET)\uixsnd.o: target.h
+$(TARGET)\uixsnd.o: targetg.h
+$(TARGET)\uixsnd.o: task.h
+$(TARGET)\uixsnd.o: tcp.h
+$(TARGET)\uixsnd.o: tramp.h
+$(TARGET)\uixsnd.o: uapi.h
+$(TARGET)\uixsnd.o: uasms.h
+$(TARGET)\uixsnd.o: ui.h
+$(TARGET)\uixsnd.o: uiscall.h
+$(TARGET)\uixsnd.o: uistate.h
+$(TARGET)\uixsnd.o: uiudata.h
+$(TARGET)\uixsnd.o: uiuint.h
+$(TARGET)\uixsnd.o: uiutxt.h
+$(TARGET)\uixsnd.o: uiutxti.h
+$(TARGET)\uixsnd.o: uixcm.h
+$(TARGET)\uixsnd.o: uixscrn.h
+$(TARGET)\uixsnd.o: uixsnd.c
+$(TARGET)\uixsnd.o: uixsnd.h
+
+$(TARGET)\uixuasms.o: CUST4SPE.H
+$(TARGET)\uixuasms.o: addrdefs.h
+$(TARGET)\uixuasms.o: bit.h
+$(TARGET)\uixuasms.o: cai.h
+$(TARGET)\uixuasms.o: clk.h
+$(TARGET)\uixuasms.o: cm.h
+$(TARGET)\uixuasms.o: cmd.h
+$(TARGET)\uixuasms.o: comdef.h
+$(TARGET)\uixuasms.o: customer.h
+$(TARGET)\uixuasms.o: db.h
+$(TARGET)\uixuasms.o: dog.h
+$(TARGET)\uixuasms.o: err.h
+$(TARGET)\uixuasms.o: mc.h
+$(TARGET)\uixuasms.o: msg.h
+$(TARGET)\uixuasms.o: msm.h
+$(TARGET)\uixuasms.o: msm50reg.h
+$(TARGET)\uixuasms.o: nv.h
+$(TARGET)\uixuasms.o: queue.h
+$(TARGET)\uixuasms.o: qw.h
+$(TARGET)\uixuasms.o: rex.h
+$(TARGET)\uixuasms.o: smsi.h
+$(TARGET)\uixuasms.o: target.h
+$(TARGET)\uixuasms.o: targetg.h
+$(TARGET)\uixuasms.o: task.h
+$(TARGET)\uixuasms.o: tramp.h
+$(TARGET)\uixuasms.o: uapi.h
+$(TARGET)\uixuasms.o: uasms.h
+$(TARGET)\uixuasms.o: uasmsi.h
+$(TARGET)\uixuasms.o: uasmsx.h
+$(TARGET)\uixuasms.o: ui.h
+$(TARGET)\uixuasms.o: uixuasms.c
+$(TARGET)\uixuasms.o: uixuasms.h
+
+$(TARGET)\ulpn.o: CUST4SPE.H
+$(TARGET)\ulpn.o: comdef.h
+$(TARGET)\ulpn.o: customer.h
+$(TARGET)\ulpn.o: rex.h
+$(TARGET)\ulpn.o: target.h
+$(TARGET)\ulpn.o: targetg.h
+$(TARGET)\ulpn.o: ulpn.c
+$(TARGET)\ulpn.o: ulpn.h
+
+$(TARGET)\vbatt.o: CUST4SPE.H
+$(TARGET)\vbatt.o: adc.h
+$(TARGET)\vbatt.o: addrdefs.h
+$(TARGET)\vbatt.o: arm.h
+$(TARGET)\vbatt.o: bio.h
+$(TARGET)\vbatt.o: biog.h
+$(TARGET)\vbatt.o: cai.h
+$(TARGET)\vbatt.o: clk.h
+$(TARGET)\vbatt.o: cmd.h
+$(TARGET)\vbatt.o: comdef.h
+$(TARGET)\vbatt.o: customer.h
+$(TARGET)\vbatt.o: db.h
+$(TARGET)\vbatt.o: deci.h
+$(TARGET)\vbatt.o: dmod.h
+$(TARGET)\vbatt.o: dog.h
+$(TARGET)\vbatt.o: enci.h
+$(TARGET)\vbatt.o: err.h
+$(TARGET)\vbatt.o: mc.h
+$(TARGET)\vbatt.o: msg.h
+$(TARGET)\vbatt.o: msm.h
+$(TARGET)\vbatt.o: msm50reg.h
+$(TARGET)\vbatt.o: nv.h
+$(TARGET)\vbatt.o: processor.h
+$(TARGET)\vbatt.o: queue.h
+$(TARGET)\vbatt.o: qw.h
+$(TARGET)\vbatt.o: rex.h
+$(TARGET)\vbatt.o: rf.h
+$(TARGET)\vbatt.o: rfc.h
+$(TARGET)\vbatt.o: rficap.h
+$(TARGET)\vbatt.o: target.h
+$(TARGET)\vbatt.o: targetg.h
+$(TARGET)\vbatt.o: task.h
+$(TARGET)\vbatt.o: tramp.h
+$(TARGET)\vbatt.o: vbatt.c
+$(TARGET)\vbatt.o: vbatt.h
+
+$(TARGET)\vocdown.o: CUST4SPE.H
+$(TARGET)\vocdown.o: addrdefs.h
+$(TARGET)\vocdown.o: arm.h
+$(TARGET)\vocdown.o: cai.h
+$(TARGET)\vocdown.o: clk.h
+$(TARGET)\vocdown.o: clkregim.h
+$(TARGET)\vocdown.o: cmd.h
+$(TARGET)\vocdown.o: comdef.h
+$(TARGET)\vocdown.o: customer.h
+$(TARGET)\vocdown.o: dog.h
+$(TARGET)\vocdown.o: enc.h
+$(TARGET)\vocdown.o: err.h
+$(TARGET)\vocdown.o: mc.h
+$(TARGET)\vocdown.o: misc.h
+$(TARGET)\vocdown.o: msg.h
+$(TARGET)\vocdown.o: msm.h
+$(TARGET)\vocdown.o: msm50reg.h
+$(TARGET)\vocdown.o: nv.h
+$(TARGET)\vocdown.o: processor.h
+$(TARGET)\vocdown.o: queue.h
+$(TARGET)\vocdown.o: qw.h
+$(TARGET)\vocdown.o: rex.h
+$(TARGET)\vocdown.o: rf.h
+$(TARGET)\vocdown.o: rfc.h
+$(TARGET)\vocdown.o: rficap.h
+$(TARGET)\vocdown.o: target.h
+$(TARGET)\vocdown.o: targetg.h
+$(TARGET)\vocdown.o: task.h
+$(TARGET)\vocdown.o: tramp.h
+$(TARGET)\vocdown.o: voc.h
+$(TARGET)\vocdown.o: voc_core.h
+$(TARGET)\vocdown.o: vocdown.c
+$(TARGET)\vocdown.o: vocdown.h
+$(TARGET)\vocdown.o: vocm2.h
+$(TARGET)\vocdown.o: vocmux.h
+
+$(TARGET)\vocimags.o: CUST4SPE.H
+$(TARGET)\vocimags.o: comdef.h
+$(TARGET)\vocimags.o: customer.h
+$(TARGET)\vocimags.o: rex.h
+$(TARGET)\vocimags.o: target.h
+$(TARGET)\vocimags.o: targetg.h
+$(TARGET)\vocimags.o: vocdown.h
+$(TARGET)\vocimags.o: vocimags.c
+$(TARGET)\vocimags.o: vocp813k.ins
+$(TARGET)\vocimags.o: vocpevrc.ins
+$(TARGET)\vocimags.o: vocpfm.ins
+
+$(TARGET)\vocm2.o: CUST4SPE.H
+$(TARGET)\vocm2.o: acp553.h
+$(TARGET)\vocm2.o: acpcmdef.h
+$(TARGET)\vocm2.o: acpwb.h
+$(TARGET)\vocm2.o: addrdefs.h
+$(TARGET)\vocm2.o: arm.h
+$(TARGET)\vocm2.o: cai.h
+$(TARGET)\vocm2.o: clk.h
+$(TARGET)\vocm2.o: clkregim.h
+$(TARGET)\vocm2.o: cmd.h
+$(TARGET)\vocm2.o: comdef.h
+$(TARGET)\vocm2.o: customer.h
+$(TARGET)\vocm2.o: db.h
+$(TARGET)\vocm2.o: deci.h
+$(TARGET)\vocm2.o: dog.h
+$(TARGET)\vocm2.o: enc.h
+$(TARGET)\vocm2.o: err.h
+$(TARGET)\vocm2.o: hw.h
+$(TARGET)\vocm2.o: mc.h
+$(TARGET)\vocm2.o: misc.h
+$(TARGET)\vocm2.o: msg.h
+$(TARGET)\vocm2.o: msm.h
+$(TARGET)\vocm2.o: msm50reg.h
+$(TARGET)\vocm2.o: nv.h
+$(TARGET)\vocm2.o: processor.h
+$(TARGET)\vocm2.o: queue.h
+$(TARGET)\vocm2.o: qw.h
+$(TARGET)\vocm2.o: rex.h
+$(TARGET)\vocm2.o: rf.h
+$(TARGET)\vocm2.o: rfc.h
+$(TARGET)\vocm2.o: rficap.h
+$(TARGET)\vocm2.o: target.h
+$(TARGET)\vocm2.o: targetg.h
+$(TARGET)\vocm2.o: task.h
+$(TARGET)\vocm2.o: tramp.h
+$(TARGET)\vocm2.o: ts.h
+$(TARGET)\vocm2.o: voc.h
+$(TARGET)\vocm2.o: voc_core.h
+$(TARGET)\vocm2.o: vocdown.h
+$(TARGET)\vocm2.o: vocm2.c
+$(TARGET)\vocm2.o: vocm2.h
+$(TARGET)\vocm2.o: vocmux.h
+$(TARGET)\vocm2.o: vocsup.h
+
+$(TARGET)\vocmux.o: CUST4SPE.H
+$(TARGET)\vocmux.o: addrdefs.h
+$(TARGET)\vocmux.o: arm.h
+$(TARGET)\vocmux.o: assert.h
+$(TARGET)\vocmux.o: bio.h
+$(TARGET)\vocmux.o: biog.h
+$(TARGET)\vocmux.o: cai.h
+$(TARGET)\vocmux.o: clk.h
+$(TARGET)\vocmux.o: cmd.h
+$(TARGET)\vocmux.o: comdef.h
+$(TARGET)\vocmux.o: customer.h
+$(TARGET)\vocmux.o: db.h
+$(TARGET)\vocmux.o: deci.h
+$(TARGET)\vocmux.o: dmod.h
+$(TARGET)\vocmux.o: dog.h
+$(TARGET)\vocmux.o: enc.h
+$(TARGET)\vocmux.o: enci.h
+$(TARGET)\vocmux.o: err.h
+$(TARGET)\vocmux.o: hw.h
+$(TARGET)\vocmux.o: mc.h
+$(TARGET)\vocmux.o: memory.h
+$(TARGET)\vocmux.o: msg.h
+$(TARGET)\vocmux.o: msm.h
+$(TARGET)\vocmux.o: msm50reg.h
+$(TARGET)\vocmux.o: nv.h
+$(TARGET)\vocmux.o: processor.h
+$(TARGET)\vocmux.o: queue.h
+$(TARGET)\vocmux.o: qw.h
+$(TARGET)\vocmux.o: rex.h
+$(TARGET)\vocmux.o: rf.h
+$(TARGET)\vocmux.o: rfc.h
+$(TARGET)\vocmux.o: rficap.h
+$(TARGET)\vocmux.o: snd.h
+$(TARGET)\vocmux.o: target.h
+$(TARGET)\vocmux.o: targetg.h
+$(TARGET)\vocmux.o: task.h
+$(TARGET)\vocmux.o: tramp.h
+$(TARGET)\vocmux.o: voc.h
+$(TARGET)\vocmux.o: voc_core.h
+$(TARGET)\vocmux.o: vocdown.h
+$(TARGET)\vocmux.o: vocm2.h
+$(TARGET)\vocmux.o: vocmux.c
+$(TARGET)\vocmux.o: vocmux.h
+$(TARGET)\vocmux.o: vocsup.h
+
+$(TARGET)\vocsup.o: CUST4SPE.H
+$(TARGET)\vocsup.o: arm.h
+$(TARGET)\vocsup.o: assert.h
+$(TARGET)\vocsup.o: comdef.h
+$(TARGET)\vocsup.o: customer.h
+$(TARGET)\vocsup.o: err.h
+$(TARGET)\vocsup.o: memory.h
+$(TARGET)\vocsup.o: msg.h
+$(TARGET)\vocsup.o: nv.h
+$(TARGET)\vocsup.o: processor.h
+$(TARGET)\vocsup.o: queue.h
+$(TARGET)\vocsup.o: qw.h
+$(TARGET)\vocsup.o: rex.h
+$(TARGET)\vocsup.o: target.h
+$(TARGET)\vocsup.o: targetg.h
+$(TARGET)\vocsup.o: voc.h
+$(TARGET)\vocsup.o: vocmux.h
+$(TARGET)\vocsup.o: vocsup.c
+$(TARGET)\vocsup.o: vocsup.h
+
+# End of auto generated dependencies.
