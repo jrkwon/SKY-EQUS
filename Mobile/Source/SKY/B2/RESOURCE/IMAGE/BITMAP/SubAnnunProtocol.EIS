@@ -1,0 +1,42 @@
+/* ************************************************************************ */
+/* SubAnnunProtocol_8x11x1.ppm */
+LOCAL ROM BYTE abSubAnnunProtocol[] = {
+    0x7C, 
+    0xEE, 
+    0xD6, 
+    0xBA, 
+    0xBA, 
+    0x82, 
+    0xBA, 
+    0xBA, 
+    0xBA, 
+    0xFE, 
+    0x7C, 
+    0x7C, 
+    0xFE, 
+    0x86, 
+    0xBA, 
+    0xBA, 
+    0x86, 
+    0xBA, 
+    0xBA, 
+    0x86, 
+    0xFE, 
+    0x7C, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+    0x00, 
+};
+
+ROM BITMAP g_BmpSubAnnunProtocol = {
+    { { 'I', 'M', 'G' }, { 8, 11 }, 8, 1, FALSE, (COLOR)0x00, 0, { 0, } }, abSubAnnunProtocol
+};
+

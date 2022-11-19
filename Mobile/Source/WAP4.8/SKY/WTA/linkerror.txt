@@ -1,0 +1,23 @@
+C:\MSM-Project\ARM250\Bin\armlink -elf -map -info sizes,totals,interwork -list DOOLY.map -symbols DOOLY.sym -scatter Source\ModelDep\DOOLY.scl -o .\DownLoad\DOOLY.elf C:\MSM-Project\ARM250\Lib\armlib.16l  -VIA c:\windows\TEMP\nma62175.
+Warning: Conflicting requests for library armlib: variants .16l and _i.16l
+Error: Undefined symbol 'wtaon', referred to from OBJ\DOOLY\uiscall.o.
+Error: Undefined symbol 'WTAlength', referred to from OBJ\DOOLY\wapstate.o.
+Error: Undefined symbol 'WTAnumBuf', referred to from OBJ\DOOLY\wapstate.o.
+Error: Undefined symbol 'ERR_MMI_UNKNOWN_CONTENT', referred to from OBJ\DOOLY\wapstate.o.
+Error: Undefined symbol 'ERRTYPE_SKTT', referred to from OBJ\DOOLY\wapstate.o.
+Error: Undefined symbol 'wsp_send', referred to from OBJ\DOOLY\wapstate.o.
+Error: Undefined symbol 'CONTENT_UA', referred to from OBJ\DOOLY\waptask.o.
+Error: Undefined symbol 'WTAIa_publicMakeCall', referred to from OBJ\DOOLY\si_wtai.o.
+Error: Undefined symbol 'WTAIa_publicSendDTMF', referred to from OBJ\DOOLY\si_wtai.o.
+Error: Undefined symbol 'CLNTa_callFunction', referred to from OBJ\DOOLY\WAE_Cmmn.o.
+Error: Undefined symbol 'WDa_sendRequest', referred to from OBJ\DOOLY\WDP.o.
+Error: Undefined symbol 'CLNTa_choosePort', referred to from OBJ\DOOLY\WSPIF.o.
+Error: Undefined symbol 'getImageSize', referred to from OBJ\DOOLY\GenDsp.o.
+Error: Undefined symbol 'sisDecode', referred to from OBJ\DOOLY\GenDsp.o.
+Error: Undefined symbol 'b_EscapeURLString', referred to from OBJ\DOOLY\mmi_wap_menu.o.
+Errors in link, no output generated.
+NMAKE : fatal error U1077: 'C:\MSM-Project\ARM250\Bin\armlink.exe' : return code '0x1'
+Stop.
+Error executing nmake.
+
+Dooly.exe - 16 error(s), 1 warning(s)

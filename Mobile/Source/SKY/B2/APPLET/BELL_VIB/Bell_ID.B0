@@ -1,0 +1,186 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     Boa
+**
+** File:
+**     Bell_ID.B0
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-12-25 woodstok     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _BELL_ID_H_
+#define _BELL_ID_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Variable Declarations
+**---------------------------------------------------------------------------
+*/
+
+// 벨 그룹
+CONST BELL_GROUP_TYPE_T aBell_Group[NUM_BELL_GROUP] = 
+{
+    {TKN_BELL_GROUP_BASIC,          NUM_BELL_GROUP_BASIC},
+    {TKN_BELL_GROUP_CLASSIC1,       NUM_BELL_GROUP_CLASSIC1},
+    {TKN_BELL_GROUP_CLASSIC2,       NUM_BELL_GROUP_CLASSIC2},
+    {TKN_BELL_GROUP_SOUND_EFFECT,   NUM_BELL_GROUP_SOUND_EFFECT},
+    {TKN_BELL_GROUP_MY_BELL,        0 }
+};
+
+CONST BELL_NAME_TYPE_T aBell_List[NUM_BELL_LIST] =
+{
+// 동요/민요/기타
+    {TKN_BELL_SILENT_NIGHT,     MUS_SILENTNIGHT},
+    {TKN_BELL_ROAST_CHESTNUT,   MUS_GUMBAM},
+    {TKN_BELL_CUTE_BOY,         MUS_CUTEBOY},
+    {TKN_BELL_JOY_OF_GOD,       MUS_JOY},
+    {TKN_BELL_ROAD_OF_DREAM,    MUS_DREAM},
+    {TKN_BELL_IN_ROW,           MUS_NARANHI},
+    {TKN_BELL_DOREMI_SONG,      MUS_DOREMI},
+    {TKN_BELL_NOSE_OF_RUDOLPH,  MUS_RUDOLPH2},
+    {TKN_BELL_MONGKUMPO,        MUS_MONGGUMPO},
+    {TKN_BELL_MILYANG_ARIRANG,  MUS_MILYANG},
+    {TKN_BELL_YODEL_OF_FOREST,  MUS_YODDLE},
+    {TKN_BELL_LITTLE_ELEPHANT,  MUS_BABY_ELEPHANT1},
+    {TKN_BELL_UMBRELLA,         MUS_UMBRELLA},
+    {TKN_BELL_GIANT,            MUS_GIANT},
+    {TKN_BELL_BE_WELL,          MUS_NEWTOWN},
+    {TKN_BELL_SING_A_SONG,      MUS_DECKHALL2},
+    {TKN_BELL_JINGLE_BELL,      MUS_JINGLEBELL2},
+    {TKN_BELL_MERRY_XMAS,       MUS_MERRYXMAS},
+    {TKN_BELL_CONGRATULATION,   MUS_CONGRATULATION},
+    {TKN_BELL_FUNIKUL,          MUS_FUNIKULA},
+    {TKN_BELL_GOOD_HARVEST,     MUS_HARVEST},
+    {TKN_BELL_HYPER_PIPER,      MUS_HYPOPIPO},
+    {TKN_BELL_YELLOW_RIBBON,    MUS_YELLOWRIBBON},
+    {TKN_BELL_CHIM_CHIM,        MUS_CHIMCHIM1},
+
+// 클래식 1
+    {TKN_BELL_TRIUMPH,          MUS_AIDA},
+    {TKN_BELL_GOLDEN_WEDDING,   MUS_GOLDEN},
+    {TKN_BELL_WALTZ_OF_FLOWER,  MUS_FLOWER},
+    {TKN_BELL_DONAU_WALTZ,      MUS_DONAU2},
+    {TKN_BELL_LADETZKY,         MUS_LADETZKY},
+    {TKN_BELL_MENDELSSOHN,      MUS_VIOLINC},
+    {TKN_BELL_CELLO_SUITE,      MUS_1007},
+    {TKN_BELL_MINUET,           MUS_MINUET},
+    {TKN_BELL_VIOLIN_ROMANCE,   MUS_VIOLINROMANCE},
+    {TKN_BELL_SWAN,             MUS_CYNGNE},
+    {TKN_BELL_V_MINUET,         MUS_MENUET},
+    {TKN_BELL_SONG_OF_SPRING,   MUS_SONGSPRING},
+    {TKN_BELL_SOUND_OF_SPRING,  MUS_SOUNDSPRING},
+    {TKN_BELL_PATHETIC_1,       MUS_PATHETIQUE},
+    {TKN_BELL_PATHETIC_2,       MUS_PATHETIQUE_SONATA},
+    {TKN_BELL_SPRING,           MUS_SPRING},
+    {TKN_BELL_SABRE_DANCE,      MUS_SABREDANCE},
+    {TKN_BELL_TROUT,            MUS_TROUT},
+    {TKN_BELL_NOCTURN,          MUS_NOCTURN},
+    {TKN_BELL_FOR_ELISE,        MUS_FORELISE},
+
+
+// 클래식 2
+    {TKN_BELL_MAGICFLUTE,        MUS_MAGICFLUTE},
+    {TKN_BELL_SOUSA3,            MUS_SOUSA3},
+    {TKN_BELL_MARCH,             MUS_MARCH},
+    {TKN_BELL_WILLIAMTELL,       MUS_WILLIAMTELL},
+    {TKN_BELL_HUMORESQUE,        MUS_HUMORESQUE},
+    {TKN_BELL_IGOR,              MUS_IGOR},
+    {TKN_BELL_SOUSA2,            MUS_SOUSA2},
+    {TKN_BELL_TOY,               MUS_TOY},
+    {TKN_BELL_FANTASY,           MUS_FANTASY},
+    {TKN_BELL_WEDD,              MUS_WEDD},
+    {TKN_BELL_CARMEN,            MUS_CARMEN},
+    {TKN_BELL_CANCAN,            MUS_CANCAN},
+    {TKN_BELL_TURKEY,            MUS_TURKEY},
+    {TKN_BELL_TURKISH,           MUS_TURKISH},
+    {TKN_BELL_TOREDOR,           MUS_TOREDOR},
+    {TKN_BELL_CANON,             MUS_CANON},
+    {TKN_BELL_TRUMPET,           MUS_TRUMPET},
+    {TKN_BELL_HALLELLUJAH,       MUS_HALLELLUJAH},
+    {TKN_BELL_ARIA2,             MUS_ARIA2},
+    {TKN_BELL_SOUSA1,            MUS_SOUSA1},
+
+// 효과음
+    {TKN_BELL_CHINESE_NOODLES,   MUS_CHINESE_NOODLES},
+    {TKN_BELL_JAPAN_FESTIVAL,    MUS_JAPAN_FESTIVAL},
+    {TKN_BELL_WIND_CLOCK,        MUS_WIND_CLOCK},
+    {TKN_BELL_CUCKOO,            MUS_CUCKOO},
+    {TKN_BELL_AMBULANCE,         MUS_AMBULANCE},
+    {TKN_BELL_W_BELL,            MUS_W_BELL},
+    {TKN_BELL_CRACTION,          MUS_CRACTION},
+    {TKN_BELL_BICYCLE_BELL,      MUS_BICYCLE_BELL},
+    {TKN_BELL_RAILROAD,          MUS_RAILROAD},
+    {TKN_BELL_TRAIN,             MUS_TRAIN},
+    {TKN_BELL_GUDDY,             MUS_GUDDY},
+    {TKN_BELL_CICADAS,           MUS_CICADAS},
+    {TKN_BELL_WAVE,              MUS_WAVE},
+    {TKN_BELL_JINGLE1,           MUS_JINGLE1},      
+    {TKN_BELL_JINGLE2,           MUS_JINGLE2},      
+    {TKN_BELL_JINGLE3,           MUS_JINGLE3},      
+    {TKN_BELL_JINGLE4,           MUS_JINGLE4},      
+    {TKN_BELL_JINGLE5,           MUS_JINGLE5},      
+    {TKN_BELL_JINGLE6,           MUS_JINGLE6},      
+    {TKN_BELL_JINGLE7,           MUS_JINGLE7},      
+    {TKN_BELL_JINGLE8,           MUS_JINGLE10},     
+    {TKN_BELL_JINGLE9,           MUS_JINGLE11},     
+    {TKN_BELL_JINGLE10,          MUS_JINGLE12},     
+    {TKN_BELL_TELEPHONE1,        MUS_JAPAN_TELEPHONE},
+    {TKN_BELL_TELEPHONE2,        MUS_TELEPHONE2},   
+    {TKN_BELL_TELEPHONE3,        MUS_TELEPHONE5},   
+    {TKN_BELL_TELEPHONE4,        MUS_TELEPHONE8},   
+    {TKN_BELL_TELEPHONE5,        MUS_TELEPHONE9} 
+};
+
+
+/*
+**---------------------------------------------------------------------------
+**  Function(external use only) Declarations
+**---------------------------------------------------------------------------
+*/
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _BELL_ID_H_ */

@@ -1,0 +1,63 @@
+
+                       -- The EQUS coding convention --
+
+
+1. Use spaces instead of a tab
+   1 tab = 4 spaces
+
+2. USE CAPITAL LETTERS IN FILE AND PATH NAME
+   Do not assume the file system is case sensitive.
+
+3. EQUS file naming convention
+
+   eq<category><_|x>xxxx.c|h
+   
+   e.g.
+   eqa_idle.c    --> idle applet
+   eqc_nedt.c    --> dial number edit control 
+   eqc_aedt.c    --> alpha/hangul numeric edit control
+   eqs_grph.c    --> graphic system in display engine
+   eqsqevnt.c    --> q means qualcomm. the converting routine 
+                     from qualcomm event to EQUS event
+
+4. EQUS function naming convention
+
+   EQS_         state machine and display engine
+   EQA_         applet
+   EQA_MainXxxx the top applet of all sub applets in a file
+   sEQA_Xxxxx   local applet
+   EQC_         control
+
+5. Adding new feature, use FEATURE_SKTT_XXXX format.
+   There are so many features in the DMSS software.
+   I want to know which features are for SKTT.
+
+6. Never use the path in including header file.
+   We can change the directory sturcture at any time.
+
+7. function naming
+   <Verb><Object>
+   
+   e.g.
+   UpdateDisplay (0)
+   DisplayUpdate (X)
+   ClearScreen   (0)
+   ScreenClear   (X)   
+
+8. Do not include "eqx_xxxx.h".
+   While you're working in a applet, include only one file, "eqa.h".
+   Whenever you add a header file in an applet set, you should add 
+   the header file at the end of "eqa.h".
+   
+9. Never use "extern" in C implementation file
+   You have to make a header file to declare some functions or 
+   variables to "extern"
+
+10. image file name
+   <country>_xxxx.ebi
+   <country> is three characters.
+   ebi = Equs Bitmap Image
+
+   e.g.
+   kor_strt.ebi         The startup image for the Korean version   
+   usa_strt.ebi         The startup image for the English(USA) version

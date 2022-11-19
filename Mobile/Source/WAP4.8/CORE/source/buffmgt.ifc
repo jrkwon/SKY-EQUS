@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2001.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_BuffMgt__BuffMgt
+#define X_IFC_z_BuffMgt__BuffMgt
+#define XMK_IFC_TIME 995439254
+
+/* *************** DECLARATIONS IN PACKAGE BuffMgt *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "ctypes.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE PDU_Buffer  (TYPE section)
+* <<PACKAGE BuffMgt>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\buffmgt.sun(Declarations2),152(35,45),1)
+******/
+                /* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\buffmgt.sun(Declarations2),152(35,45),37) */
+
+#include "pdubuf.h"
+#include "tapicmmn.h"
+
+typedef pdubuf * pdubuf_ptr;
+
+#ifdef XREADANDWRITEF
+static char yCTemp_Data[ 4096 ];
+#endif
+
+
+
+/*****
+* NEWTYPE PDU_Buffer  (HEADING section)
+* <<PACKAGE BuffMgt>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\buffmgt.sun(Declarations2),152(35,45),1)
+******/
+                /* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\buffmgt.sun(Declarations2),152(35,45),37) */
+
+#define PDU_null() 0
+
+pdubuf *PDU_get(SDL_Natural ypar1);
+pdubuf *PDU_getFromData(void *ypar1, SDL_Natural ypar2);
+SDL_Boolean PDU_rel(pdubuf **ypar1);
+SDL_Boolean PDU_isNull(pdubuf *ypar1);
+SDL_Natural PDU_getLen(pdubuf *ypar1);
+SDL_Natural PDU_maxSiz(pdubuf *ypar1);
+pdubuf *PDU_copy(pdubuf *ypar1);
+SDL_Boolean PDU_inc (pdubuf *ypar1, SDL_Natural ypar2);
+SDL_Boolean PDU_dec (pdubuf *ypar1, SDL_Natural ypar2);
+
+SDL_Boolean PDU_getDat(pdubuf *ypar1, SDL_Octet_String* ypar2);
+SDL_Boolean PDU_insrt(pdubuf *ypar1, SDL_Natural ypar2, SDL_Octet_String* ypar3);
+SDL_Boolean PDU_strip(pdubuf *ypar1, SDL_Natural ypar2, SDL_Octet_String* ypar3);
+SDL_Boolean PDU_appnd(pdubuf *ypar1, SDL_Natural ypar2, SDL_Octet_String* ypar3);
+pdubuf *PDU_segm2pdu(pdubuf *ypar1, SDL_Natural ypar2, SDL_Natural ypar3);
+SDL_Boolean PDU_cutSegm(pdubuf *ypar1, SDL_Natural ypar2, SDL_Natural ypar3);
+
+#ifdef XREADANDWRITEF
+extern char *yWri_pdubuf_ptr XPP(( void  *C ));
+#endif
+
+#define yExtr_pdubuf_ptr(x, y) pdubuf_extract(x, y)
+#define yAddr_pdubuf_ptr(x, y) pdubuf_addr(x, y)
+
+
+
+#define yAssF_pdubuf_ptr(V,E,A)  V = E
+extern void yDef_pdubuf_ptr XPP(( pdubuf_ptr * ));
+#define yEqF_pdubuf_ptr(Expr1,Expr2)  (Expr1) == (Expr2)
+#define yNEqF_pdubuf_ptr(Expr1,Expr2)  (Expr1) != (Expr2)
+#ifndef ANY_pdubuf_ptr
+#define ANY_pdubuf_ptr
+#endif
+#endif
+   /* X_IFC_z_BuffMgt__BuffMgt */

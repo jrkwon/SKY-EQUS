@@ -1,0 +1,768 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WAP
+#define X_IFC_z_WAP
+#define XMK_IFC_TIME 977233142
+
+/* *************** DECLARATIONS IN SYSTEM WAP *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "wtlspckg.ifc"
+#include "wtls_wdp.ifc"
+#include "wdppckg.ifc"
+#include "wdp_udp.ifc"
+#include "wtppckg.ifc"
+#include "wtp_wdp.ifc"
+#include "wdp_ul.ifc"
+#include "sptp_tls.ifc"
+#include "wspcmwtp.ifc"
+#include "wspclwdp.ifc"
+#include "wtapckg.ifc"
+#include "pushpckg.ifc"
+#include "wae_wsp.ifc"
+#include "glbldecl.ifc"
+#include "stackmgr.ifc"
+#include "waepckg.ifc"
+#include "buffmgt.ifc"
+#include "ctypes.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*------------------------------ SIGNALS --------------------------------*/
+/* LoadURL IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    z_ctypes_4_VoidStar  Param2;
+    SDL_Boolean  Param3;
+    SDL_Integer  Param4;
+} yPDef_z_WAEPackage_06_LoadURL;
+typedef yPDef_z_WAEPackage_06_LoadURL  *yPDP_z_WAEPackage_06_LoadURL;
+#define yPDP_LoadURL  yPDP_z_WAEPackage_06_LoadURL
+#define yPDef_LoadURL  yPDef_z_WAEPackage_06_LoadURL
+#define LoadURL  39
+
+/* ReloadCard IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_07_ReloadCard;
+typedef yPDef_z_WAEPackage_07_ReloadCard  *yPDP_z_WAEPackage_07_ReloadCard;
+#define yPDP_ReloadCard  yPDP_z_WAEPackage_07_ReloadCard
+#define yPDef_ReloadCard  yPDef_z_WAEPackage_07_ReloadCard
+#define ReloadCard  40
+
+/* OpenView IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_08_OpenView;
+typedef yPDef_z_WAEPackage_08_OpenView  *yPDP_z_WAEPackage_08_OpenView;
+#define yPDP_OpenView  yPDP_z_WAEPackage_08_OpenView
+#define yPDef_OpenView  yPDef_z_WAEPackage_08_OpenView
+#define OpenView  41
+
+/* CloseView IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_09_CloseView;
+typedef yPDef_z_WAEPackage_09_CloseView  *yPDP_z_WAEPackage_09_CloseView;
+#define yPDP_CloseView  yPDP_z_WAEPackage_09_CloseView
+#define yPDef_CloseView  yPDef_z_WAEPackage_09_CloseView
+#define CloseView  42
+
+/* DiscardAllContext IN */
+#define DiscardAllContext  43
+
+/* InputString IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+} yPDef_z_WAEPackage_05_InputString;
+typedef yPDef_z_WAEPackage_05_InputString  *yPDP_z_WAEPackage_05_InputString;
+#define yPDP_InputString  yPDP_z_WAEPackage_05_InputString
+#define yPDef_InputString  yPDef_z_WAEPackage_05_InputString
+#define InputString  38
+
+/* Abort IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_0B_Abort;
+typedef yPDef_z_WAEPackage_0B_Abort  *yPDP_z_WAEPackage_0B_Abort;
+#define yPDP_Abort  yPDP_z_WAEPackage_0B_Abort
+#define yPDef_Abort  yPDef_z_WAEPackage_0B_Abort
+#define Abort  44
+
+/* GoBack IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_0C_GoBack;
+typedef yPDef_z_WAEPackage_0C_GoBack  *yPDP_z_WAEPackage_0C_GoBack;
+#define yPDP_GoBack  yPDP_z_WAEPackage_0C_GoBack
+#define yPDef_GoBack  yPDef_z_WAEPackage_0C_GoBack
+#define GoBack  45
+
+/* WTAResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+} yPDef_z_WAEPackage_0D_WTAResponse;
+typedef yPDef_z_WAEPackage_0D_WTAResponse  *yPDP_z_WAEPackage_0D_WTAResponse;
+#define yPDP_WTAResponse  yPDP_z_WAEPackage_0D_WTAResponse
+#define yPDef_WTAResponse  yPDef_z_WAEPackage_0D_WTAResponse
+#define WTAResponse  46
+
+/* PromptDialogResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+} yPDef_z_WAEPackage_0P_PromptDialogResponse;
+typedef yPDef_z_WAEPackage_0P_PromptDialogResponse  *yPDP_z_WAEPackage_0P_PromptDialogResponse;
+#define yPDP_PromptDialogResponse  yPDP_z_WAEPackage_0P_PromptDialogResponse
+#define yPDef_PromptDialogResponse  yPDef_z_WAEPackage_0P_PromptDialogResponse
+#define PromptDialogResponse  58
+
+/* ConfirmDialogResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Integer  Param3;
+} yPDef_z_WAEPackage_0Q_ConfirmDialogResponse;
+typedef yPDef_z_WAEPackage_0Q_ConfirmDialogResponse  *yPDP_z_WAEPackage_0Q_ConfirmDialogResponse;
+#define yPDP_ConfirmDialogResponse  yPDP_z_WAEPackage_0Q_ConfirmDialogResponse
+#define yPDef_ConfirmDialogResponse  yPDef_z_WAEPackage_0Q_ConfirmDialogResponse
+#define ConfirmDialogResponse  59
+
+/* AlertDialogResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_0R_AlertDialogResponse;
+typedef yPDef_z_WAEPackage_0R_AlertDialogResponse  *yPDP_z_WAEPackage_0R_AlertDialogResponse;
+#define yPDP_AlertDialogResponse  yPDP_z_WAEPackage_0R_AlertDialogResponse
+#define yPDef_AlertDialogResponse  yPDef_z_WAEPackage_0R_AlertDialogResponse
+#define AlertDialogResponse  60
+
+/* TextSigned IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Integer  Param3;
+    SDL_Integer  Param4;
+    z_ctypes_4_VoidStar  Param5;
+    z_ctypes_4_VoidStar  Param6;
+    SDL_Integer  Param7;
+    z_ctypes_4_VoidStar  Param8;
+    SDL_Integer  Param9;
+    SDL_Integer  Param10;
+    SDL_Integer  Param11;
+} yPDef_z_WAEPackage_0S_TextSigned;
+typedef yPDef_z_WAEPackage_0S_TextSigned  *yPDP_z_WAEPackage_0S_TextSigned;
+#define yPDP_TextSigned  yPDP_z_WAEPackage_0S_TextSigned
+#define yPDef_TextSigned  yPDef_z_WAEPackage_0S_TextSigned
+#define TextSigned  61
+
+/* WMLSLibFuncResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    z_ctypes_4_VoidStar  Param2;
+} yPDef_z_WAEPackage_0T_WMLSLibFuncResponse;
+typedef yPDef_z_WAEPackage_0T_WMLSLibFuncResponse  *yPDP_z_WAEPackage_0T_WMLSLibFuncResponse;
+#define yPDP_WMLSLibFuncResponse  yPDP_z_WAEPackage_0T_WMLSLibFuncResponse
+#define yPDef_WMLSLibFuncResponse  yPDef_z_WAEPackage_0T_WMLSLibFuncResponse
+#define WMLSLibFuncResponse  62
+
+/* GetContent IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+    SDL_Integer  Param2;
+    SDL_Integer  Param3;
+    z_ctypes_4_VoidStar  Param4;
+} yPDef_z_WAEPackage_00_GetContent;
+typedef yPDef_z_WAEPackage_00_GetContent  *yPDP_z_WAEPackage_00_GetContent;
+#define yPDP_GetContent  yPDP_z_WAEPackage_00_GetContent
+#define yPDef_GetContent  yPDef_z_WAEPackage_00_GetContent
+#define GetContent  33
+
+/* PostContent IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+    SDL_Integer  Param2;
+    SDL_Integer  Param3;
+    z_ctypes_4_VoidStar  Param4;
+    z_ctypes_4_VoidStar  Param5;
+    SDL_Integer  Param6;
+    SDL_Boolean  Param7;
+    z_ctypes_4_VoidStar  Param8;
+    SDL_Integer  Param9;
+    z_ctypes_4_VoidStar  Param10;
+    SDL_Natural  Param11;
+} yPDef_z_WAEPackage_01_PostContent;
+typedef yPDef_z_WAEPackage_01_PostContent  *yPDP_z_WAEPackage_01_PostContent;
+#define yPDP_PostContent  yPDP_z_WAEPackage_01_PostContent
+#define yPDef_PostContent  yPDef_z_WAEPackage_01_PostContent
+#define PostContent  34
+
+/* AcknowledgeContent IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_02_AcknowledgeContent;
+typedef yPDef_z_WAEPackage_02_AcknowledgeContent  *yPDP_z_WAEPackage_02_AcknowledgeContent;
+#define yPDP_AcknowledgeContent  yPDP_z_WAEPackage_02_AcknowledgeContent
+#define yPDef_AcknowledgeContent  yPDef_z_WAEPackage_02_AcknowledgeContent
+#define AcknowledgeContent  35
+
+/* CancelContent IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WAEPackage_03_CancelContent;
+typedef yPDef_z_WAEPackage_03_CancelContent  *yPDP_z_WAEPackage_03_CancelContent;
+#define yPDP_CancelContent  yPDP_z_WAEPackage_03_CancelContent
+#define yPDef_CancelContent  yPDef_z_WAEPackage_03_CancelContent
+#define CancelContent  36
+
+/* PostMoreContent IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    z_ctypes_4_VoidStar  Param2;
+    SDL_Integer  Param3;
+    SDL_Boolean  Param4;
+} yPDef_z_WAEPackage_04_PostMoreContent;
+typedef yPDef_z_WAEPackage_04_PostMoreContent  *yPDP_z_WAEPackage_04_PostMoreContent;
+#define yPDP_PostMoreContent  yPDP_z_WAEPackage_04_PostMoreContent
+#define yPDef_PostMoreContent  yPDef_z_WAEPackage_04_PostMoreContent
+#define PostMoreContent  37
+
+/* KeySelected IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_0K_KeySelected;
+typedef yPDef_z_WAEPackage_0K_KeySelected  *yPDP_z_WAEPackage_0K_KeySelected;
+#define yPDP_KeySelected  yPDP_z_WAEPackage_0K_KeySelected
+#define yPDef_KeySelected  yPDef_z_WAEPackage_0K_KeySelected
+#define KeySelected  53
+
+/* ChangeOptionState IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_0N_ChangeOptionState;
+typedef yPDef_z_WAEPackage_0N_ChangeOptionState  *yPDP_z_WAEPackage_0N_ChangeOptionState;
+#define yPDP_ChangeOptionState  yPDP_z_WAEPackage_0N_ChangeOptionState
+#define yPDef_ChangeOptionState  yPDef_z_WAEPackage_0N_ChangeOptionState
+#define ChangeOptionState  56
+
+/* ImageSelected IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_0M_ImageSelected;
+typedef yPDef_z_WAEPackage_0M_ImageSelected  *yPDP_z_WAEPackage_0M_ImageSelected;
+#define yPDP_ImageSelected  yPDP_z_WAEPackage_0M_ImageSelected
+#define yPDef_ImageSelected  yPDef_z_WAEPackage_0M_ImageSelected
+#define ImageSelected  55
+
+/* TextSelected IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WAEPackage_0L_TextSelected;
+typedef yPDef_z_WAEPackage_0L_TextSelected  *yPDP_z_WAEPackage_0L_TextSelected;
+#define yPDP_TextSelected  yPDP_z_WAEPackage_0L_TextSelected
+#define yPDef_TextSelected  yPDef_z_WAEPackage_0L_TextSelected
+#define TextSelected  54
+
+/* LinkInfo IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Integer  Param3;
+} yPDef_z_WAEPackage_0O_LinkInfo;
+typedef yPDef_z_WAEPackage_0O_LinkInfo  *yPDP_z_WAEPackage_0O_LinkInfo;
+#define yPDP_LinkInfo  yPDP_z_WAEPackage_0O_LinkInfo
+#define yPDef_LinkInfo  yPDef_z_WAEPackage_0O_LinkInfo
+#define LinkInfo  57
+
+/* InitCache IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_7_LongInt  Param1;
+    z_ctypes_7_LongInt  Param2;
+} yPDef_z_WAEPackage_0E_InitCache;
+typedef yPDef_z_WAEPackage_0E_InitCache  *yPDP_z_WAEPackage_0E_InitCache;
+#define yPDP_InitCache  yPDP_z_WAEPackage_0E_InitCache
+#define yPDef_InitCache  yPDef_z_WAEPackage_0E_InitCache
+#define InitCache  47
+
+/* PrepareCache IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_7_LongInt  Param1;
+} yPDef_z_WAEPackage_0F_PrepareCache;
+typedef yPDef_z_WAEPackage_0F_PrepareCache  *yPDP_z_WAEPackage_0F_PrepareCache;
+#define yPDP_PrepareCache  yPDP_z_WAEPackage_0F_PrepareCache
+#define yPDef_PrepareCache  yPDef_z_WAEPackage_0F_PrepareCache
+#define PrepareCache  48
+
+/* PasswordDialogResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+    z_ctypes_4_VoidStar  Param4;
+} yPDef_z_WAEPackage_0G_PasswordDialogResponse;
+typedef yPDef_z_WAEPackage_0G_PasswordDialogResponse  *yPDP_z_WAEPackage_0G_PasswordDialogResponse;
+#define yPDP_PasswordDialogResponse  yPDP_z_WAEPackage_0G_PasswordDialogResponse
+#define yPDef_PasswordDialogResponse  yPDef_z_WAEPackage_0G_PasswordDialogResponse
+#define PasswordDialogResponse  49
+
+/* SetupConnectionDone IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Boolean  Param3;
+} yPDef_z_WAEPackage_0H_SetupConnectionDone;
+typedef yPDef_z_WAEPackage_0H_SetupConnectionDone  *yPDP_z_WAEPackage_0H_SetupConnectionDone;
+#define yPDP_SetupConnectionDone  yPDP_z_WAEPackage_0H_SetupConnectionDone
+#define yPDef_SetupConnectionDone  yPDef_z_WAEPackage_0H_SetupConnectionDone
+#define SetupConnectionDone  50
+
+/* CloseConnection IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Boolean  Param3;
+} yPDef_z_WAEPackage_0I_CloseConnection;
+typedef yPDef_z_WAEPackage_0I_CloseConnection  *yPDP_z_WAEPackage_0I_CloseConnection;
+#define yPDP_CloseConnection  yPDP_z_WAEPackage_0I_CloseConnection
+#define yPDef_CloseConnection  yPDef_z_WAEPackage_0I_CloseConnection
+#define CloseConnection  51
+
+/* RequestConnectionDone IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Boolean  Param2;
+} yPDef_z_WAEPackage_0J_RequestConnectionDone;
+typedef yPDef_z_WAEPackage_0J_RequestConnectionDone  *yPDP_z_WAEPackage_0J_RequestConnectionDone;
+#define yPDP_RequestConnectionDone  yPDP_z_WAEPackage_0J_RequestConnectionDone
+#define yPDef_RequestConnectionDone  yPDef_z_WAEPackage_0J_RequestConnectionDone
+#define RequestConnectionDone  52
+
+/* GetFileResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    z_ctypes_4_VoidStar  Param2;
+    SDL_Integer  Param3;
+    z_ctypes_4_VoidStar  Param4;
+} yPDef_z_WAEPackage_1E_GetFileResponse;
+typedef yPDef_z_WAEPackage_1E_GetFileResponse  *yPDP_z_WAEPackage_1E_GetFileResponse;
+#define yPDP_GetFileResponse  yPDP_z_WAEPackage_1E_GetFileResponse
+#define yPDef_GetFileResponse  yPDef_z_WAEPackage_1E_GetFileResponse
+#define GetFileResponse  83
+
+/* CallFunctionResult IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    z_ctypes_4_VoidStar  Param2;
+    SDL_Integer  Param3;
+    z_ctypes_4_VoidStar  Param4;
+    z_ctypes_4_VoidStar  Param5;
+} yPDef_z_WAEPackage_1F_CallFunctionResult;
+typedef yPDef_z_WAEPackage_1F_CallFunctionResult  *yPDP_z_WAEPackage_1F_CallFunctionResult;
+#define yPDP_CallFunctionResult  yPDP_z_WAEPackage_1F_CallFunctionResult
+#define yPDef_CallFunctionResult  yPDef_z_WAEPackage_1F_CallFunctionResult
+#define CallFunctionResult  84
+
+/* FileFunctionTimer IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Natural  Param1;
+} yPDef_z_WAEPackage_1G_FileFunctionTimer;
+typedef yPDef_z_WAEPackage_1G_FileFunctionTimer  *yPDP_z_WAEPackage_1G_FileFunctionTimer;
+#define yPDP_FileFunctionTimer  yPDP_z_WAEPackage_1G_FileFunctionTimer
+#define yPDef_FileFunctionTimer  yPDef_z_WAEPackage_1G_FileFunctionTimer
+#define FileFunctionTimer  85
+
+/* ChangeStatus IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_0_ChangeStatus;
+typedef yPDef_z_PUSHPackage_0_ChangeStatus  *yPDP_z_PUSHPackage_0_ChangeStatus;
+#define yPDP_ChangeStatus  yPDP_z_PUSHPackage_0_ChangeStatus
+#define yPDef_ChangeStatus  yPDef_z_PUSHPackage_0_ChangeStatus
+#define ChangeStatus  139
+
+/* LoadSI IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_1_LoadSI;
+typedef yPDef_z_PUSHPackage_1_LoadSI  *yPDP_z_PUSHPackage_1_LoadSI;
+#define yPDP_LoadSI  yPDP_z_PUSHPackage_1_LoadSI
+#define yPDef_LoadSI  yPDef_z_PUSHPackage_1_LoadSI
+#define LoadSI  140
+
+/* LoadSL IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_2_LoadSL;
+typedef yPDef_z_PUSHPackage_2_LoadSL  *yPDP_z_PUSHPackage_2_LoadSL;
+#define yPDP_LoadSL  yPDP_z_PUSHPackage_2_LoadSL
+#define yPDef_LoadSL  yPDef_z_PUSHPackage_2_LoadSL
+#define LoadSL  141
+
+/* GetSIinfo IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_3_GetSIinfo;
+typedef yPDef_z_PUSHPackage_3_GetSIinfo  *yPDP_z_PUSHPackage_3_GetSIinfo;
+#define yPDP_GetSIinfo  yPDP_z_PUSHPackage_3_GetSIinfo
+#define yPDef_GetSIinfo  yPDef_z_PUSHPackage_3_GetSIinfo
+#define GetSIinfo  142
+
+/* GetSLinfo IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_4_GetSLinfo;
+typedef yPDef_z_PUSHPackage_4_GetSLinfo  *yPDP_z_PUSHPackage_4_GetSLinfo;
+#define yPDP_GetSLinfo  yPDP_z_PUSHPackage_4_GetSLinfo
+#define yPDef_GetSLinfo  yPDef_z_PUSHPackage_4_GetSLinfo
+#define GetSLinfo  143
+
+/* DeleteSI IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_5_DeleteSI;
+typedef yPDef_z_PUSHPackage_5_DeleteSI  *yPDP_z_PUSHPackage_5_DeleteSI;
+#define yPDP_DeleteSI  yPDP_z_PUSHPackage_5_DeleteSI
+#define yPDef_DeleteSI  yPDef_z_PUSHPackage_5_DeleteSI
+#define DeleteSI  144
+
+/* DeleteSL IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_PUSHPackage_6_DeleteSL;
+typedef yPDef_z_PUSHPackage_6_DeleteSL  *yPDP_z_PUSHPackage_6_DeleteSL;
+#define yPDP_DeleteSL  yPDP_z_PUSHPackage_6_DeleteSL
+#define yPDef_DeleteSL  yPDef_z_PUSHPackage_6_DeleteSL
+#define DeleteSL  145
+
+/* PushReqConnectionDone IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+    SDL_Boolean  Param3;
+} yPDef_z_PUSHPackage_7_PushReqConnectionDone;
+typedef yPDef_z_PUSHPackage_7_PushReqConnectionDone  *yPDP_z_PUSHPackage_7_PushReqConnectionDone;
+#define yPDP_PushReqConnectionDone  yPDP_z_PUSHPackage_7_PushReqConnectionDone
+#define yPDef_PushReqConnectionDone  yPDef_z_PUSHPackage_7_PushReqConnectionDone
+#define PushReqConnectionDone  146
+
+/* WTAEvent IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+    z_ctypes_4_VoidStar  Param2;
+} yPDef_z_WTAPackage_2_WTAEvent;
+typedef yPDef_z_WTAPackage_2_WTAEvent  *yPDP_z_WTAPackage_2_WTAEvent;
+#define yPDP_WTAEvent  yPDP_z_WTAPackage_2_WTAEvent
+#define yPDef_WTAEvent  yPDef_z_WTAPackage_2_WTAEvent
+#define WTAEvent  122
+
+/* WTAExecuteService IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+} yPDef_z_WTAPackage_1_WTAExecuteService;
+typedef yPDef_z_WTAPackage_1_WTAExecuteService  *yPDP_z_WTAPackage_1_WTAExecuteService;
+#define yPDP_WTAExecuteService  yPDP_z_WTAPackage_1_WTAExecuteService
+#define yPDef_WTAExecuteService  yPDef_z_WTAPackage_1_WTAExecuteService
+#define WTAExecuteService  121
+
+/* TerminateWTAService IN */
+#define TerminateWTAService  120
+
+/* WTAcConfirmInstallation IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WTAPackage_3_WTAcConfirmInstallation;
+typedef yPDef_z_WTAPackage_3_WTAcConfirmInstallation  *yPDP_z_WTAPackage_3_WTAcConfirmInstallation;
+#define yPDP_WTAcConfirmInstallation  yPDP_z_WTAPackage_3_WTAcConfirmInstallation
+#define yPDef_WTAcConfirmInstallation  yPDef_z_WTAPackage_3_WTAcConfirmInstallation
+#define WTAcConfirmInstallation  123
+
+/* WTAcRetryGetInstallationResult IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WTAPackage_4_WTAcRetryGetInstallationResult;
+typedef yPDef_z_WTAPackage_4_WTAcRetryGetInstallationResult  *yPDP_z_WTAPackage_4_WTAcRetryGetInstallationResult;
+#define yPDP_WTAcRetryGetInstallationResult  yPDP_z_WTAPackage_4_WTAcRetryGetInstallationResult
+#define yPDef_WTAcRetryGetInstallationResult  yPDef_z_WTAPackage_4_WTAcRetryGetInstallationResult
+#define WTAcRetryGetInstallationResult  124
+
+/* WTAcShowInstallationResult IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Integer  Param2;
+} yPDef_z_WTAPackage_5_WTAcShowInstallationResult;
+typedef yPDef_z_WTAPackage_5_WTAcShowInstallationResult  *yPDP_z_WTAPackage_5_WTAcShowInstallationResult;
+#define yPDP_WTAcShowInstallationResult  yPDP_z_WTAPackage_5_WTAcShowInstallationResult
+#define yPDef_WTAcShowInstallationResult  yPDef_z_WTAPackage_5_WTAcShowInstallationResult
+#define WTAcShowInstallationResult  125
+
+/* WTAcAbortInstallation IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WTAPackage_6_WTAcAbortInstallation;
+typedef yPDef_z_WTAPackage_6_WTAcAbortInstallation  *yPDP_z_WTAPackage_6_WTAcAbortInstallation;
+#define yPDP_WTAcAbortInstallation  yPDP_z_WTAPackage_6_WTAcAbortInstallation
+#define yPDef_WTAcAbortInstallation  yPDef_z_WTAPackage_6_WTAcAbortInstallation
+#define WTAcAbortInstallation  126
+
+/* WTAcGetServices IN */
+#define WTAcGetServices  127
+
+/* WTAcDeleteService IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+} yPDef_z_WTAPackage_8_WTAcDeleteService;
+typedef yPDef_z_WTAPackage_8_WTAcDeleteService  *yPDP_z_WTAPackage_8_WTAcDeleteService;
+#define yPDP_WTAcDeleteService  yPDP_z_WTAPackage_8_WTAcDeleteService
+#define yPDef_WTAcDeleteService  yPDef_z_WTAPackage_8_WTAcDeleteService
+#define WTAcDeleteService  128
+
+/* WTAcClearServices IN */
+#define WTAcClearServices  129
+
+/* StartWAPStack IN */
+#define StartWAPStack  155
+
+/* TerminateWAPStack IN */
+#define TerminateWAPStack  164
+
+/* StartResult OUT */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Natural  Param1;
+} yPDef_z_StackMgr_1_StartResult;
+typedef yPDef_z_StackMgr_1_StartResult  *yPDP_z_StackMgr_1_StartResult;
+#define yPDP_StartResult  yPDP_z_StackMgr_1_StartResult
+#define yPDef_StartResult  yPDef_z_StackMgr_1_StartResult
+#define StartResult  156
+
+/* WTPWaitTimeout IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+} yPDef_z_WTPpckg_D_WTPWaitTimeout;
+typedef yPDef_z_WTPpckg_D_WTPWaitTimeout  *yPDP_z_WTPpckg_D_WTPWaitTimeout;
+#define yPDP_WTPWaitTimeout  yPDP_z_WTPpckg_D_WTPWaitTimeout
+#define yPDef_WTPWaitTimeout  yPDef_z_WTPpckg_D_WTPWaitTimeout
+#define WTPWaitTimeout  255
+
+/* VerifyCertificateChainResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+} yPDef_VerifyCertificateChainResponse;
+typedef yPDef_VerifyCertificateChainResponse  *yPDP_VerifyCertificateChainResponse;
+#define VerifyCertificateChainResponse  213
+
+/* KeyExchangeResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    SDL_Octet  Param3;
+    z_ctypes_4_VoidStar  Param4;
+    SDL_Natural  Param5;
+} yPDef_KeyExchangeResponse;
+typedef yPDef_KeyExchangeResponse  *yPDP_KeyExchangeResponse;
+#define KeyExchangeResponse  214
+
+/* PRFResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+    SDL_Natural  Param4;
+} yPDef_PRFResponse;
+typedef yPDef_PRFResponse  *yPDP_PRFResponse;
+#define PRFResponse  215
+
+/* GetMethodsResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+    SDL_Natural  Param4;
+    z_ctypes_4_VoidStar  Param5;
+    SDL_Natural  Param6;
+    z_ctypes_4_VoidStar  Param7;
+    SDL_Natural  Param8;
+} yPDef_GetMethodsResponse;
+typedef yPDef_GetMethodsResponse  *yPDP_GetMethodsResponse;
+#define GetMethodsResponse  216
+
+/* GetClientCertificateResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+    SDL_Natural  Param4;
+    z_ctypes_4_VoidStar  Param5;
+    SDL_Natural  Param6;
+} yPDef_GetClientCertificateResponse;
+typedef yPDef_GetClientCertificateResponse  *yPDP_GetClientCertificateResponse;
+#define GetClientCertificateResponse  217
+
+/* ComputeSignatureResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    z_ctypes_4_VoidStar  Param3;
+    SDL_Natural  Param4;
+} yPDef_ComputeSignatureResponse;
+typedef yPDef_ComputeSignatureResponse  *yPDP_ComputeSignatureResponse;
+#define ComputeSignatureResponse  218
+
+/* PeerLookupResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    SDL_Octet  Param3;
+} yPDef_PeerLookupResponse;
+typedef yPDef_PeerLookupResponse  *yPDP_PeerLookupResponse;
+#define PeerLookupResponse  219
+
+/* SessionFetchResponse IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_PId  Param1;
+    SDL_Integer  Param2;
+    SDL_Octet  Param3;
+    z_ctypes_4_VoidStar  Param4;
+    SDL_Octet  Param5;
+    SDL_Octet  Param6;
+    SDL_Octet  Param7;
+    SDL_Octet  Param8;
+    z_ctypes_4_VoidStar  Param9;
+    SDL_Natural  Param10;
+} yPDef_SessionFetchResponse;
+typedef yPDef_SessionFetchResponse  *yPDP_SessionFetchResponse;
+#define SessionFetchResponse  220
+
+/* UDPsendReq OUT */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Octet_String  Param1;
+    DeviceAddress  Param2;
+    DeviceAddress  Param3;
+    SDL_Natural  Param4;
+    SDL_Natural  Param5;
+} yPDef_z_WDP_UDP_0_UDPsendReq;
+typedef yPDef_z_WDP_UDP_0_UDPsendReq  *yPDP_z_WDP_UDP_0_UDPsendReq;
+#define yPDP_UDPsendReq  yPDP_z_WDP_UDP_0_UDPsendReq
+#define yPDef_UDPsendReq  yPDef_z_WDP_UDP_0_UDPsendReq
+#define UDPsendReq  197
+
+/* RecUDPDatagram IN */
+typedef struct {
+    SIGNAL_VARS
+    z_ctypes_4_VoidStar  Param1;
+    SDL_Natural  Param2;
+    DeviceAddress  Param3;
+    DeviceAddress  Param4;
+    SDL_Natural  Param5;
+    SDL_Natural  Param6;
+} yPDef_z_WDP_UDP_1_RecUDPDatagram;
+typedef yPDef_z_WDP_UDP_1_RecUDPDatagram  *yPDP_z_WDP_UDP_1_RecUDPDatagram;
+#define yPDP_RecUDPDatagram  yPDP_z_WDP_UDP_1_RecUDPDatagram
+#define yPDef_RecUDPDatagram  yPDef_z_WDP_UDP_1_RecUDPDatagram
+#define RecUDPDatagram  198
+
+/* UDPErrorInd IN */
+typedef struct {
+    SIGNAL_VARS
+    SDL_Integer  Param1;
+    SDL_Natural  Param2;
+} yPDef_z_WDP_UDP_2_UDPErrorInd;
+typedef yPDef_z_WDP_UDP_2_UDPErrorInd  *yPDP_z_WDP_UDP_2_UDPErrorInd;
+#define yPDP_UDPErrorInd  yPDP_z_WDP_UDP_2_UDPErrorInd
+#define yPDef_UDPErrorInd  yPDef_z_WDP_UDP_2_UDPErrorInd
+#define UDPErrorInd  199
+
+#endif
+   /* X_IFC_z_WAP */

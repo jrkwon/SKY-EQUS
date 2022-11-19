@@ -1,0 +1,429 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WAEPackage__WAEPackage
+#define X_IFC_z_WAEPackage__WAEPackage
+#define XMK_IFC_TIME 956221797
+
+/* *************** DECLARATIONS IN PACKAGE WAEPackage *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "ctypes.ifc"
+
+/*------------------------------ SYNONYMS -------------------------------*/
+#define z_WAEPackage_56_MAXNUMBEROFWMLUA SDL_INTEGER_LIT(1)
+#define MAXNUMBEROFWMLUA SDL_INTEGER_LIT(1)
+
+#define z_WAEPackage_5C_nCache SDL_INTEGER_LIT(0)
+#define nCache SDL_INTEGER_LIT(0)
+
+#define z_WAEPackage_5D_nUpdateCache SDL_INTEGER_LIT(1)
+#define nUpdateCache SDL_INTEGER_LIT(1)
+
+#define z_WAEPackage_5E_nNoCache SDL_INTEGER_LIT(2)
+#define nNoCache SDL_INTEGER_LIT(2)
+
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE RequestType  (TYPE section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),1)
+******/
+typedef struct z_WAEPackage_2U_RequestType_s {
+    SDL_Integer  UA_Type;
+    SDL_Integer  Scheme;
+    SDL_Integer  SID;
+    SDL_Integer  TID;
+    z_ctypes_4_VoidStar  RequestStruct;
+    SDL_Integer  Reload;
+    SDL_Integer  Prio;
+} z_WAEPackage_2U_RequestType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_RequestType z_WAEPackage_2U_RequestType
+#else
+#define RequestType z_WAEPackage_2U_RequestType
+#endif
+
+/*****
+* NEWTYPE ResponseType  (TYPE section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),11)
+******/
+typedef struct z_WAEPackage_2V_ResponseType_s {
+    SDL_Integer  Scheme;
+    SDL_Integer  SID;
+    SDL_Integer  TID;
+    z_ctypes_4_VoidStar  HeaderHandle;
+    z_ctypes_4_VoidStar  ContentType;
+    z_ctypes_4_VoidStar  BodyData;
+    SDL_Integer  BodyDataLength;
+    SDL_Octet  Status;
+    z_ctypes_4_VoidStar  ExtParameters;
+} z_WAEPackage_2V_ResponseType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_ResponseType z_WAEPackage_2V_ResponseType
+#else
+#define ResponseType z_WAEPackage_2V_ResponseType
+#endif
+
+/*****
+* NEWTYPE SessionType  (TYPE section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),23)
+******/
+typedef struct z_WAEPackage_2W_SessionType_s {
+    z_ctypes_4_VoidStar  Network;
+    z_ctypes_4_VoidStar  UaSettings;
+    SDL_Integer  ViewID;
+} z_WAEPackage_2W_SessionType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SessionType z_WAEPackage_2W_SessionType
+#else
+#define SessionType z_WAEPackage_2W_SessionType
+#endif
+
+/*****
+* NEWTYPE RequestType  (HEADING section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),1)
+******/
+
+#define yAssF_z_WAEPackage_2U_RequestType(V,E,A)  V = E
+extern void yDef_z_WAEPackage_2U_RequestType
+  XPP(( z_WAEPackage_2U_RequestType * ));
+extern SDL_Boolean yEq_z_WAEPackage_2U_RequestType
+  XPP(( z_WAEPackage_2U_RequestType, z_WAEPackage_2U_RequestType ));
+#define yEqF_z_WAEPackage_2U_RequestType(Expr1,Expr2)  yEq_z_WAEPackage_2U_RequestType(Expr1,Expr2)
+#define yNEqF_z_WAEPackage_2U_RequestType(Expr1,Expr2)  ( ! yEq_z_WAEPackage_2U_RequestType(Expr1,Expr2) )
+extern z_WAEPackage_2U_RequestType yMake_z_WAEPackage_2U_RequestType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Integer, SDL_Integer,
+  z_ctypes_4_VoidStar, SDL_Integer, SDL_Integer ));
+#ifndef ANY_z_WAEPackage_2U_RequestType
+#define ANY_z_WAEPackage_2U_RequestType  yMake_z_WAEPackage_2U_RequestType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_SDL_Integer, ANY_SDL_Integer)
+#endif
+#define z_WAEPackage_2U3_copy(P)  P
+
+/*****
+* NEWTYPE ResponseType  (HEADING section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),11)
+******/
+
+#define yAssF_z_WAEPackage_2V_ResponseType(V,E,A)  V = E
+extern void yDef_z_WAEPackage_2V_ResponseType
+  XPP(( z_WAEPackage_2V_ResponseType * ));
+extern SDL_Boolean yEq_z_WAEPackage_2V_ResponseType
+  XPP(( z_WAEPackage_2V_ResponseType, z_WAEPackage_2V_ResponseType ));
+#define yEqF_z_WAEPackage_2V_ResponseType(Expr1,Expr2)  yEq_z_WAEPackage_2V_ResponseType(Expr1,Expr2)
+#define yNEqF_z_WAEPackage_2V_ResponseType(Expr1,Expr2)  ( ! yEq_z_WAEPackage_2V_ResponseType(Expr1,Expr2) )
+extern z_WAEPackage_2V_ResponseType yMake_z_WAEPackage_2V_ResponseType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar, z_ctypes_4_VoidStar, SDL_Integer, SDL_Octet,
+  z_ctypes_4_VoidStar ));
+#ifndef ANY_z_WAEPackage_2V_ResponseType
+#define ANY_z_WAEPackage_2V_ResponseType  yMake_z_WAEPackage_2V_ResponseType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar, ANY_SDL_Integer, \
+  ANY_SDL_Octet, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAEPackage_2V3_copy(P)  P
+
+/*****
+* NEWTYPE SessionType  (HEADING section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\Maintenance\WAP_1.1\System\base_co\sdl\packages\WAEPackage.sun(WSPIFSignals),530(20,40),23)
+******/
+
+#define yAssF_z_WAEPackage_2W_SessionType(V,E,A)  V = E
+extern void yDef_z_WAEPackage_2W_SessionType
+  XPP(( z_WAEPackage_2W_SessionType * ));
+extern SDL_Boolean yEq_z_WAEPackage_2W_SessionType
+  XPP(( z_WAEPackage_2W_SessionType, z_WAEPackage_2W_SessionType ));
+#define yEqF_z_WAEPackage_2W_SessionType(Expr1,Expr2)  yEq_z_WAEPackage_2W_SessionType(Expr1,Expr2)
+#define yNEqF_z_WAEPackage_2W_SessionType(Expr1,Expr2)  ( ! yEq_z_WAEPackage_2W_SessionType(Expr1,Expr2) )
+extern z_WAEPackage_2W_SessionType yMake_z_WAEPackage_2W_SessionType
+  XPP(( z_ctypes_4_VoidStar, z_ctypes_4_VoidStar, SDL_Integer ));
+#ifndef ANY_z_WAEPackage_2W_SessionType
+#define ANY_z_WAEPackage_2W_SessionType  yMake_z_WAEPackage_2W_SessionType(ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar, ANY_SDL_Integer)
+#endif
+#define z_WAEPackage_2W3_copy(P)  P
+
+/*------------------------------ SYNONYMS -------------------------------*/
+extern SDL_Octet  z_WAEPackage_2X_Get;
+#define Get  z_WAEPackage_2X_Get
+
+extern SDL_Octet  z_WAEPackage_2Y_Post;
+#define Post  z_WAEPackage_2Y_Post
+
+extern SDL_Octet  z_WAEPackage_2Z_anything;
+#define anything  z_WAEPackage_2Z_anything
+
+extern SDL_Octet  z_WAEPackage_30_text;
+#define text  z_WAEPackage_30_text
+
+extern SDL_Octet  z_WAEPackage_31_text_html;
+#define text_html  z_WAEPackage_31_text_html
+
+extern SDL_Octet  z_WAEPackage_32_text_plain;
+#define text_plain  z_WAEPackage_32_text_plain
+
+extern SDL_Octet  z_WAEPackage_33_text_x_hdml;
+#define text_x_hdml  z_WAEPackage_33_text_x_hdml
+
+extern SDL_Octet  z_WAEPackage_34_text_x_ttml;
+#define text_x_ttml  z_WAEPackage_34_text_x_ttml
+
+extern SDL_Octet  z_WAEPackage_35_text_x_vCalendar;
+#define text_x_vCalendar  z_WAEPackage_35_text_x_vCalendar
+
+extern SDL_Octet  z_WAEPackage_36_text_x_vCard;
+#define text_x_vCard  z_WAEPackage_36_text_x_vCard
+
+extern SDL_Octet  z_WAEPackage_37_text_x_wapwml;
+#define text_x_wapwml  z_WAEPackage_37_text_x_wapwml
+
+extern SDL_Octet  z_WAEPackage_38_text_x_wapwmlscript;
+#define text_x_wapwmlscript  z_WAEPackage_38_text_x_wapwmlscript
+
+extern SDL_Octet  z_WAEPackage_39_text_x_wapwta_event;
+#define text_x_wapwta_event  z_WAEPackage_39_text_x_wapwta_event
+
+extern SDL_Octet  z_WAEPackage_3A_multipart;
+#define multipart  z_WAEPackage_3A_multipart
+
+extern SDL_Octet  z_WAEPackage_3B_multipart_mixed;
+#define multipart_mixed  z_WAEPackage_3B_multipart_mixed
+
+extern SDL_Octet  z_WAEPackage_3C_multipart_form_data;
+#define multipart_form_data  z_WAEPackage_3C_multipart_form_data
+
+extern SDL_Octet  z_WAEPackage_3D_multipart_byteranges;
+#define multipart_byteranges  z_WAEPackage_3D_multipart_byteranges
+
+extern SDL_Octet  z_WAEPackage_3E_multipart_alternative;
+#define multipart_alternative  z_WAEPackage_3E_multipart_alternative
+
+extern SDL_Octet  z_WAEPackage_3F_application;
+#define application  z_WAEPackage_3F_application
+
+extern SDL_Octet  z_WAEPackage_3G_application_java_vm;
+#define application_java_vm  z_WAEPackage_3G_application_java_vm
+
+extern SDL_Octet  z_WAEPackage_3H_application_x_www_form_urlencoded;
+#define application_x_www_form_urlencoded  z_WAEPackage_3H_application_x_www_form_urlencoded
+
+extern SDL_Octet  z_WAEPackage_3I_application_x_hdmlc;
+#define application_x_hdmlc  z_WAEPackage_3I_application_x_hdmlc
+
+extern SDL_Octet  z_WAEPackage_3J_application_vnd_wapwmlc;
+#define application_vnd_wapwmlc  z_WAEPackage_3J_application_vnd_wapwmlc
+
+extern SDL_Octet  z_WAEPackage_3K_application_vnd_wapwbxml;
+#define application_vnd_wapwbxml  z_WAEPackage_3K_application_vnd_wapwbxml
+
+extern SDL_Octet  z_WAEPackage_3L_application_vnd_wapwmlscriptc;
+#define application_vnd_wapwmlscriptc  z_WAEPackage_3L_application_vnd_wapwmlscriptc
+
+extern SDL_Octet  z_WAEPackage_3M_application_x_wapwta_eventc;
+#define application_x_wapwta_eventc  z_WAEPackage_3M_application_x_wapwta_eventc
+
+extern SDL_Octet  z_WAEPackage_3N_application_x_wapuaprof;
+#define application_x_wapuaprof  z_WAEPackage_3N_application_x_wapuaprof
+
+extern SDL_Octet  z_WAEPackage_3O_application_x_wapwtls_ca_certificate;
+#define application_x_wapwtls_ca_certificate  z_WAEPackage_3O_application_x_wapwtls_ca_certificate
+
+extern SDL_Octet  z_WAEPackage_3P_application_x_wapwtls_user_certificate;
+#define application_x_wapwtls_user_certificate  z_WAEPackage_3P_application_x_wapwtls_user_certificate
+
+extern SDL_Octet  z_WAEPackage_3Q_application_x_x509_ca_cert;
+#define application_x_x509_ca_cert  z_WAEPackage_3Q_application_x_x509_ca_cert
+
+extern SDL_Octet  z_WAEPackage_3R_application_x_x509_user_cert;
+#define application_x_x509_user_cert  z_WAEPackage_3R_application_x_x509_user_cert
+
+extern SDL_Octet  z_WAEPackage_3S_image;
+#define image  z_WAEPackage_3S_image
+
+extern SDL_Octet  z_WAEPackage_3T_image_gif;
+#define image_gif  z_WAEPackage_3T_image_gif
+
+extern SDL_Octet  z_WAEPackage_3U_image_jpeg;
+#define image_jpeg  z_WAEPackage_3U_image_jpeg
+
+extern SDL_Octet  z_WAEPackage_3V_image_tiff;
+#define image_tiff  z_WAEPackage_3V_image_tiff
+
+extern SDL_Octet  z_WAEPackage_3W_image_png;
+#define image_png  z_WAEPackage_3W_image_png
+
+extern SDL_Octet  z_WAEPackage_3X_image_x_wapwbmp;
+#define image_x_wapwbmp  z_WAEPackage_3X_image_x_wapwbmp
+
+extern SDL_Octet  z_WAEPackage_3Y_x_wapmultipart;
+#define x_wapmultipart  z_WAEPackage_3Y_x_wapmultipart
+
+extern SDL_Octet  z_WAEPackage_3Z_x_wapmultipart_mixed;
+#define x_wapmultipart_mixed  z_WAEPackage_3Z_x_wapmultipart_mixed
+
+extern SDL_Octet  z_WAEPackage_40_x_wapmultipart_form_data;
+#define x_wapmultipart_form_data  z_WAEPackage_40_x_wapmultipart_form_data
+
+extern SDL_Octet  z_WAEPackage_41_x_wapmultipart_byteranges;
+#define x_wapmultipart_byteranges  z_WAEPackage_41_x_wapmultipart_byteranges
+
+extern SDL_Octet  z_WAEPackage_42_x_wapmultipart_alternative;
+#define x_wapmultipart_alternative  z_WAEPackage_42_x_wapmultipart_alternative
+
+extern SDL_Octet  z_WAEPackage_43_application_vnd_wapchannelc;
+#define application_vnd_wapchannelc  z_WAEPackage_43_application_vnd_wapchannelc
+
+extern SDL_Octet  z_WAEPackage_44_hex128;
+#define hex128  z_WAEPackage_44_hex128
+
+extern SDL_Octet  z_WAEPackage_45_Continued;
+#define Continued  z_WAEPackage_45_Continued
+
+extern SDL_Octet  z_WAEPackage_46_SwitchingProtocols;
+#define SwitchingProtocols  z_WAEPackage_46_SwitchingProtocols
+
+extern SDL_Octet  z_WAEPackage_47_RequestOK;
+#define RequestOK  z_WAEPackage_47_RequestOK
+
+extern SDL_Octet  z_WAEPackage_48_Created;
+#define Created  z_WAEPackage_48_Created
+
+extern SDL_Octet  z_WAEPackage_49_Accepted;
+#define Accepted  z_WAEPackage_49_Accepted
+
+extern SDL_Octet  z_WAEPackage_4A_NonAuthoritativeInformation;
+#define NonAuthoritativeInformation  z_WAEPackage_4A_NonAuthoritativeInformation
+
+extern SDL_Octet  z_WAEPackage_4B_NoContent;
+#define NoContent  z_WAEPackage_4B_NoContent
+
+extern SDL_Octet  z_WAEPackage_4C_ResetContent;
+#define ResetContent  z_WAEPackage_4C_ResetContent
+
+extern SDL_Octet  z_WAEPackage_4D_PartialContent;
+#define PartialContent  z_WAEPackage_4D_PartialContent
+
+extern SDL_Octet  z_WAEPackage_4E_MultipleChoices;
+#define MultipleChoices  z_WAEPackage_4E_MultipleChoices
+
+extern SDL_Octet  z_WAEPackage_4F_MovedPermanently;
+#define MovedPermanently  z_WAEPackage_4F_MovedPermanently
+
+extern SDL_Octet  z_WAEPackage_4G_MovedTemporarily;
+#define MovedTemporarily  z_WAEPackage_4G_MovedTemporarily
+
+extern SDL_Octet  z_WAEPackage_4H_SeeOther;
+#define SeeOther  z_WAEPackage_4H_SeeOther
+
+extern SDL_Octet  z_WAEPackage_4I_NotModified;
+#define NotModified  z_WAEPackage_4I_NotModified
+
+extern SDL_Octet  z_WAEPackage_4J_UseProxy;
+#define UseProxy  z_WAEPackage_4J_UseProxy
+
+extern SDL_Octet  z_WAEPackage_4K_BadRequest;
+#define BadRequest  z_WAEPackage_4K_BadRequest
+
+extern SDL_Octet  z_WAEPackage_4L_Unauthorized;
+#define Unauthorized  z_WAEPackage_4L_Unauthorized
+
+extern SDL_Octet  z_WAEPackage_4M_PaymentRequired;
+#define PaymentRequired  z_WAEPackage_4M_PaymentRequired
+
+extern SDL_Octet  z_WAEPackage_4N_Forbidden;
+#define Forbidden  z_WAEPackage_4N_Forbidden
+
+extern SDL_Octet  z_WAEPackage_4O_NotFound;
+#define NotFound  z_WAEPackage_4O_NotFound
+
+extern SDL_Octet  z_WAEPackage_4P_MethodNotAllowed;
+#define MethodNotAllowed  z_WAEPackage_4P_MethodNotAllowed
+
+extern SDL_Octet  z_WAEPackage_4Q_NotAcceptable;
+#define NotAcceptable  z_WAEPackage_4Q_NotAcceptable
+
+extern SDL_Octet  z_WAEPackage_4R_ProxyAuthenticationRequired;
+#define ProxyAuthenticationRequired  z_WAEPackage_4R_ProxyAuthenticationRequired
+
+extern SDL_Octet  z_WAEPackage_4S_RequestTimeout;
+#define RequestTimeout  z_WAEPackage_4S_RequestTimeout
+
+extern SDL_Octet  z_WAEPackage_4T_Conflict;
+#define Conflict  z_WAEPackage_4T_Conflict
+
+extern SDL_Octet  z_WAEPackage_4U_Gone;
+#define Gone  z_WAEPackage_4U_Gone
+
+extern SDL_Octet  z_WAEPackage_4V_LengthRequired;
+#define LengthRequired  z_WAEPackage_4V_LengthRequired
+
+extern SDL_Octet  z_WAEPackage_4W_PreconditionFailed;
+#define PreconditionFailed  z_WAEPackage_4W_PreconditionFailed
+
+extern SDL_Octet  z_WAEPackage_4X_RequestedEntityTooLarge;
+#define RequestedEntityTooLarge  z_WAEPackage_4X_RequestedEntityTooLarge
+
+extern SDL_Octet  z_WAEPackage_4Y_RequestURITooLarge;
+#define RequestURITooLarge  z_WAEPackage_4Y_RequestURITooLarge
+
+extern SDL_Octet  z_WAEPackage_4Z_UnsupportedMediaType;
+#define UnsupportedMediaType  z_WAEPackage_4Z_UnsupportedMediaType
+
+extern SDL_Octet  z_WAEPackage_50_InternalServerError;
+#define InternalServerError  z_WAEPackage_50_InternalServerError
+
+extern SDL_Octet  z_WAEPackage_51_NotImplemented;
+#define NotImplemented  z_WAEPackage_51_NotImplemented
+
+extern SDL_Octet  z_WAEPackage_52_BadGateway;
+#define BadGateway  z_WAEPackage_52_BadGateway
+
+extern SDL_Octet  z_WAEPackage_53_ServiceUnavailable;
+#define ServiceUnavailable  z_WAEPackage_53_ServiceUnavailable
+
+extern SDL_Octet  z_WAEPackage_54_GatewayTimeout;
+#define GatewayTimeout  z_WAEPackage_54_GatewayTimeout
+
+extern SDL_Octet  z_WAEPackage_55_HTTPverNotSupported;
+#define HTTPverNotSupported  z_WAEPackage_55_HTTPverNotSupported
+
+extern SDL_Octet  z_WAEPackage_57_SendOK;
+#define SendOK  z_WAEPackage_57_SendOK
+
+extern SDL_Octet  z_WAEPackage_58_NoTIDAvailable;
+#define NoTIDAvailable  z_WAEPackage_58_NoTIDAvailable
+
+extern SDL_Octet  z_WAEPackage_59_NonSupportedScheme;
+#define NonSupportedScheme  z_WAEPackage_59_NonSupportedScheme
+
+extern SDL_Octet  z_WAEPackage_5A_PublicWTAIAction;
+#define PublicWTAIAction  z_WAEPackage_5A_PublicWTAIAction
+
+extern SDL_Octet  z_WAEPackage_5B_AboutScheme;
+#define AboutScheme  z_WAEPackage_5B_AboutScheme
+
+#endif
+   /* X_IFC_z_WAEPackage__WAEPackage */

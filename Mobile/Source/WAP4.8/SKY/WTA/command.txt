@@ -1,0 +1,7 @@
+OBJECT aapiwta.o
+ C:\MSM-Project\ARM250\Bin\tcc -c -IInclude -ISource\MMI\SK -ISource\MMI\SK\UI -ISource\QUALCOMM -IC:\MSM-Project\ARM250\Include  -I SOURCE\IRDA  -I SOURCE\IRDA\LIB\include  -I SOURCE\IRDA\LIB\dcinc  -I SOURCE\IRDA\LIB\DeepCore\prot  -cpu ARM7TDMI -
+apcs /noswst/nointerwork/softfp/narrow -littleend -za1 -zas4 -zap0 -zat1 -zpcontinue_after_hash_error -fa -g+ -dwarf2  -Ospace -O2 -DT_ARM -DT_MSM3 -DT_MSM31 -DT_SURF -DTG=T_G -DCUST_H=\"CUSTA7.H\" -DMODEL_DEP_H=\"DOOLY.h\" -DSHOW_STAT -DMMI_TYPE=MM
+I_SK -DB5_TO_A7 -DENHANCED_TEXT_MODE_DISPLAY -DUSE_WIP_MALLOC -DTRGT_REX -DWAPPER  -DASSERT=ASSERT_FATAL -DMSG_LEVEL=MSG_LVL_NONE -DMSG_FILE=\"aapiwta.c\" -o OBJ\DOOLY\aapiwta.o SOURCE\WAP\rex\wta\aapiwta.c
+NMAKE : fatal error U1077: 'C:\MSM-Project\ARM250\Bin\tcc.exe' : return code '0xc0000005'
+Stop.
+Error executing nmake.

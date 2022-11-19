@@ -1,0 +1,21 @@
+When you are going to modify a Qualcomm source code,
+You should add the special comment like this
+
+/* id yyyy-mm-dd --> @ WhyWhat */
+#ifdef FEATURE_EQUS_IdOfModel
+/* the modified version for IdOfModel */
+#else
+/* the original version of the Qualcomm */
+#endif /* FEATURE_EQUS_IdOfModel */
+/* <-- */
+
+For example, in case the ID is jrkwon and the model name
+is "A10", we can comment like this
+
+/* jrkwon 2000-07-17 --> is not needed any more */
+#ifdef FEATURE_EQUS_A10
+/* the modified version for IdOfModel */
+#else
+/* the original version of the Qualcomm */
+#endif /* FEATURE_EQUS_A10 */
+/* <-- */

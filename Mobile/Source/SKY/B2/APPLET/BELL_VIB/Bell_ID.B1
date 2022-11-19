@@ -1,0 +1,199 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     Boa
+**
+** File:
+**     Bell_ID.B1
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-12-25 woodstok     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _BELL_ID_H_
+#define _BELL_ID_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Variable Declarations
+**---------------------------------------------------------------------------
+*/
+
+// º§ ±×·ì
+CONST BELL_GROUP_TYPE_T aBell_Group[NUM_BELL_GROUP] = 
+{
+    {TKN_BELL_GROUP_BASIC,          NUM_BELL_GROUP_BASIC},  // ±âº»º§
+    {TKN_BELL_GROUP_CHILD,          NUM_BELL_GROUP_CHILD},  // µ¿¿ä
+    {TKN_BELL_GROUP_ANNIV,          NUM_BELL_GROUP_ANNIV},  // Çà»ç°î
+    {TKN_BELL_GROUP_FOLK,           NUM_BELL_GROUP_FOLK},   // ¹Î¿ä
+    {TKN_BELL_GROUP_CLASSIC1,       NUM_BELL_GROUP_CLASSIC1},   // Å¬·¡½Ä1
+    {TKN_BELL_GROUP_CLASSIC2,       NUM_BELL_GROUP_CLASSIC2},   // Å¬·¡½Ä2
+    {TKN_BELL_GROUP_SOUND_EFFECT,   NUM_BELL_GROUP_SOUND_EFFECT},   // È¿°úÀ½
+#ifdef FEATURE_CHARACBELL
+    {TKN_BELL_GROUP_MY_BELL,        0 },
+    {TKN_BELL_GROUP_CHARAC_BELL,    0 }     // Ä³¸¯º§
+#else
+    {TKN_BELL_GROUP_MY_BELL,        0 }
+#endif // FEATURE_CHARACBELL
+};
+
+CONST BELL_NAME_TYPE_T aBell_List[NUM_BELL_LIST] =
+{
+    // ±âº»º§(5°î)
+    {TKN_BELL_BASIC1,			MUS_DENWA2},
+    {TKN_BELL_BASIC2,			MUS_DENWA5},
+    {TKN_BELL_BASIC3,			MUS_DENWA8},
+    {TKN_BELL_BASIC4,			MUS_DENWA9},
+    {TKN_BELL_BASIC5,			MUS_KURODEN},
+
+    // µ¿¿ä (10°î)
+    {TKN_BELL_CHILD1,			MUS_CUTY_KID},
+    {TKN_BELL_CHILD2,			MUS_DOREMI},
+    {TKN_BELL_CHILD3,			MUS_ELEPHANTWALK},
+    {TKN_BELL_CHILD4,			MUS_YOUNG_BAND},
+    {TKN_BELL_CHILD5,			MUS_SUN_BLAZING},
+    {TKN_BELL_CHILD6,			MUS_FARM_ROAD},
+    {TKN_BELL_CHILD7,			MUS_TING_A_LING},
+    {TKN_BELL_CHILD8,			MUS_MOTHER_PIG_CHILD_PIG},
+    {TKN_BELL_CHILD9,			MUS_INVADE},
+    {TKN_BELL_FOLK7,			MUS_ULYBULY},
+    
+    // Çà»ç°î(13°î)
+    {TKN_BELL_ANNIV1,			MUS_SILENT_NIGHT},
+    {TKN_BELL_ANNIV2,			MUS_JOYFUL_JESUS_COME},
+    {TKN_BELL_ANNIV3,			MUS_RODOLF_NOSE},
+    {TKN_BELL_ANNIV4,			MUS_JINGLEBELL},
+    {TKN_BELL_ANNIV5,			MUS_DRUM_BOY},
+    {TKN_BELL_ANNIV6,			MUS_MARRIAGE_MARCH},
+    {TKN_BELL_ANNIV7,			MUS_WEDDING_MARCH},
+    {TKN_BELL_ANNIV8,			MUS_OLDYEAR_OUT},
+    {TKN_BELL_ANNIV9,			MUS_LOOKOUT_WINDOW},
+    {TKN_BELL_ANNIV10,			MUS_SALUTE_NATIONALFLAG},
+    {TKN_BELL_ANNIV11,			MUS_NOEL},
+    {TKN_BELL_ANNIV12,			MUS_BIRTHDAY_PANG},
+    {TKN_BELL_ANNIV13,			MUS_CORONATION_MARCH},
+
+    // ¹Î¿ä(6°î)
+    {TKN_BELL_FOLK1,			MUS_CHESTNUT_TARYUNG},
+    {TKN_BELL_FOLK2,			MUS_MILYANG_ARIRANG},
+    {TKN_BELL_FOLK3,			MUS_PUNGNYEONGA},
+    {TKN_BELL_FOLK4,			MUS_BIRD_TARYUNG},
+    {TKN_BELL_FOLK5,			MUS_GOOD},
+    {TKN_BELL_FOLK6,			MUS_MOON_TARYUNG},
+
+    // Å¬·¡½Ä1 (20°î)
+    {TKN_BELL_CLASSIC1,			MUS_FLOWER_WALTZ},
+    {TKN_BELL_CLASSIC2,			MUS_ALHAMBRA},
+    {TKN_BELL_CLASSIC3,			MUS_LAD_MARCH},
+    {TKN_BELL_CLASSIC4,			MUS_VIOLIN_ROMANCE},
+    {TKN_BELL_CLASSIC5,			MUS_VOKERINI_MINUET},
+    {TKN_BELL_CLASSIC6,			MUS_SPRING_SONG},
+    {TKN_BELL_CLASSIC7,			MUS_4SEAS_WINTER},
+    {TKN_BELL_CLASSIC8,			MUS_WOMEN_HEART},
+    {TKN_BELL_CLASSIC9,			MUS_PATHOS_SONATA},
+    {TKN_BELL_CLASSIC10,			MUS_TRIUMPH_MARCH},
+    {TKN_BELL_CLASSIC11,			MUS_NOCTURNE},  //¿ø·¡ ¾ß»ó°îÀº ¿©±â
+    {TKN_BELL_CLASSIC12,			MUS_4ELIZE},
+    {TKN_BELL_CLASSIC13,			MUS_MAGIC_FLUTE},
+    {TKN_BELL_CLASSIC14,			MUS_WASHINGTON},
+    {TKN_BELL_CLASSIC15,			MUS_MAJESTIC_MARCH},
+    {TKN_BELL_CLASSIC16,			MUS_WILLIAM_PRELUDE},
+    {TKN_BELL_CLASSIC17,			MUS_HUMORESQUE},
+    {TKN_BELL_CLASSIC18,			MUS_4SEAS_SPRING},
+    {TKN_BELL_CLASSIC19,			MUS_KANGKANG},
+    {TKN_BELL_CLASSIC20,			MUS_CARMEN_PRELUDE},
+
+    // Å¬·¡½Ä2(19°î)
+    {TKN_BELL_CLASSIC21,			MUS_MATADOR_SONG},
+    {TKN_BELL_CLASSIC22,			MUS_CANON},
+    {TKN_BELL_CLASSIC23,			MUS_TURKEY_MARCH},
+    {TKN_BELL_CLASSIC24,			MUS_LOVE_PLEASURE},
+    {TKN_BELL_CLASSIC25,			MUS_HAYDN_TRUMPET},
+    {TKN_BELL_CLASSIC26,			MUS_HALLELUJAH},
+    {TKN_BELL_CLASSIC27,			MUS_ARIA_G},
+    {TKN_BELL_CLASSIC28,			MUS_STAR},
+    {TKN_BELL_CLASSIC29,			MUS_PERGUINT_MORNING},
+    {TKN_BELL_CLASSIC30,			MUS_DONAU_WALTZ},
+    {TKN_BELL_CLASSIC31,			MUS_MULLET},
+    {TKN_BELL_CLASSIC32,			MUS_TOY_SYMPHONY},
+    {TKN_BELL_CLASSIC33,			MUS_SANTALUTIA},
+    {TKN_BELL_CLASSIC34,			MUS_COMEBACK_SOTRENTO},
+    {TKN_BELL_CLASSIC35,			MUS_CHICK_DANCE},
+    {TKN_BELL_CLASSIC36,			MUS_FINLANDIA},
+    {TKN_BELL_CLASSIC37,			MUS_MAIDEN_PRAYER},
+    {TKN_BELL_CLASSIC38,			MUS_SILVERY_WAVE},
+    {TKN_BELL_CLASSIC39,			MUS_NEWLAND_SYMPHONY},
+
+    // È¿°úÀ½ (12°î)
+    {TKN_BELL_EFFECT1,			MUS_OPENING_PANG},
+    {TKN_BELL_EFFECT2,			MUS_PANG},
+    {TKN_BELL_EFFECT3,			MUS_PANG1},
+    {TKN_BELL_EFFECT4,			MUS_WIND_SOUND},
+    {TKN_BELL_EFFECT5,			MUS_GUN_SOUND},
+    {TKN_BELL_EFFECT6,			MUS_COPTER_SOUND},
+    {TKN_BELL_EFFECT7,			MUS_BIRD_SOUND},
+    {TKN_BELL_EFFECT8,			MUS_WAVE_SOUND},
+    {TKN_BELL_EFFECT9,			MUS_CAR_SOUND},
+    {TKN_BELL_EFFECT10,		    MUS_TRAIN_SOUND},
+    {TKN_BELL_EFFECT11,			MUS_KNOCK_SOUND},
+    {TKN_BELL_EFFECT12,			MUS_PUPPY_SOUND},
+    {TKN_BELL_EFFECT13,			MUS_HE_WOW},
+    {TKN_BELL_EFFECT14,			MUS_HE_HURRY},
+    {TKN_BELL_EFFECT15,			MUS_HE_RING},
+    {TKN_BELL_EFFECT16,			MUS_SHE_WOW},
+    {TKN_BELL_EFFECT17,			MUS_SHE_HURRY},
+    {TKN_BELL_EFFECT18,			MUS_SHE_RING},
+	{TKN_BELL_EFFECT19,			MUS_HE_PLUS_RING},
+	{TKN_BELL_EFFECT20,			MUS_SHE_PLUS_MUSIC}
+
+};
+/*
+**---------------------------------------------------------------------------
+**  Function(external use only) Declarations
+**---------------------------------------------------------------------------
+*/
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _BELL_ID_H_ */

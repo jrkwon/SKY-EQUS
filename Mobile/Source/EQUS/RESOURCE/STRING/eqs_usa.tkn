@@ -1,0 +1,74 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     EQUS (Enhanced and Qualified User interface System)
+**
+** File:
+**     eqs_usa.tkn
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-08-09 jrkwon     Created.
+**
+** ============================================================================
+*/
+/* Application */
+DEFINE_TOKEN(APP_VERSION,                   EQS_T("1.0.0"))
+DEFINE_TOKEN(APP_NAME,                      EQS_T("EQUS"))
+
+/* Error */
+DEFINE_TOKEN(ERR_OUT_OF_MEMORY,             EQS_T("Out of memory"))
+DEFINE_TOKEN(ERR_FREE_NULL_POINTER,         EQS_T("Free NULL pointer"))
+
+DEFINE_TOKEN(ERR_INVALID_NEXT_APPLET_STATE, EQS_T("Invalid the next applet state"))
+DEFINE_TOKEN(ERR_INVALID_APPLET_START_FLAG, EQS_T("Invalid the applet state flag"))
+DEFINE_TOKEN(ERR_APPLET_STACK_OVERFLOW,     EQS_T("The applet stack overflow"))
+DEFINE_TOKEN(ERR_NO_APPLET_IN_STACK,        EQS_T("No applet in the stack"))
+
+/* Common Phrase */
+DEFINE_TOKEN(WORD_SELECTED,                 EQS_T("is selected"))
+DEFINE_TOKEN(WORD_DELETED,                  EQS_T("is deleted"))
+
+DEFINE_TOKEN(TIME_CONTROL_BLANK,                     EQS_T(""))
+DEFINE_TOKEN(TIME_CONTROL_YEAR,                      EQS_T("")) /* not used in English */
+DEFINE_TOKEN(TIME_CONTROL_MONTH,                     EQS_T("")) /* not used in English */
+DEFINE_TOKEN(TIME_CONTROL_DAY,                       EQS_T("DAY")) /* not used in English */
+DEFINE_TOKEN(TIME_CONTROL_SOLAR,                     EQS_T(""))    /* not used in English */
+DEFINE_TOKEN(TIME_CONTROL_LUNAR,                     EQS_T(""))    /* not used in English */
+DEFINE_TOKEN(TIME_CONTROL_AM,                        EQS_T("AM"))
+DEFINE_TOKEN(TIME_CONTROL_PM,                        EQS_T("PM"))
+DEFINE_TOKEN(TIME_CONTROL_JAN,                       EQS_T("JAN"))
+DEFINE_TOKEN(TIME_CONTROL_FEB,                       EQS_T("FEB"))
+DEFINE_TOKEN(TIME_CONTROL_MAR,                       EQS_T("MAR"))
+DEFINE_TOKEN(TIME_CONTROL_APR,                       EQS_T("APR"))
+DEFINE_TOKEN(TIME_CONTROL_MAY,                       EQS_T("MAY"))
+DEFINE_TOKEN(TIME_CONTROL_JUN,                       EQS_T("JUN"))
+DEFINE_TOKEN(TIME_CONTROL_JUL,                       EQS_T("JUL"))
+DEFINE_TOKEN(TIME_CONTROL_AUG,                       EQS_T("AUG"))
+DEFINE_TOKEN(TIME_CONTROL_SEP,                       EQS_T("SEP"))
+DEFINE_TOKEN(TIME_CONTROL_OCT,                       EQS_T("OCT"))
+DEFINE_TOKEN(TIME_CONTROL_NOV,                       EQS_T("NOV"))
+DEFINE_TOKEN(TIME_CONTROL_DEC,                       EQS_T("DEC"))
+DEFINE_TOKEN(TIME_CONTROL_MON,                       EQS_T("MON"))
+DEFINE_TOKEN(TIME_CONTROL_TUE,                       EQS_T("TUE"))
+DEFINE_TOKEN(TIME_CONTROL_WED,                       EQS_T("WED"))
+DEFINE_TOKEN(TIME_CONTROL_THU,                       EQS_T("THU"))
+DEFINE_TOKEN(TIME_CONTROL_FRI,                       EQS_T("FRI"))
+DEFINE_TOKEN(TIME_CONTROL_SAT,                       EQS_T("SAT"))
+DEFINE_TOKEN(TIME_CONTROL_SUN,                       EQS_T("SUN"))
+DEFINE_TOKEN(TIME_CONTROL_MON_DAY,                   EQS_T("월요일"))
+DEFINE_TOKEN(TIME_CONTROL_TUE_DAY,                   EQS_T("화요일"))
+DEFINE_TOKEN(TIME_CONTROL_WED_DAY,                   EQS_T("수요일"))
+DEFINE_TOKEN(TIME_CONTROL_THU_DAY,                   EQS_T("목요일"))
+DEFINE_TOKEN(TIME_CONTROL_FRI_DAY,                   EQS_T("금요일"))
+DEFINE_TOKEN(TIME_CONTROL_SAT_DAY,                   EQS_T("토요일"))
+DEFINE_TOKEN(TIME_CONTROL_SUN_DAY,                   EQS_T("일요일"))
+DEFINE_TOKEN(TIME_CONTROL_DAYOFWEEK,                 EQS_T("")) /* not used in English */

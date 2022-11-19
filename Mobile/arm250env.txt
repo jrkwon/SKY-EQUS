@@ -1,0 +1,6 @@
+ARMBIN     = c:\tools\arm250\bin
+ARMLIB     = c:\tools\ARM250\lib
+ARMINC     = c:\tools\ARM250\INCLUDE
+PERLPATH   = c:\PERL\BIN
+
+

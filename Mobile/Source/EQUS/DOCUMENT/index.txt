@@ -1,0 +1,12 @@
+file name               what
+======================= =======================================================
+Code Review.txt         check design specification, implementation and coding
+                        convention in souce codes
+Coding Convention.txt   the summary of the coding convention
+Daily Bug Report.txt    daily bug report.
+What's new.txt          newly added functions or files
+EQUS User's Reference   Practical user's guide explaining how to make EQUS program
+
+
+
+====================== =========================================================

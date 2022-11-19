@@ -1,0 +1,16 @@
+; Batch Job for Target Based Programming of Intel 28F160C3 on MSM5000
+; Flash on target 0--3FFFFF
+; RAM on target 1380000--147FFFF
+; 00.02.27 by chos
+
+; set base envronment for MSM5000
+ Data.Set 0300067c %WORD 01		; GPIO 14 ( PS_HOLD ) -> high
+ Data.Set 03000668 %WORD 01
+ Data.Set 04800080 %WORD 20ff	; ROM size & wait cycle ( 8M bytes, 15 wait )
+ Data.Set 04800094 %WORD 0000
+ Data.Set 048000a0 %WORD 0007	; enable Address line A20 & A21 & A22
+ Data.Set 04800090 %WORD 0202	; enable RAM CS 1, x16 SRAM
+ Data.Set 04800084 %WORD 2044	; RAM size & wait cycle ( 8M bytes, 4 wait )
+ Data.Set 04800098 %WORD 0000	; RAM bus size
+
+

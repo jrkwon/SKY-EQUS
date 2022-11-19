@@ -1,0 +1,14 @@
+
+#ifndef X_IFC_z_WSPWTP_WTLS__WSPWTP_WTLS
+#define X_IFC_z_WSPWTP_WTLS__WSPWTP_WTLS
+#define XMK_IFC_TIME 942420229
+
+/* *************** DECLARATIONS IN PACKAGE WSPWTP_WTLS *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "WDP_UL.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+#endif
+   /* X_IFC_z_WSPWTP_WTLS__WSPWTP_WTLS */

@@ -1,0 +1,114 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     EQUS (Enhanced and Qualified User interface System)
+**
+** File:
+**     eqs_kor.tkn
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-08-09 jrkwon     Created.
+**
+** ============================================================================
+*/
+/* Application */
+/*
+DEFINE_TOKEN(APP_VERSION,                   EQS_T("1.0.0"))
+DEFINE_TOKEN(APP_NAME,                      EQS_T("EQUS"))
+*/
+
+/* Error */
+/*
+DEFINE_TOKEN(ERR_OUT_OF_MEMORY,             EQS_T("메모리가 부족합니다"))
+DEFINE_TOKEN(ERR_FREE_NULL_POINTER,         EQS_T("NULL포인터 메모리를 반환하려합니다"))
+*/
+DEFINE_TOKEN(ERR_INVALID_NEXT_APPLET_STATE, EQS_T("다음 애플릿 상태가 적절치 않습니다"))
+DEFINE_TOKEN(ERR_INVALID_APPLET_START_FLAG, EQS_T("다음 애플릿 플래그가 적절치 않습니다"))
+DEFINE_TOKEN(ERR_APPLET_STACK_OVERFLOW,     EQS_T("애플릿 스택이 모두 찼습니다"))
+DEFINE_TOKEN(ERR_NO_APPLET_IN_STACK,        EQS_T("애플릿 스택이 비어 있습니다"))
+
+/* Common Phrase */
+DEFINE_TOKEN(WORD_SELECTED,                 EQS_T("가(이) 선택됐습니다"))
+DEFINE_TOKEN(WORD_DELETED,                  EQS_T("가(이) 삭제됐습니다"))
+
+// Command Line for Text Editor //
+DEFINE_TOKEN(CML_TEDIT_ENG_UPPER,             EQS_T("[취소]       [영대]"))
+DEFINE_TOKEN(CML_TEDIT_ENG_LOWER,             EQS_T("[취소]       [영소]"))
+DEFINE_TOKEN(CML_TEDIT_KOREAN,                EQS_T("[취소]       [한글]"))
+DEFINE_TOKEN(CML_TEDIT_SYMBOL,                EQS_T("[취소]       [기호]"))
+DEFINE_TOKEN(CML_TEDIT_NUMBER,                EQS_T("[취소]       [숫자]"))
+DEFINE_TOKEN(CML_TEDIT_ERROR,                 EQS_T("[취소]        [ERR]"))
+
+/* POPUP Menu */
+DEFINE_TOKEN(POPUP_MENU_TITLE,		         EQS_T("메뉴"))
+DEFINE_TOKEN(POPUP_MENU_SET,		         EQS_T("설정"))
+DEFINE_TOKEN(POPUP_MENU_RESET,               EQS_T("기본설정"))
+DEFINE_TOKEN(POPUP_MENU_DELETE,              EQS_T("삭제"))
+DEFINE_TOKEN(POPUP_MENU_CANCEL,              EQS_T("취소"))
+
+/* Message Box */
+DEFINE_TOKEN(MESSAGE_BOX_OK,	              EQS_T("확인"))
+DEFINE_TOKEN(MESSAGE_BOX_YES,	              EQS_T("예"))
+DEFINE_TOKEN(MESSAGE_BOX_NO,	              EQS_T("아니오"))
+/* old
+DEFINE_TOKEN(MESSAGE_BOX_SUCCESS,	          EQS_T(SF_MSGBOX_OK" 작업완료"))
+DEFINE_TOKEN(MESSAGE_BOX_FAIL,	              EQS_T(SF_MSGBOX_X" 작업실패"))
+DEFINE_TOKEN(MESSAGE_BOX_HELP,	              EQS_T(SF_MSGBOX_I" 도움말"))
+DEFINE_TOKEN(MESSAGE_BOX_CONFIRM,	          EQS_T(SF_MSGBOX_QUESTION" 확인"))
+DEFINE_TOKEN(MESSAGE_BOX_SYSTEM,	          EQS_T(SF_MSGBOX_EXCLAMATION" 시스템알림"))
+*/
+DEFINE_TOKEN(MESSAGE_BOX_SUCCESS,	          EQS_T(SF_NEW_MSGBOX_OK1_2""SF_NEW_MSGBOX_OK2_2))
+DEFINE_TOKEN(MESSAGE_BOX_FAIL,	              EQS_T(SF_NEW_MSGBOX_X1_2""SF_NEW_MSGBOX_X2_2))
+DEFINE_TOKEN(MESSAGE_BOX_HELP,	              EQS_T(SF_NEW_MSGBOX_I1_2""SF_NEW_MSGBOX_I2_2))
+DEFINE_TOKEN(MESSAGE_BOX_CONFIRM,	          EQS_T(SF_NEW_MSGBOX_QUESTION1_2""SF_NEW_MSGBOX_QUESTION2_2))
+DEFINE_TOKEN(MESSAGE_BOX_SYSTEM,	          EQS_T(SF_NEW_MSGBOX_EXCLAMATION1_2""SF_NEW_MSGBOX_EXCLAMATION2_2))
+
+/* Time Control*/
+DEFINE_TOKEN(TIME_CONTROL_BLANK,                     EQS_T(""))
+DEFINE_TOKEN(TIME_CONTROL_YEAR,                      EQS_T("년"))
+DEFINE_TOKEN(TIME_CONTROL_MONTH,                     EQS_T("월")) /* only in Korean */
+DEFINE_TOKEN(TIME_CONTROL_DAY,                       EQS_T("일")) /* only in Korean */
+DEFINE_TOKEN(TIME_CONTROL_SOLAR,                     EQS_T("양")) /* only in Korean */
+DEFINE_TOKEN(TIME_CONTROL_LUNAR,                     EQS_T("음")) /* only in Korean */
+DEFINE_TOKEN(TIME_CONTROL_AM,                        EQS_T("AM"))
+DEFINE_TOKEN(TIME_CONTROL_PM,                        EQS_T("PM"))
+DEFINE_TOKEN(TIME_CONTROL_HPM,                       EQS_T("오후"))
+DEFINE_TOKEN(TIME_CONTROL_HAM,                       EQS_T("오전"))
+DEFINE_TOKEN(TIME_CONTROL_HTIME,                     EQS_T("시"))
+DEFINE_TOKEN(TIME_CONTROL_HMINUTE,                   EQS_T("분"))
+DEFINE_TOKEN(TIME_CONTROL_JAN,                       EQS_T("1"))
+DEFINE_TOKEN(TIME_CONTROL_FEB,                       EQS_T("2"))
+DEFINE_TOKEN(TIME_CONTROL_MAR,                       EQS_T("3"))
+DEFINE_TOKEN(TIME_CONTROL_APR,                       EQS_T("4"))
+DEFINE_TOKEN(TIME_CONTROL_MAY,                       EQS_T("5"))
+DEFINE_TOKEN(TIME_CONTROL_JUN,                       EQS_T("6"))
+DEFINE_TOKEN(TIME_CONTROL_JUL,                       EQS_T("7"))
+DEFINE_TOKEN(TIME_CONTROL_AUG,                       EQS_T("8"))
+DEFINE_TOKEN(TIME_CONTROL_SEP,                       EQS_T("9"))
+DEFINE_TOKEN(TIME_CONTROL_OCT,                       EQS_T("10"))
+DEFINE_TOKEN(TIME_CONTROL_NOV,                       EQS_T("11"))
+DEFINE_TOKEN(TIME_CONTROL_DEC,                       EQS_T("12"))
+DEFINE_TOKEN(TIME_CONTROL_MON,                       EQS_T("월"))
+DEFINE_TOKEN(TIME_CONTROL_TUE,                       EQS_T("화"))
+DEFINE_TOKEN(TIME_CONTROL_WED,                       EQS_T("수"))
+DEFINE_TOKEN(TIME_CONTROL_THU,                       EQS_T("목"))
+DEFINE_TOKEN(TIME_CONTROL_FRI,                       EQS_T("금"))
+DEFINE_TOKEN(TIME_CONTROL_SAT,                       EQS_T("토"))
+DEFINE_TOKEN(TIME_CONTROL_SUN,                       EQS_T("일"))
+DEFINE_TOKEN(TIME_CONTROL_MON_DAY,                   EQS_T("월요일"))
+DEFINE_TOKEN(TIME_CONTROL_TUE_DAY,                   EQS_T("화요일"))
+DEFINE_TOKEN(TIME_CONTROL_WED_DAY,                   EQS_T("수요일"))
+DEFINE_TOKEN(TIME_CONTROL_THU_DAY,                   EQS_T("목요일"))
+DEFINE_TOKEN(TIME_CONTROL_FRI_DAY,                   EQS_T("금요일"))
+DEFINE_TOKEN(TIME_CONTROL_SAT_DAY,                   EQS_T("토요일"))
+DEFINE_TOKEN(TIME_CONTROL_SUN_DAY,                   EQS_T("일요일"))
+DEFINE_TOKEN(TIME_CONTROL_DAYOFWEEK,                 EQS_T("요일")) /* only in Korean */

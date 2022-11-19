@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+#ifndef CAPIMEM_H
+#define CAPIMEM_H
+
+
+#include "tapicmmn.h"
+#include "wipprdct.h"
+
+#define DATABASE_AUTHENTICATION	1
+#define DATABASE_COOKIE			2
+
+IMPORT_C VOID    MEMc_initCache (UINT32 cacheSize);
+
+IMPORT_C VOID    MEMc_prepareCache (UINT32 availablePersistentMemory);
+
+IMPORT_C VOID    MEMc_clearDatabase( UINT8 kind );
+
+#ifdef CONFIG_PUSH
+VOID	MEMc_initPushRepository (UINT32 repositorySize);
+VOID	MEMc_closePushRepository (UINT32 availablePersistentMemory);
+#endif
+
+#endif

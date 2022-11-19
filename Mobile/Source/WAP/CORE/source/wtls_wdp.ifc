@@ -1,0 +1,29 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WTLS_WDP__WTLS_WDP
+#define X_IFC_z_WTLS_WDP__WTLS_WDP
+#define XMK_IFC_TIME 977233142
+
+/* *************** DECLARATIONS IN PACKAGE WTLS_WDP *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "glbldecl.ifc"
+#include "wdp_ul.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+#endif
+   /* X_IFC_z_WTLS_WDP__WTLS_WDP */

@@ -1,0 +1,65 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2001.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WTPpckg__WTPpckg
+#define X_IFC_z_WTPpckg__WTPpckg
+#define XMK_IFC_TIME 995439254
+
+/* *************** DECLARATIONS IN PACKAGE WTPpckg *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "wdp_ul.ifc"
+#include "wspcmwtp.ifc"
+#include "buffmgt.ifc"
+#include "glbldecl.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE TransactionType  (TYPE section)
+* <<PACKAGE WTPpckg>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wtppckg.sun(1),119(40,55),1)
+******/
+typedef struct TransactionType_s {
+    SDL_Natural  dir;
+    SDL_Natural  tid;
+    SDL_Integer  handle;
+    SDL_PId  pid;
+    AddressType  clientAddress;
+    AddressType  serverAddress;
+    SDL_Natural  lastRecvSeqnum;
+} TransactionType;
+
+/*****
+* NEWTYPE TransactionType  (HEADING section)
+* <<PACKAGE WTPpckg>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wtppckg.sun(1),119(40,55),1)
+******/
+
+#define yAssF_TransactionType(V,E,A)  V = E
+extern void yDef_TransactionType XPP(( TransactionType * ));
+#define yEqF_TransactionType(Expr1,Expr2)  (Expr1) == (Expr2)
+#define yNEqF_TransactionType(Expr1,Expr2)  (Expr1) != (Expr2)
+extern TransactionType yMake_TransactionType XPP(( SDL_Natural, SDL_Natural,
+  SDL_Integer, SDL_PId, AddressType, AddressType, SDL_Natural ));
+#ifndef ANY_TransactionType
+#define ANY_TransactionType  yMake_TransactionType(ANY_SDL_Natural, \
+  ANY_SDL_Natural, ANY_SDL_Integer, ANY_SDL_PId, ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Natural)
+#endif
+#define z_WTPpckg_L3_copy(P)  P
+#endif
+   /* X_IFC_z_WTPpckg__WTPpckg */

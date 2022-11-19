@@ -1,0 +1,52 @@
+                                             -- What's new ? --
+
+=======================================================================================================================
+Date        Who      File           What and Why
+=======================================================================================================================
+2000-09-17  jrkwon   eqs_grph.c/h
+
+                                    1. Sliding Window 구현을 위한 Offset 처리 (EQUS 엔진에서 사용)
+                                        
+                                        EQS_DCL VOID         EQS_API SetSlidingWindowState(BOOL fEnable);
+                                        EQS_DCL BOOL         EQS_API GetSlidingWindowState(VOID);
+
+                                        EQS_DCL VOID         EQS_API SetSlidingWindowOffsetY(COORD yOffset);
+                                        EQS_DCL COORD        EQS_API GetSlidingWindowOffsetY(VOID);
+
+-----------------------------------------------------------------------------------------------------------------------
+2000-09-16  jrkwon   eqs_grph.c/h   
+                     eqs_dc.c/h
+                                    0. TEXT_DRAW_MODE을 BYTE의 typedef로 복구
+                                    1. TextColor
+                                       The text color can be set/get by Set/GetTextColor()
+                                    2. Clipping
+                                       The text position can be on the screen border.
+                                    3. Wrapping
+                                       Set/GetTextWrap()
+
+
+-----------------------------------------------------------------------------------------------------------------------
+2000-09-13  jrkwon   eqs_grph.c/h   
+                     eqs_dc.c/h
+                                    1. Change font name 
+                                       NUMBER_FONT, BIG_FONT, SYSTEM_FONT --> FT_BIGBIG, FT_BIG, FT_MED
+                                    2. FONT --> FONT_TYPE
+                                       Get/SetFont --> Get/SetFontType
+                                    3. Change ClearScreen argument
+                                       Remove CLEAR_SCREEN_XXX and get rid of the argument of ClearScreen.
+                                    4. Add RoundRectangle function
+                                    5. TextOutStrTDM
+                                       현재 TextDrawMode값을 변경시키지 않고, 출력 함수에 인자로 TextDrawMode값을 주어서 
+                                       텍스트를 출력하는 함수
+                                    6. TEXT_DRAW_MODE enum 삭제
+                                       이 값은 여러 개의 Draw Mode 값을 OR 해서 사용해야 하므로 enum은 부적절.
+                                       대신, define 문을 이용해서 정의해 놓았음.
+
+-----------------------------------------------------------------------------------------------------------------------
+2000-08-14  jrkwon   eqs_i18n.c/h   Internationalization
+                     eqs_tokn.c/h   Token management
+                     eqs_kor.tkn    Korean token defintion
+                     eqs_usa.tkn    English(USA) token definition
+-----------------------------------------------------------------------------------------------------------------------
+2000-07-25  jrkwon   N/A            Created
+=======================================================================================================================

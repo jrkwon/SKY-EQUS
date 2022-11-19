@@ -1,0 +1,10 @@
+The naming convention of string tokens
+
+    TKN_<Sub System>_<Information>
+
+
+eg. 
+
+#define TKN_CALL_ORIGINATED     "전화 거는 중..."
+
+#define TKN_CALL_END_NO_SRV     "서비스 지역이^아닙니다"

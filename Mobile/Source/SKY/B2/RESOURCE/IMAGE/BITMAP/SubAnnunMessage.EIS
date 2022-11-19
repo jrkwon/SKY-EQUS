@@ -1,0 +1,20 @@
+/* ************************************************************************ */
+/* SubAnnunMessage_11x11x1.ppm */
+LOCAL ROM BYTE abSubAnnunMessage[] = {
+    0x00, 0x00, 
+    0x00, 0x00, 
+    0xFF, 0xE0, 
+    0x80, 0x20, 
+    0xC0, 0x60, 
+    0xA0, 0xA0, 
+    0x91, 0x20, 
+    0x8E, 0x20, 
+    0x80, 0x20, 
+    0x80, 0x20, 
+    0xFF, 0xE0, 
+};
+
+ROM BITMAP g_BmpSubAnnunMessage = {
+    { { 'I', 'M', 'G' }, { 16, 11 }, 11, 1, FALSE, (COLOR)0x00, 0, { 0, } }, abSubAnnunMessage
+};
+

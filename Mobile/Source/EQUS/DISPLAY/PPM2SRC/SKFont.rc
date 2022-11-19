@@ -1,0 +1,220 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif\r\n"
+    "#include ""res\\SKFont.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\SKFont.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SKFONT_DIALOG DIALOGEX 0, 0, 263, 205
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "The Hexa Format C Data File Maker from Portable Pixel Map File"
+FONT 9, "±¼¸²"
+BEGIN
+    EDITTEXT        IDC_IMAGE_PATH,48,61,185,12,ES_RIGHT | ES_AUTOHSCROLL | 
+                    NOT WS_BORDER,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "...",IDC_SET_IMAGE_PATH,240,61,16,12
+    EDITTEXT        IDC_SRC_PATH,48,77,185,12,ES_RIGHT | ES_AUTOHSCROLL | 
+                    NOT WS_BORDER,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "...",IDC_SET_SRC_PATH,240,77,16,12
+    CONTROL         "Black and White",IDC_RDO_1,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,19,123,67,10
+    CONTROL         "4 Grays",IDC_RDO_4,"Button",BS_AUTORADIOBUTTON,115,123,
+                    41,10
+    CONTROL         "256 Colors",IDC_RDO_256,"Button",BS_AUTORADIOBUTTON,193,
+                    123,50,10
+    PUSHBUTTON      "&Font --> Hexa",IDC_IMAGE_TO_SOURCE,6,170,77,28
+    PUSHBUTTON      "&Image --> Hexa",IDC_IMAGE_TO_ANISRC,91,170,77,28
+    PUSHBUTTON      "&Exit",IDCANCEL,179,170,77,28,0,WS_EX_DLGMODALFRAME | 
+                    WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    EDITTEXT        IDC_COLSIZE,28,39,24,12,ES_AUTOHSCROLL | ES_READONLY | 
+                    NOT WS_BORDER | NOT WS_TABSTOP,WS_EX_CLIENTEDGE
+    LTEXT           "Width:",IDC_STATIC,5,41,23,8
+    LTEXT           "Height:",IDC_STATIC,73,41,23,8
+    EDITTEXT        IDC_ROWSIZE,98,39,28,12,ES_AUTOHSCROLL | ES_READONLY | 
+                    NOT WS_BORDER | NOT WS_TABSTOP,WS_EX_CLIENTEDGE
+    LTEXT           "&Source:",IDC_STATIC,6,63,38,8
+    LTEXT           "&Destination:",IDC_STATIC,6,79,39,8
+    CONTROL         129,IDB_LOGO,"Static",SS_BITMAP,8,7,120,24
+    CONTROL         130,IDC_STATIC,"Static",SS_BITMAP,192,7,64,12
+    RTEXT           "Count:",IDC_STATIC,151,41,22,8
+    EDITTEXT        IDC_CHARSIZE,177,39,24,12,ES_AUTOHSCROLL | ES_READONLY | 
+                    NOT WS_BORDER | NOT WS_TABSTOP,WS_EX_CLIENTEDGE
+    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",PBS_SMOOTH | 
+                    WS_BORDER,49,94,207,8,WS_EX_CLIENTEDGE
+    LTEXT           "&Progress:",IDC_STATIC,6,93,33,8
+    CTEXT           "2000. 07.10 jrkwon",IDC_BUILD,190,23,66,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,6,167,250,1
+    GROUPBOX        "&Color",IDC_STATIC,6,109,250,33
+    EDITTEXT        IDC_EDT_BCOLOR,107,147,24,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER | NOT WS_TABSTOP,WS_EX_CLIENTEDGE
+    LTEXT           "Font &boundary color (R=G=B)",IDC_STATIC,6,149,97,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SKFONT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 256
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 198
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_SKT                 BITMAP  DISCARDABLE     "res\\skt.bmp"
+IDB_SKCI                BITMAP  DISCARDABLE     "res\\skci.bmp"
+IDB_LOGO                BITMAP  DISCARDABLE     "res\\ppm2src.bmp"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "SKFont MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "SKFont\0"
+            VALUE "LegalCopyright", "Copyright (C) 1999\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "SKFont.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "SKFont Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif
+#include "res\SKFont.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

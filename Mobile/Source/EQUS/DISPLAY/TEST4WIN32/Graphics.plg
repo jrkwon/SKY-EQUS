@@ -1,0 +1,41 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Graphics - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\jrkwon\LOCALS~1\Temp\RSP96.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\\" /I "..\..\INCLUDE" /I "..\..\State" /I "..\..\Control" /I "..\..\TARGET\A10\LCD\FONT" /I "..\..\TARGET\A10\LCD\IMAGE" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\My Projects\2000\Cooper\Mobile\Source\EQUS\DISPLAY\TEST4WIN32\testgrph.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\jrkwon\LOCALS~1\Temp\RSP96.tmp" 
+Creating temporary file "C:\DOCUME~1\jrkwon\LOCALS~1\Temp\RSP97.tmp" with contents
+[
+/nologo /subsystem:windows /profile /debug /machine:I386 /out:"Debug/Graphics.exe" 
+".\Debug\ControllerDlg.obj"
+".\Debug\Graphics.obj"
+".\Debug\GraphicsDlg.obj"
+".\Debug\StdAfx.obj"
+".\Debug\testgrph.obj"
+".\Debug\eqs_dc.obj"
+".\Debug\eqs_grph.obj"
+".\Debug\eqs_mem.obj"
+".\Debug\eqs_util.obj"
+".\Debug\Graphics.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\jrkwon\LOCALS~1\Temp\RSP97.tmp"
+<h3>Output Window</h3>
+Compiling...
+testgrph.c
+Linking...
+
+
+
+<h3>Results</h3>
+Graphics.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,850 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WAE_WSP__WAE_WSP
+#define X_IFC_z_WAE_WSP__WAE_WSP
+#define XMK_IFC_TIME 977233142
+
+/* *************** DECLARATIONS IN PACKAGE WAE_WSP *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "ctypes.ifc"
+#include "glbldecl.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE SUnitMethodInvokeReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),3)
+******/
+typedef struct SUnitMethodInvokeReqType_s {
+    AddressType  ServerAddress;
+    AddressType  ClientAddress;
+    SDL_Octet  TransactionId;
+    SDL_Octet  Method;
+    SDL_Integer  URILen;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  RequestURI;
+    z_ctypes_4_VoidStar  RequestHeaders;
+    z_ctypes_4_VoidStar  RequestBody;
+} SUnitMethodInvokeReqType;
+
+/*****
+* NEWTYPE SUnitMethodResultIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),16)
+******/
+typedef struct SUnitMethodResultIndType_s {
+    AddressType  ClientAddress;
+    AddressType  ServerAddress;
+    SDL_Octet  TransactionId;
+    SDL_Octet  Status;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  ResponseHeaders;
+    z_ctypes_4_VoidStar  ResponseBody;
+} SUnitMethodResultIndType;
+
+/*****
+* NEWTYPE SUnitPushIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),27)
+******/
+typedef struct SUnitPushIndType_s {
+    AddressType  ClientAddress;
+    AddressType  ServerAddress;
+    SDL_Octet  PushId;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  PushHeaders;
+    z_ctypes_4_VoidStar  PushBody;
+} SUnitPushIndType;
+
+/*****
+* NEWTYPE SConnectReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),119(25,40),1)
+******/
+typedef struct SConnectReqType_s {
+    AddressType  ServerAddress;
+    AddressType  ClientAddress;
+    SDL_Integer  HeadersLen;
+    z_ctypes_4_VoidStar  ClientHeaders;
+    SDL_Natural  ClientSDUSize;
+    SDL_Natural  ServerSDUSize;
+    SDL_Octet  ProtocolOptions;
+    SDL_Octet  MethodMOR;
+    SDL_Octet  PushMOR;
+} SConnectReqType;
+
+/*****
+* NEWTYPE SConnectCnfType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),119(25,40),13)
+******/
+typedef struct SConnectCnfType_s {
+    SDL_Integer  SourcePort;
+    SDL_Natural  HeadersLen;
+    z_ctypes_4_VoidStar  ServerHeaders;
+    SDL_Natural  ClientSDUSize;
+    SDL_Natural  ServerSDUSize;
+    SDL_Octet  ProtocolOptions;
+    SDL_Octet  MethodMOR;
+    SDL_Octet  PushMOR;
+} SConnectCnfType;
+
+/*****
+* NEWTYPE SDisconnectType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),122(25,125),1)
+******/
+typedef struct SDisconnectType_s {
+    SDL_Integer  SourcePort;
+    SDL_Natural  ReasonCode;
+    SDL_Boolean  RedirectSecurity;
+    SDL_Integer  AddressesLen;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  RedirectAddresses;
+    z_ctypes_4_VoidStar  ErrorHeaders;
+    z_ctypes_4_VoidStar  ErrorBody;
+} SDisconnectType;
+
+/*****
+* NEWTYPE SMethodInvokeReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),140(20,40),1)
+******/
+typedef struct SMethodInvokeReqType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientTransactionId;
+    SDL_Octet  Method;
+    SDL_Integer  URILen;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  RequestURI;
+    z_ctypes_4_VoidStar  RequestHeaders;
+    z_ctypes_4_VoidStar  RequestBody;
+    SDL_Boolean  AllowSegmentedResult;
+    SDL_Boolean  MoreData;
+    SDL_Natural  TotalSize;
+} SMethodInvokeReqType;
+
+/*****
+* NEWTYPE SMethodInvokeCnfType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),140(20,40),16)
+******/
+typedef struct SMethodInvokeCnfType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientTransactionId;
+} SMethodInvokeCnfType;
+
+/*****
+* NEWTYPE SMethodResultIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),143(20,115),1)
+******/
+typedef struct SMethodResultIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientTransactionId;
+    SDL_Octet  Status;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  ResponseHeaders;
+    z_ctypes_4_VoidStar  ResponseBody;
+    SDL_Boolean  MoreData;
+    SDL_Natural  TotalSize;
+    SDL_Boolean  FirstSegment;
+} SMethodResultIndType;
+
+/*****
+* NEWTYPE SMethodResultResType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),143(20,115),14)
+******/
+typedef struct SMethodResultResType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientTransactionId;
+    z_ctypes_4_VoidStar  AcknowledgementHeaders;
+} SMethodResultResType;
+
+/*****
+* NEWTYPE SMethodAbortReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),146(20,180),1)
+******/
+typedef struct z_WAE_WSP_12_SMethodAbortReqType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  TransactionId;
+} z_WAE_WSP_12_SMethodAbortReqType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SMethodAbortReqType z_WAE_WSP_12_SMethodAbortReqType
+#else
+#define SMethodAbortReqType z_WAE_WSP_12_SMethodAbortReqType
+#endif
+
+/*****
+* NEWTYPE SMethodAbortIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),146(20,180),6)
+******/
+typedef struct z_WAE_WSP_13_SMethodAbortIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  TransactionId;
+    SDL_Natural  Reason;
+} z_WAE_WSP_13_SMethodAbortIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SMethodAbortIndType z_WAE_WSP_13_SMethodAbortIndType
+#else
+#define SMethodAbortIndType z_WAE_WSP_13_SMethodAbortIndType
+#endif
+
+/*****
+* NEWTYPE SPushIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),1)
+******/
+typedef struct z_WAE_WSP_14_SPushIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  PushHeaders;
+    z_ctypes_4_VoidStar  PushBody;
+} z_WAE_WSP_14_SPushIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SPushIndType z_WAE_WSP_14_SPushIndType
+#else
+#define SPushIndType z_WAE_WSP_14_SPushIndType
+#endif
+
+/*****
+* NEWTYPE SConfirmedPushIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),9)
+******/
+typedef struct z_WAE_WSP_15_SConfirmedPushIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientPushId;
+    SDL_Integer  HeadersLen;
+    SDL_Integer  BodyLen;
+    z_ctypes_4_VoidStar  PushHeaders;
+    z_ctypes_4_VoidStar  PushBody;
+} z_WAE_WSP_15_SConfirmedPushIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SConfirmedPushIndType z_WAE_WSP_15_SConfirmedPushIndType
+#else
+#define SConfirmedPushIndType z_WAE_WSP_15_SConfirmedPushIndType
+#endif
+
+/*****
+* NEWTYPE SConfirmedPushResType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),18)
+******/
+typedef struct z_WAE_WSP_16_SConfirmedPushResType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientPushId;
+    z_ctypes_4_VoidStar  AcknowledgementHeaders;
+} z_WAE_WSP_16_SConfirmedPushResType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SConfirmedPushResType z_WAE_WSP_16_SConfirmedPushResType
+#else
+#define SConfirmedPushResType z_WAE_WSP_16_SConfirmedPushResType
+#endif
+
+/*****
+* NEWTYPE SPushAbortReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),28)
+******/
+typedef struct z_WAE_WSP_17_SPushAbortReqType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientPushId;
+    SDL_Natural  Reason;
+} z_WAE_WSP_17_SPushAbortReqType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SPushAbortReqType z_WAE_WSP_17_SPushAbortReqType
+#else
+#define SPushAbortReqType z_WAE_WSP_17_SPushAbortReqType
+#endif
+
+/*****
+* NEWTYPE SPushAbortIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),34)
+******/
+typedef struct z_WAE_WSP_18_SPushAbortIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Integer  ClientPushId;
+    SDL_Natural  Reason;
+} z_WAE_WSP_18_SPushAbortIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SPushAbortIndType z_WAE_WSP_18_SPushAbortIndType
+#else
+#define SPushAbortIndType z_WAE_WSP_18_SPushAbortIndType
+#endif
+
+/*****
+* NEWTYPE SSuspendReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),1)
+******/
+typedef struct z_WAE_WSP_19_SSuspendReqType_s {
+    SDL_Integer  SourcePort;
+} z_WAE_WSP_19_SSuspendReqType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SSuspendReqType z_WAE_WSP_19_SSuspendReqType
+#else
+#define SSuspendReqType z_WAE_WSP_19_SSuspendReqType
+#endif
+
+/*****
+* NEWTYPE SSuspendIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),5)
+******/
+typedef struct z_WAE_WSP_1A_SSuspendIndType_s {
+    SDL_Integer  SourcePort;
+    SDL_Natural  Reason;
+} z_WAE_WSP_1A_SSuspendIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SSuspendIndType z_WAE_WSP_1A_SSuspendIndType
+#else
+#define SSuspendIndType z_WAE_WSP_1A_SSuspendIndType
+#endif
+
+/*****
+* NEWTYPE SResumeCnfType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),10)
+******/
+typedef struct z_WAE_WSP_1B_SResumeCnfType_s {
+    SDL_Integer  SourcePort;
+} z_WAE_WSP_1B_SResumeCnfType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SResumeCnfType z_WAE_WSP_1B_SResumeCnfType
+#else
+#define SResumeCnfType z_WAE_WSP_1B_SResumeCnfType
+#endif
+
+/*****
+* NEWTYPE SResumeReqType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),14)
+******/
+typedef struct SResumeReqType_s {
+    AddressType  ServerAddress;
+    AddressType  ClientAddress;
+    SDL_Integer  HeadersLen;
+    z_ctypes_4_VoidStar  ClientHeaders;
+} SResumeReqType;
+
+/*****
+* NEWTYPE SExceptionIndType  (TYPE section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),170(100,115),1)
+******/
+typedef struct z_WAE_WSP_1D_SExceptionIndType_s {
+    SDL_Octet_String  ExceptionData;
+} z_WAE_WSP_1D_SExceptionIndType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_SExceptionIndType z_WAE_WSP_1D_SExceptionIndType
+#else
+#define SExceptionIndType z_WAE_WSP_1D_SExceptionIndType
+#endif
+
+/*****
+* NEWTYPE SUnitMethodInvokeReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),3)
+******/
+
+#define yAssF_SUnitMethodInvokeReqType(V,E,A)  V = E
+extern void yDef_SUnitMethodInvokeReqType XPP(( SUnitMethodInvokeReqType * ));
+extern SDL_Boolean yEq_SUnitMethodInvokeReqType XPP(( SUnitMethodInvokeReqType,
+  SUnitMethodInvokeReqType ));
+#define yEqF_SUnitMethodInvokeReqType(Expr1,Expr2)  yEq_SUnitMethodInvokeReqType(Expr1,Expr2)
+#define yNEqF_SUnitMethodInvokeReqType(Expr1,Expr2)  ( ! yEq_SUnitMethodInvokeReqType(Expr1,Expr2) )
+extern SUnitMethodInvokeReqType yMake_SUnitMethodInvokeReqType
+  XPP(( AddressType, AddressType, SDL_Octet, SDL_Octet, SDL_Integer,
+  SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar ));
+#ifndef ANY_SUnitMethodInvokeReqType
+#define ANY_SUnitMethodInvokeReqType  yMake_SUnitMethodInvokeReqType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Octet, ANY_SDL_Octet, ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_0S3_copy(P)  P
+
+/*****
+* NEWTYPE SUnitMethodResultIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),16)
+******/
+
+#define yAssF_SUnitMethodResultIndType(V,E,A)  V = E
+extern void yDef_SUnitMethodResultIndType XPP(( SUnitMethodResultIndType * ));
+extern SDL_Boolean yEq_SUnitMethodResultIndType XPP(( SUnitMethodResultIndType,
+  SUnitMethodResultIndType ));
+#define yEqF_SUnitMethodResultIndType(Expr1,Expr2)  yEq_SUnitMethodResultIndType(Expr1,Expr2)
+#define yNEqF_SUnitMethodResultIndType(Expr1,Expr2)  ( ! yEq_SUnitMethodResultIndType(Expr1,Expr2) )
+extern SUnitMethodResultIndType yMake_SUnitMethodResultIndType
+  XPP(( AddressType, AddressType, SDL_Octet, SDL_Octet, SDL_Integer,
+  SDL_Integer, z_ctypes_4_VoidStar, z_ctypes_4_VoidStar ));
+#ifndef ANY_SUnitMethodResultIndType
+#define ANY_SUnitMethodResultIndType  yMake_SUnitMethodResultIndType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Octet, ANY_SDL_Octet, ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_0T3_copy(P)  P
+
+/*****
+* NEWTYPE SUnitPushIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionLess),212(25,45),27)
+******/
+
+#define yAssF_SUnitPushIndType(V,E,A)  V = E
+extern void yDef_SUnitPushIndType XPP(( SUnitPushIndType * ));
+extern SDL_Boolean yEq_SUnitPushIndType XPP(( SUnitPushIndType,
+  SUnitPushIndType ));
+#define yEqF_SUnitPushIndType(Expr1,Expr2)  yEq_SUnitPushIndType(Expr1,Expr2)
+#define yNEqF_SUnitPushIndType(Expr1,Expr2)  ( ! yEq_SUnitPushIndType(Expr1,Expr2) )
+extern SUnitPushIndType yMake_SUnitPushIndType XPP(( AddressType, AddressType,
+  SDL_Octet, SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar ));
+#ifndef ANY_SUnitPushIndType
+#define ANY_SUnitPushIndType  yMake_SUnitPushIndType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Octet, ANY_SDL_Integer, ANY_SDL_Integer, \
+  ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_0U3_copy(P)  P
+
+/*****
+* NEWTYPE SConnectReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),119(25,40),1)
+******/
+
+#define yAssF_SConnectReqType(V,E,A)  V = E
+extern void yDef_SConnectReqType XPP(( SConnectReqType * ));
+extern SDL_Boolean yEq_SConnectReqType XPP(( SConnectReqType,
+  SConnectReqType ));
+#define yEqF_SConnectReqType(Expr1,Expr2)  yEq_SConnectReqType(Expr1,Expr2)
+#define yNEqF_SConnectReqType(Expr1,Expr2)  ( ! yEq_SConnectReqType(Expr1,Expr2) )
+extern SConnectReqType yMake_SConnectReqType XPP(( AddressType, AddressType,
+  SDL_Integer, z_ctypes_4_VoidStar, SDL_Natural, SDL_Natural, SDL_Octet,
+  SDL_Octet, SDL_Octet ));
+#ifndef ANY_SConnectReqType
+#define ANY_SConnectReqType  yMake_SConnectReqType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, ANY_SDL_Natural, \
+  ANY_SDL_Natural, ANY_SDL_Octet, ANY_SDL_Octet, ANY_SDL_Octet)
+#endif
+#define z_WAE_WSP_0V3_copy(P)  P
+
+/*****
+* NEWTYPE SConnectCnfType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),119(25,40),13)
+******/
+
+#define yAssF_SConnectCnfType(V,E,A)  V = E
+extern void yDef_SConnectCnfType XPP(( SConnectCnfType * ));
+extern SDL_Boolean yEq_SConnectCnfType XPP(( SConnectCnfType,
+  SConnectCnfType ));
+#define yEqF_SConnectCnfType(Expr1,Expr2)  yEq_SConnectCnfType(Expr1,Expr2)
+#define yNEqF_SConnectCnfType(Expr1,Expr2)  ( ! yEq_SConnectCnfType(Expr1,Expr2) )
+extern SConnectCnfType yMake_SConnectCnfType XPP(( SDL_Integer, SDL_Natural,
+  z_ctypes_4_VoidStar, SDL_Natural, SDL_Natural, SDL_Octet, SDL_Octet,
+  SDL_Octet ));
+#ifndef ANY_SConnectCnfType
+#define ANY_SConnectCnfType  yMake_SConnectCnfType(ANY_SDL_Integer, \
+  ANY_SDL_Natural, ANY_z_ctypes_4_VoidStar, ANY_SDL_Natural, ANY_SDL_Natural, \
+  ANY_SDL_Octet, ANY_SDL_Octet, ANY_SDL_Octet)
+#endif
+#define z_WAE_WSP_0W3_copy(P)  P
+
+/*****
+* NEWTYPE SDisconnectType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode1),122(25,125),1)
+******/
+
+#define yAssF_SDisconnectType(V,E,A)  V = E
+extern void yDef_SDisconnectType XPP(( SDisconnectType * ));
+extern SDL_Boolean yEq_SDisconnectType XPP(( SDisconnectType,
+  SDisconnectType ));
+#define yEqF_SDisconnectType(Expr1,Expr2)  yEq_SDisconnectType(Expr1,Expr2)
+#define yNEqF_SDisconnectType(Expr1,Expr2)  ( ! yEq_SDisconnectType(Expr1,Expr2) )
+extern SDisconnectType yMake_SDisconnectType XPP(( SDL_Integer, SDL_Natural,
+  SDL_Boolean, SDL_Integer, SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar, z_ctypes_4_VoidStar ));
+#ifndef ANY_SDisconnectType
+#define ANY_SDisconnectType  yMake_SDisconnectType(ANY_SDL_Integer, \
+  ANY_SDL_Natural, ANY_SDL_Boolean, ANY_SDL_Integer, ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_0X3_copy(P)  P
+
+/*****
+* NEWTYPE SMethodInvokeReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),140(20,40),1)
+******/
+
+#define yAssF_SMethodInvokeReqType(V,E,A)  V = E
+extern void yDef_SMethodInvokeReqType XPP(( SMethodInvokeReqType * ));
+extern SDL_Boolean yEq_SMethodInvokeReqType XPP(( SMethodInvokeReqType,
+  SMethodInvokeReqType ));
+#define yEqF_SMethodInvokeReqType(Expr1,Expr2)  yEq_SMethodInvokeReqType(Expr1,Expr2)
+#define yNEqF_SMethodInvokeReqType(Expr1,Expr2)  ( ! yEq_SMethodInvokeReqType(Expr1,Expr2) )
+extern SMethodInvokeReqType yMake_SMethodInvokeReqType XPP(( SDL_Integer,
+  SDL_Integer, SDL_Octet, SDL_Integer, SDL_Integer, SDL_Integer,
+  z_ctypes_4_VoidStar, z_ctypes_4_VoidStar, z_ctypes_4_VoidStar, SDL_Boolean,
+  SDL_Boolean, SDL_Natural ));
+#ifndef ANY_SMethodInvokeReqType
+#define ANY_SMethodInvokeReqType  yMake_SMethodInvokeReqType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Octet, ANY_SDL_Integer, ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar, ANY_SDL_Boolean, ANY_SDL_Boolean, ANY_SDL_Natural)
+#endif
+#define z_WAE_WSP_0Y03_copy(P)  P
+
+/*****
+* NEWTYPE SMethodInvokeCnfType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),140(20,40),16)
+******/
+
+#define yAssF_SMethodInvokeCnfType(V,E,A)  V = E
+extern void yDef_SMethodInvokeCnfType XPP(( SMethodInvokeCnfType * ));
+extern SDL_Boolean yEq_SMethodInvokeCnfType XPP(( SMethodInvokeCnfType,
+  SMethodInvokeCnfType ));
+#define yEqF_SMethodInvokeCnfType(Expr1,Expr2)  yEq_SMethodInvokeCnfType(Expr1,Expr2)
+#define yNEqF_SMethodInvokeCnfType(Expr1,Expr2)  ( ! yEq_SMethodInvokeCnfType(Expr1,Expr2) )
+extern SMethodInvokeCnfType yMake_SMethodInvokeCnfType XPP(( SDL_Integer,
+  SDL_Integer ));
+#ifndef ANY_SMethodInvokeCnfType
+#define ANY_SMethodInvokeCnfType  yMake_SMethodInvokeCnfType(ANY_SDL_Integer, \
+  ANY_SDL_Integer)
+#endif
+#define z_WAE_WSP_0Z3_copy(P)  P
+
+/*****
+* NEWTYPE SMethodResultIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),143(20,115),1)
+******/
+
+#define yAssF_SMethodResultIndType(V,E,A)  V = E
+extern void yDef_SMethodResultIndType XPP(( SMethodResultIndType * ));
+extern SDL_Boolean yEq_SMethodResultIndType XPP(( SMethodResultIndType,
+  SMethodResultIndType ));
+#define yEqF_SMethodResultIndType(Expr1,Expr2)  yEq_SMethodResultIndType(Expr1,Expr2)
+#define yNEqF_SMethodResultIndType(Expr1,Expr2)  ( ! yEq_SMethodResultIndType(Expr1,Expr2) )
+extern SMethodResultIndType yMake_SMethodResultIndType XPP(( SDL_Integer,
+  SDL_Integer, SDL_Octet, SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar, SDL_Boolean, SDL_Natural, SDL_Boolean ));
+#ifndef ANY_SMethodResultIndType
+#define ANY_SMethodResultIndType  yMake_SMethodResultIndType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Octet, ANY_SDL_Integer, ANY_SDL_Integer, \
+  ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar, ANY_SDL_Boolean, \
+  ANY_SDL_Natural, ANY_SDL_Boolean)
+#endif
+#define z_WAE_WSP_103_copy(P)  P
+
+/*****
+* NEWTYPE SMethodResultResType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),143(20,115),14)
+******/
+
+#define yAssF_SMethodResultResType(V,E,A)  V = E
+extern void yDef_SMethodResultResType XPP(( SMethodResultResType * ));
+extern SDL_Boolean yEq_SMethodResultResType XPP(( SMethodResultResType,
+  SMethodResultResType ));
+#define yEqF_SMethodResultResType(Expr1,Expr2)  yEq_SMethodResultResType(Expr1,Expr2)
+#define yNEqF_SMethodResultResType(Expr1,Expr2)  ( ! yEq_SMethodResultResType(Expr1,Expr2) )
+extern SMethodResultResType yMake_SMethodResultResType XPP(( SDL_Integer,
+  SDL_Integer, z_ctypes_4_VoidStar ));
+#ifndef ANY_SMethodResultResType
+#define ANY_SMethodResultResType  yMake_SMethodResultResType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_113_copy(P)  P
+
+/*****
+* NEWTYPE SMethodAbortReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),146(20,180),1)
+******/
+
+#define yAssF_z_WAE_WSP_12_SMethodAbortReqType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_12_SMethodAbortReqType
+  XPP(( z_WAE_WSP_12_SMethodAbortReqType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_12_SMethodAbortReqType
+  XPP(( z_WAE_WSP_12_SMethodAbortReqType, z_WAE_WSP_12_SMethodAbortReqType ));
+#define yEqF_z_WAE_WSP_12_SMethodAbortReqType(Expr1,Expr2)  yEq_z_WAE_WSP_12_SMethodAbortReqType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_12_SMethodAbortReqType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_12_SMethodAbortReqType(Expr1,Expr2) )
+extern z_WAE_WSP_12_SMethodAbortReqType yMake_z_WAE_WSP_12_SMethodAbortReqType
+  XPP(( SDL_Integer, SDL_Integer ));
+#ifndef ANY_z_WAE_WSP_12_SMethodAbortReqType
+#define ANY_z_WAE_WSP_12_SMethodAbortReqType  yMake_z_WAE_WSP_12_SMethodAbortReqType(ANY_SDL_Integer, \
+  ANY_SDL_Integer)
+#endif
+#define z_WAE_WSP_123_copy(P)  P
+
+/*****
+* NEWTYPE SMethodAbortIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode2),146(20,180),6)
+******/
+
+#define yAssF_z_WAE_WSP_13_SMethodAbortIndType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_13_SMethodAbortIndType
+  XPP(( z_WAE_WSP_13_SMethodAbortIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_13_SMethodAbortIndType
+  XPP(( z_WAE_WSP_13_SMethodAbortIndType, z_WAE_WSP_13_SMethodAbortIndType ));
+#define yEqF_z_WAE_WSP_13_SMethodAbortIndType(Expr1,Expr2)  yEq_z_WAE_WSP_13_SMethodAbortIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_13_SMethodAbortIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_13_SMethodAbortIndType(Expr1,Expr2) )
+extern z_WAE_WSP_13_SMethodAbortIndType yMake_z_WAE_WSP_13_SMethodAbortIndType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Natural ));
+#ifndef ANY_z_WAE_WSP_13_SMethodAbortIndType
+#define ANY_z_WAE_WSP_13_SMethodAbortIndType  yMake_z_WAE_WSP_13_SMethodAbortIndType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Natural)
+#endif
+#define z_WAE_WSP_133_copy(P)  P
+
+/*****
+* NEWTYPE SPushIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),1)
+******/
+
+#define yAssF_z_WAE_WSP_14_SPushIndType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_14_SPushIndType XPP(( z_WAE_WSP_14_SPushIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_14_SPushIndType
+  XPP(( z_WAE_WSP_14_SPushIndType, z_WAE_WSP_14_SPushIndType ));
+#define yEqF_z_WAE_WSP_14_SPushIndType(Expr1,Expr2)  yEq_z_WAE_WSP_14_SPushIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_14_SPushIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_14_SPushIndType(Expr1,Expr2) )
+extern z_WAE_WSP_14_SPushIndType yMake_z_WAE_WSP_14_SPushIndType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar ));
+#ifndef ANY_z_WAE_WSP_14_SPushIndType
+#define ANY_z_WAE_WSP_14_SPushIndType  yMake_z_WAE_WSP_14_SPushIndType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_143_copy(P)  P
+
+/*****
+* NEWTYPE SConfirmedPushIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),9)
+******/
+
+#define yAssF_z_WAE_WSP_15_SConfirmedPushIndType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_15_SConfirmedPushIndType
+  XPP(( z_WAE_WSP_15_SConfirmedPushIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_15_SConfirmedPushIndType
+  XPP(( z_WAE_WSP_15_SConfirmedPushIndType,
+  z_WAE_WSP_15_SConfirmedPushIndType ));
+#define yEqF_z_WAE_WSP_15_SConfirmedPushIndType(Expr1,Expr2)  yEq_z_WAE_WSP_15_SConfirmedPushIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_15_SConfirmedPushIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_15_SConfirmedPushIndType(Expr1,Expr2) )
+extern z_WAE_WSP_15_SConfirmedPushIndType yMake_z_WAE_WSP_15_SConfirmedPushIndType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Integer, SDL_Integer,
+  z_ctypes_4_VoidStar, z_ctypes_4_VoidStar ));
+#ifndef ANY_z_WAE_WSP_15_SConfirmedPushIndType
+#define ANY_z_WAE_WSP_15_SConfirmedPushIndType  yMake_z_WAE_WSP_15_SConfirmedPushIndType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_153_copy(P)  P
+
+/*****
+* NEWTYPE SConfirmedPushResType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),18)
+******/
+
+#define yAssF_z_WAE_WSP_16_SConfirmedPushResType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_16_SConfirmedPushResType
+  XPP(( z_WAE_WSP_16_SConfirmedPushResType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_16_SConfirmedPushResType
+  XPP(( z_WAE_WSP_16_SConfirmedPushResType,
+  z_WAE_WSP_16_SConfirmedPushResType ));
+#define yEqF_z_WAE_WSP_16_SConfirmedPushResType(Expr1,Expr2)  yEq_z_WAE_WSP_16_SConfirmedPushResType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_16_SConfirmedPushResType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_16_SConfirmedPushResType(Expr1,Expr2) )
+extern z_WAE_WSP_16_SConfirmedPushResType yMake_z_WAE_WSP_16_SConfirmedPushResType
+  XPP(( SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar ));
+#ifndef ANY_z_WAE_WSP_16_SConfirmedPushResType
+#define ANY_z_WAE_WSP_16_SConfirmedPushResType  yMake_z_WAE_WSP_16_SConfirmedPushResType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_163_copy(P)  P
+
+/*****
+* NEWTYPE SPushAbortReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),28)
+******/
+
+#define yAssF_z_WAE_WSP_17_SPushAbortReqType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_17_SPushAbortReqType
+  XPP(( z_WAE_WSP_17_SPushAbortReqType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_17_SPushAbortReqType
+  XPP(( z_WAE_WSP_17_SPushAbortReqType, z_WAE_WSP_17_SPushAbortReqType ));
+#define yEqF_z_WAE_WSP_17_SPushAbortReqType(Expr1,Expr2)  yEq_z_WAE_WSP_17_SPushAbortReqType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_17_SPushAbortReqType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_17_SPushAbortReqType(Expr1,Expr2) )
+extern z_WAE_WSP_17_SPushAbortReqType yMake_z_WAE_WSP_17_SPushAbortReqType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Natural ));
+#ifndef ANY_z_WAE_WSP_17_SPushAbortReqType
+#define ANY_z_WAE_WSP_17_SPushAbortReqType  yMake_z_WAE_WSP_17_SPushAbortReqType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Natural)
+#endif
+#define z_WAE_WSP_173_copy(P)  P
+
+/*****
+* NEWTYPE SPushAbortIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),167(20,40),34)
+******/
+
+#define yAssF_z_WAE_WSP_18_SPushAbortIndType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_18_SPushAbortIndType
+  XPP(( z_WAE_WSP_18_SPushAbortIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_18_SPushAbortIndType
+  XPP(( z_WAE_WSP_18_SPushAbortIndType, z_WAE_WSP_18_SPushAbortIndType ));
+#define yEqF_z_WAE_WSP_18_SPushAbortIndType(Expr1,Expr2)  yEq_z_WAE_WSP_18_SPushAbortIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_18_SPushAbortIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_18_SPushAbortIndType(Expr1,Expr2) )
+extern z_WAE_WSP_18_SPushAbortIndType yMake_z_WAE_WSP_18_SPushAbortIndType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Natural ));
+#ifndef ANY_z_WAE_WSP_18_SPushAbortIndType
+#define ANY_z_WAE_WSP_18_SPushAbortIndType  yMake_z_WAE_WSP_18_SPushAbortIndType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Natural)
+#endif
+#define z_WAE_WSP_183_copy(P)  P
+
+/*****
+* NEWTYPE SSuspendReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),1)
+******/
+
+#define yAssF_z_WAE_WSP_19_SSuspendReqType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_19_SSuspendReqType
+  XPP(( z_WAE_WSP_19_SSuspendReqType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_19_SSuspendReqType
+  XPP(( z_WAE_WSP_19_SSuspendReqType, z_WAE_WSP_19_SSuspendReqType ));
+#define yEqF_z_WAE_WSP_19_SSuspendReqType(Expr1,Expr2)  yEq_z_WAE_WSP_19_SSuspendReqType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_19_SSuspendReqType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_19_SSuspendReqType(Expr1,Expr2) )
+extern z_WAE_WSP_19_SSuspendReqType yMake_z_WAE_WSP_19_SSuspendReqType
+  XPP(( SDL_Integer ));
+#ifndef ANY_z_WAE_WSP_19_SSuspendReqType
+#define ANY_z_WAE_WSP_19_SSuspendReqType  yMake_z_WAE_WSP_19_SSuspendReqType(ANY_SDL_Integer)
+#endif
+#define z_WAE_WSP_193_copy(P)  P
+
+/*****
+* NEWTYPE SSuspendIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),5)
+******/
+
+#define yAssF_z_WAE_WSP_1A_SSuspendIndType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_1A_SSuspendIndType
+  XPP(( z_WAE_WSP_1A_SSuspendIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_1A_SSuspendIndType
+  XPP(( z_WAE_WSP_1A_SSuspendIndType, z_WAE_WSP_1A_SSuspendIndType ));
+#define yEqF_z_WAE_WSP_1A_SSuspendIndType(Expr1,Expr2)  yEq_z_WAE_WSP_1A_SSuspendIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_1A_SSuspendIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_1A_SSuspendIndType(Expr1,Expr2) )
+extern z_WAE_WSP_1A_SSuspendIndType yMake_z_WAE_WSP_1A_SSuspendIndType
+  XPP(( SDL_Integer, SDL_Natural ));
+#ifndef ANY_z_WAE_WSP_1A_SSuspendIndType
+#define ANY_z_WAE_WSP_1A_SSuspendIndType  yMake_z_WAE_WSP_1A_SSuspendIndType(ANY_SDL_Integer, \
+  ANY_SDL_Natural)
+#endif
+#define z_WAE_WSP_1A3_copy(P)  P
+
+/*****
+* NEWTYPE SResumeCnfType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),10)
+******/
+
+#define yAssF_z_WAE_WSP_1B_SResumeCnfType(V,E,A)  V = E
+extern void yDef_z_WAE_WSP_1B_SResumeCnfType
+  XPP(( z_WAE_WSP_1B_SResumeCnfType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_1B_SResumeCnfType
+  XPP(( z_WAE_WSP_1B_SResumeCnfType, z_WAE_WSP_1B_SResumeCnfType ));
+#define yEqF_z_WAE_WSP_1B_SResumeCnfType(Expr1,Expr2)  yEq_z_WAE_WSP_1B_SResumeCnfType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_1B_SResumeCnfType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_1B_SResumeCnfType(Expr1,Expr2) )
+extern z_WAE_WSP_1B_SResumeCnfType yMake_z_WAE_WSP_1B_SResumeCnfType
+  XPP(( SDL_Integer ));
+#ifndef ANY_z_WAE_WSP_1B_SResumeCnfType
+#define ANY_z_WAE_WSP_1B_SResumeCnfType  yMake_z_WAE_WSP_1B_SResumeCnfType(ANY_SDL_Integer)
+#endif
+#define z_WAE_WSP_1B3_copy(P)  P
+
+/*****
+* NEWTYPE SResumeReqType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),164(100,40),14)
+******/
+
+#define yAssF_SResumeReqType(V,E,A)  V = E
+extern void yDef_SResumeReqType XPP(( SResumeReqType * ));
+extern SDL_Boolean yEq_SResumeReqType XPP(( SResumeReqType, SResumeReqType ));
+#define yEqF_SResumeReqType(Expr1,Expr2)  yEq_SResumeReqType(Expr1,Expr2)
+#define yNEqF_SResumeReqType(Expr1,Expr2)  ( ! yEq_SResumeReqType(Expr1,Expr2) )
+extern SResumeReqType yMake_SResumeReqType XPP(( AddressType, AddressType,
+  SDL_Integer, z_ctypes_4_VoidStar ));
+#ifndef ANY_SResumeReqType
+#define ANY_SResumeReqType  yMake_SResumeReqType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar)
+#endif
+#define z_WAE_WSP_1C3_copy(P)  P
+
+/*****
+* NEWTYPE SExceptionIndType  (HEADING section)
+* <<PACKAGE WAE_WSP>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\cnf_co_cl__wae_wsp.sun(ConnectionMode3),170(100,115),1)
+******/
+
+extern void yAss_z_WAE_WSP_1D_SExceptionIndType
+  XPP(( z_WAE_WSP_1D_SExceptionIndType *, z_WAE_WSP_1D_SExceptionIndType,
+  int ));
+#define yAssF_z_WAE_WSP_1D_SExceptionIndType(V,E,A)  yAss_z_WAE_WSP_1D_SExceptionIndType(&(V),E,A)
+extern void yDef_z_WAE_WSP_1D_SExceptionIndType
+  XPP(( z_WAE_WSP_1D_SExceptionIndType * ));
+extern SDL_Boolean yEq_z_WAE_WSP_1D_SExceptionIndType
+  XPP(( z_WAE_WSP_1D_SExceptionIndType, z_WAE_WSP_1D_SExceptionIndType ));
+#define yEqF_z_WAE_WSP_1D_SExceptionIndType(Expr1,Expr2)  yEq_z_WAE_WSP_1D_SExceptionIndType(Expr1,Expr2)
+#define yNEqF_z_WAE_WSP_1D_SExceptionIndType(Expr1,Expr2)  ( ! yEq_z_WAE_WSP_1D_SExceptionIndType(Expr1,Expr2) )
+extern void yFree_z_WAE_WSP_1D_SExceptionIndType XPP((void **));
+extern z_WAE_WSP_1D_SExceptionIndType yMake_z_WAE_WSP_1D_SExceptionIndType
+  XPP(( SDL_Octet_String ));
+#ifndef ANY_z_WAE_WSP_1D_SExceptionIndType
+#define ANY_z_WAE_WSP_1D_SExceptionIndType  yMake_z_WAE_WSP_1D_SExceptionIndType(ANY_SDL_Octet_String)
+#endif
+#define z_WAE_WSP_1D3_copy(P)  P
+#endif
+   /* X_IFC_z_WAE_WSP__WAE_WSP */

@@ -1,0 +1,137 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     Bomber
+**
+** File:
+**     IrDA_B1.tbl
+**
+** Description:
+**     IrDA Table for B1
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2001-01-24 woodstok     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _IRDA_B1_H_
+#define _IRDA_B1_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+UINT16 irex_ModelIndex = IREX_MODEL_B1;
+
+/*
+**---------------------------------------------------------------------------
+**  Variable Declarations
+**---------------------------------------------------------------------------
+*/
+/*
+enum tag_IREX_MODEL_E {
+    IREX_MODEL_C5,
+    IREX_MODEL_B5,
+    IREX_MODEL_B5_WAP,
+    IREX_MODEL_C5_WAP,
+    IREX_MODEL_A7,
+    IREX_MODEL_A8,
+    IREX_MODEL_B0,
+    IREX_MODEL_B1,
+    IREX_MAX_MODELS
+};
+*/
+
+const BOOL afSendMelody[IREX_MAX_MODELS] =
+{
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,  
+    FALSE,
+    FALSE,
+    TRUE
+};
+
+const BOOL afReceiveMelody[IREX_MAX_MODELS] =
+{
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE, 
+    FALSE,
+    FALSE,
+    TRUE
+};
+
+const BOOL afSendAni[IREX_MAX_MODELS] =
+{
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    TRUE
+};
+
+const BOOL afReceiveAni[IREX_MAX_MODELS] =
+{
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    TRUE
+};
+
+/*
+**---------------------------------------------------------------------------
+**  Function(external use only) Declarations
+**---------------------------------------------------------------------------
+*/
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _IRDA_B1_H_ */
+
+
+

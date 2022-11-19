@@ -1,0 +1,20 @@
+/* ************************************************************************ */
+/* SubAnnunAlarm_9x11x1.ppm */
+LOCAL ROM BYTE abSubAnnunAlarm[] = {
+    0x00, 0x00, 
+    0x1C, 0x00, 
+    0x63, 0x00, 
+    0x49, 0x00, 
+    0x88, 0x80, 
+    0x8E, 0x80, 
+    0x80, 0x80, 
+    0x41, 0x00, 
+    0x63, 0x00, 
+    0x1C, 0x00, 
+    0x63, 0x00, 
+};
+
+ROM BITMAP g_BmpSubAnnunAlarm = {
+    { { 'I', 'M', 'G' }, { 16, 11 }, 9, 1, FALSE, (COLOR)0x00, 0, { 0, } }, abSubAnnunAlarm
+};
+

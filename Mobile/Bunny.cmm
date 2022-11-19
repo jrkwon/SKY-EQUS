@@ -1,0 +1,7 @@
+;sys.up
+;Data.Set 0300067c %WORD 01		; GPIO 14 ( PS_HOLD ) -> high
+;Data.Set 03000668 %WORD 01
+
+d.load.elf DownLoad\Bunny.elf /nocode
+map.readonly 0--4fffff
+

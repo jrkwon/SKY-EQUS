@@ -1,0 +1,894 @@
+#[Template Applet
+
+#{Main Applet
+
+/* 
+** ---------------------------------------------------------------------------
+**
+** Function:    
+**     SKA_MainXxx()
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Input:
+**     pEvent :
+**
+** Output:
+**     None
+**
+** Return value:
+**     None
+**
+** Side effects:
+**     @SideEffects
+**
+** ---------------------------------------------------------------------------
+*/
+void SKY_API SKA_MainXxx(SKY_EVENT_T *pEvent)
+{
+    switch(pEvent->EventID)
+    {
+    case SE_APP_START : /* The very first event */
+        break;
+
+    case SE_APP_END :   /* The very last event */ 
+		break;
+
+    case SE_APP_SUSPEND: /* child applet is started */
+        break;
+
+    case SE_APP_RESUME: /* child applet is ended */
+        break;
+
+    default :
+        EQS_DEF_EVENT_PROC(pEvent);
+        break;
+    }
+}
+
+}#
+
+#{Local Sub Applet
+
+/* 
+** ---------------------------------------------------------------------------
+**
+** Function:    
+**     sSKA_Xxx()
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Input:
+**     pEvent :
+**
+** Output:
+**     None
+**
+** Return value:
+**     None
+**
+** Side effects:
+**     @SideEffects
+**
+** ---------------------------------------------------------------------------
+*/
+LOCAL void SKY_API sSKA_Xxx(SKY_EVENT_T *pEvent)
+{
+    switch(pEvent->EventID)
+    {
+    /* ------------------------------------------------------------------------
+    /* APP 
+    */
+    case SE_APP_START : /* The very first event */
+        break;
+
+    case SE_APP_END :   /* The very last event */ 
+		break;
+
+    case SE_APP_SUSPEND: /* child applet is started */
+        break;
+
+    case SE_APP_RESUME: /* child applet is ended */
+        break;
+
+    /* ------------------------------------------------------------------------
+    /* KEY 
+    */
+    case SE_KEY_ :
+        break;
+
+    default :
+        EQS_DEF_EVENT_PROC(pEvent);
+        break;
+    }
+}
+
+}#
+
+]#
+
+#[Template File
+
+#{Header File
+/*
+** ============================================================================
+**
+** Project: 
+**     #%PROJECT%#
+**
+** File:
+**     #%FILE%#
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** #%DATE%# jrkwon     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _#<U #%FILENAME_ONLY%#>#_H_
+#define _#<U #%FILENAME_ONLY%#>#_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Variable Declarations
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Function(external use only) Declarations
+**---------------------------------------------------------------------------
+*/
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _#<U #%FILENAME_ONLY%#>#_H_ */
+}#
+
+#{Source File
+/*
+** ===========================================================================
+**
+** Project: 
+**     #%PROJECT%#
+**
+** File:
+**     #%FILE%#
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+** 
+** History: 
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** #%DATE%# jrkwon     Created.
+**
+** ===========================================================================
+*/
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**---------------------------------------------------------------------------- 
+*/
+#include "sky.h"
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Global variables
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Internal variables
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Function(internal use only) Declarations
+**---------------------------------------------------------------------------
+*/
+
+/* 
+** ---------------------------------------------------------------------------
+**
+** Function:    
+**     @functionName()
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Input:
+**     @ArgumentsList
+**
+** Output:
+**     @TheResultOfThisFunction
+**
+** Return value:
+**     @ReturnValue
+**
+** Side effects:
+**     @SideEffects
+**
+** ---------------------------------------------------------------------------
+*/
+
+}#
+
+###############
+
+
+#{Control-Header File
+/*
+** ============================================================================
+**
+** Project: 
+**     #%PROJECT%#
+**
+** File:
+**     #%FILE%#
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** #%DATE%# jrkwon     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _#<U #%FILENAME_ONLY%#>#_H_
+#define _#<U #%FILENAME_ONLY%#>#_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+/* CONTROL_STYLE : bit flag */
+#define CS_XXX_YYY_ZZZ            0x0001   /* 0000 0000 0000 0001 */
+#define CS_XXX_YYY_ZZZ            0x0002   /* 0000 0000 0000 0010 */
+#define CS_XXX_YYY_ZZZ            0x0004   /* 0000 0000 0000 0100 */
+#define CS_XXX_YYY_ZZZ            0x0008   /* 0000 0000 0000 1000 */
+
+#define CS_XXX_YYY_DEFAULT         CS_XXX_YYY_ZZZ
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Variable Declarations
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Function(external use only) Declarations
+**---------------------------------------------------------------------------
+*/
+HCONTROL    EQS_API EQC_XxxYyy(COORD x, COORD y/* <-- Add here --> */);
+/* <-- Add here --> get/set functions */
+void        EQS_API EQC_SetXxxYyyZzz(HCONTROL hControl/* <-- Add here --> */);
+/* <-- Add here --> */ EQS_API EQC_GetXxxYyyZzz(HCONTROL hControl);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _#<U #%FILENAME_ONLY%#>#_H_ */
+}#
+
+#{Control-Source File
+/*
+** ===========================================================================
+**
+** Project: 
+**     #%PROJECT%#
+**
+** File:
+**     #%FILE%#
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+** 
+** History: 
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** #%DATE%# jrkwon     Created.
+**
+** ===========================================================================
+*/
+
+/* 
+**----------------------------------------------------------------------------
+**  Includes
+**---------------------------------------------------------------------------- 
+*/
+#include "eqs.h"
+
+/*
+**----------------------------------------------------------------------------
+**  Definitions
+**----------------------------------------------------------------------------
+*/
+
+/*
+**----------------------------------------------------------------------------
+**  Type Definitions
+**----------------------------------------------------------------------------
+*/
+typedef struct tagXXX_YYY_T  XXX_YYY_T;
+
+/*
+**----------------------------------------------------------------------------
+**  General Declarations
+**----------------------------------------------------------------------------
+*/
+struct tagXXX_YYY_T
+{
+    /* control header */
+    CONTROL_HEADER_T Header;   
+    /* <-- Add here --> the information about this control */
+    
+};
+
+/*
+**---------------------------------------------------------------------------
+**  Global variables
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Internal variables
+**---------------------------------------------------------------------------
+*/
+
+/*
+**---------------------------------------------------------------------------
+**  Function(internal use only) Declarations
+**---------------------------------------------------------------------------
+*/
+LOCAL void* EQS_API sAllocInstance(/* --> Add here <-- the information */);
+LOCAL void  EQS_API sHandleEvent(HCONTROL hControl, EQS_EVENT *pEvent);
+LOCAL void  EQS_API sFreeInstance(void *pInstance);
+
+/* 
+** ---------------------------------------------------------------------------
+**
+** Function:    
+**     @functionName()
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Input:
+**     @ArgumentsList
+**
+** Output:
+**     @TheResultOfThisFunction
+**
+** Return value:
+**     @ReturnValue
+**
+** Side effects:
+**     @SideEffects
+**
+** ---------------------------------------------------------------------------
+*/
+
+LOCAL void* EQS_API sAllocInstance(/* --> Add here <-- the information */)
+{
+    XXX_YYY_T *pXxxYyy;
+
+    /* allocate memory for the instance itself */
+    pXxxYyy = EQS_Malloc(sizeof(XXX_YYY_T));
+    /* --> Add here <-- allocate memory for this instance information */
+
+    return (void *)pXxxYyy;
+}
+
+LOCAL void EQS_API sHandleEvent(HCONTROL hControl, EQS_EVENT *pEvent)
+{
+    XXX_YYY_T *pXxxYyy;
+    /* <-- Add here --> the local variable for handling the event */
+    
+    /* check the control type */
+    ASSERT(EQC_GET_TYPE(hControl) == CT_XXX_YYY);
+
+    /* get the pointer of teh control instance */
+    pXxxYyy = (XXX_YYY_T *)EQC_GET_INSTANCE(hControl);
+    
+    if(pEvent->EventID == EQE_APP_DRAW)
+    {
+        /* <-- Add here --> drawing routine */
+
+        EQS_UpdateDisplay();
+    }
+}
+
+LOCAL void EQS_API sFreeInstance(void *pInstance)
+{
+    /* free the memory that was allocated */
+    /* <-- Add here --> */
+
+    /* free the instance itself */
+    EQS_Free(pInstance);
+}
+
+HCONTROL EQS_API EQC_XxxYyy(COORD x, COORD y/* <-- Add here --> */)
+{
+    XXX_YYY_T *pXxxYyy;
+    HCONTROL hControl;
+    COORD dx, dy;
+    /* <-- Add here --> local variables */
+
+    pXxxYyy = (XXX_YYY_T *)sAllocInstance(/* <-- Add here --> */);
+
+    /* get dx, dy */
+    dx = ;/* <-- Add here --> */
+    dy = ;/* <-- Add here --> */
+
+    hControl = EQC_AllocControl(CT_XXX_YYY,  pXxxYyy, x, y, dx, dy, 
+                                sHandleEvent, sFreeInstance );
+    ASSERT(hControl != INVALID_CONTROL_HANDLE);
+
+    /* <-- Add here --> set the control init value */
+    EQC_SET_STYLE(hControl, CS_XXX_YYY_DEFAULT);
+
+    /* send draw event to the state machine engine */
+    EQS_SendEvent(EQE_APP_DRAW, (WORD)hControl, EQS_NA);
+
+    return hControl;
+}
+
+void EQS_API EQC_SetXxxYyyZzz(HCONTROL hControl/* <-- Add here --> */)
+{
+	XXX_YYY_T *pXxxYyy;
+
+	ASSERT( EQC_GET_TYPE(hControl) == CT_XXX_YYY);
+    /* get the control instance */
+    pXxxYyy = (XXX_YYY_T *) EQC_GET_INSTANCE(hControl);
+    /* set value */
+
+    /* re-draw */
+    sHandleEvent(hControl, EQE_APP_DRAW);
+}
+
+/* <-- Add here --> */ EQS_API EQC_GetXxxYyyZzz(HCONTROL hControl)
+{
+	XXX_YYY_T *pXxxYyy;
+
+	ASSERT( EQC_GET_TYPE(hControl) == CT_XXX_YYY);
+    /* get the control instance */
+    pXxxYyy = (XXX_YYY_T *) EQC_GET_INSTANCE(hControl);
+
+    return /* <-- Add here --> */
+}
+
+}#
+
+#################
+
+#{Function Header
+/* 
+** ---------------------------------------------------------------------------
+**
+** Function:    
+**     @functionName()
+**
+** Description: 
+**     @DesciptionAboutThisFileHere
+**
+** Input:
+**     @ArgumentsList
+**
+** Output:
+**     @TheResultOfThisFunction
+**
+** Return value:
+**     @ReturnValue
+**
+** Side effects:
+**     @SideEffects
+**
+** ---------------------------------------------------------------------------
+*/
+}#
+
+#{2 - line comment
+/*
+** ***************************************************************************
+**
+** ***************************************************************************
+*/
+}#
+
+]# 
+
+#[Variable Prefixes
+
+#{Char
+CHAR c
+}#
+
+#{iNteger
+INT n
+}#
+
+#{iNteger 8
+INT8 n
+}#
+
+#{iNteger 16
+INT16 n
+}#
+
+#{iNteger 32
+INT32 n
+}#
+
+#{Long
+LONG l
+}#
+
+#{short - 2byte Word
+WORD w
+}#
+
+#{double word - long
+DWORD dw
+}#
+
+#{Boolean
+BOOL b
+}#
+
+#{Double
+DOUBLE d
+}#
+
+#{Float
+FLOAT f
+}#
+
+#{ASCIIZ
+BYTE sz[]
+}#
+
+#{pointer of ASCIIZ
+BYTE* psz
+}#
+
+#{Pointer
+void* p
+}#
+
+#{Array
+a
+}#
+
+#{integer Index
+UINT i
+}#
+
+#{X coordinate
+COORD x
+}#
+
+#{Y coordinate
+COORD y
+}#
+
+#{X Distance
+UINT dx
+}#
+
+#{Y Distance
+UINT dy
+}#
+
+#{bit flag
+UINT afXXX
+}#
+
+###############
+
+#{Unsigned iNteger8/16/32
+UINT n
+}#
+
+#{Unsigned iNteger 8
+UINT8 n
+}#
+
+#{Unsigned iNteger 16
+UINT16 n
+}#
+
+#{Unsigned iNteger 32
+UINT32 n
+}#
+
+#{Unsigned Long
+ULONG l
+}#
+
+#{Unsigned short - 2byte Word
+UWORD 
+}#
+
+###############
+
+#{Global variable
+g_
+}#
+
+#{Global/Static Variable
+g_
+}#
+
+]#
+
+#[Variable Suffixes
+
+#{sTructure
+T
+}#
+
+#{Enumeration
+E
+}#
+
+#{Argument
+A
+}#
+
+#{Const
+C
+}#
+
+]#
+
+#[Function Prefixes
+
+#{EQUS - state machine, display, utilities
+void EQS_API EQS_
+}#
+
+#{Application - a set of Applets
+void EQS_API EQA_MainXxxx(SKY_EVENT *pEvent)
+}#
+
+#{Applet - a unit of event handling function
+void SKY_API SKA_Xxx(SKY_EVENT *pEvent)
+}#
+
+#{Local Applet - a unit of event handling function
+LOCAL void SKY_API sSKA_Xxx(SKY_EVENT *pEvent)
+}#
+
+#{Control
+void EQS_API EQC_
+}#
+
+#{Local function
+LOCAL void SKY_API s
+}#
+
+]#
+
+
+#[Define Struct and Enum
+
+#{Structure
+struct tagSTRUCT_NAME_T {
+    @Member varialbe
+};
+}#
+
+#{Enumeration
+enum tag_ENUM_NAME_E {
+    @Enum constant
+};
+}#
+
+]#
+
+#[typedef of Struct & Enum
+
+#{Structure
+typedef struct tagSTRUCT_NAME_T STRUCT_NAME_T;
+}#
+
+#{Enumeration
+typedef enum tagENUM_NAME_E ENUM_NAME_E;
+}#
+
+]#
+
+
+
+
+#[Flow Controls
+#{while
+while(@Expression)
+{
+}
+}#
+
+#{if-else
+if(@Expression)
+{
+}
+else
+{
+}
+}#
+
+#{if-else if
+if(@Expression)
+{
+}
+else if(@Expression)
+{
+}
+}#
+
+#{if
+if(@Expression)
+{
+}
+}#
+
+#{for
+for(@Expression; @Expression; @Expression)
+{
+}
+}#
+
+#{do
+do
+{
+}while(@Expression);
+}#
+
+#{switch
+switch(@Expression)
+{
+    case @Constant:
+        break;
+    default:
+        break;
+}
+}#
+
+]#
+
+#[Comment & ifdef MODEL_ID
+
+#{Add comment-Start
+/* jrkwon #%DATE%# --> @why, what */
+}#
+
+#{Add comment-End
+/* <-- */
+}#
+
+#{Add comment-Start & End
+/* jrkwon #%DATE%# --> @why, what */
+/* <-- */
+}#
+
+#{if SKY_MODEL_ID == SKY_MODEL_B0
+#if (SKY_MODEL_ID == SKY_MODEL_B0)
+
+#endif /* #if (SKY_MODEL_ID == SKY_MODEL_B0) */
+}#
+
+#{if SKY_MODEL_ID == SKY_MODEL_B1
+#if (SKY_MODEL_ID == SKY_MODEL_B1)
+
+#endif /* #if (SKY_MODEL_ID == SKY_MODEL_B1) */
+}#
+
+#{Add comment and if (MODEL_ID == MODEL_B1) || (MODEL_ID == MODEL_B0)
+/* jrkwon #%DATE%# --> @why, what */
+#if (MODEL_ID == MODEL_B1) || (MODEL_ID == MODEL_B0)
+
+#endif /* (MODEL_ID == MODEL_B1) || (MODEL_ID == MODEL_B0) */
+/* <-- */
+}#
+
+]#

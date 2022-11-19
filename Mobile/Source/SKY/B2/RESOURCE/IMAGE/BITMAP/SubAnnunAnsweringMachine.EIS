@@ -1,0 +1,20 @@
+/* ************************************************************************ */
+/* SubAnnunAnsweringMachine_11x11x1.ppm */
+LOCAL ROM BYTE abSubAnnunAnsweringMachine[] = {
+    0x00, 0x00, 
+    0x00, 0x00, 
+    0xFF, 0xE0, 
+    0xA0, 0xA0, 
+    0xBF, 0xA0, 
+    0x80, 0x20, 
+    0x91, 0x20, 
+    0xBB, 0xA0, 
+    0x91, 0x20, 
+    0x80, 0x20, 
+    0xFF, 0xE0, 
+};
+
+ROM BITMAP g_BmpSubAnnunAnsweringMachine = {
+    { { 'I', 'M', 'G' }, { 16, 11 }, 11, 1, FALSE, (COLOR)0x00, 0, { 0, } }, abSubAnnunAnsweringMachine
+};
+

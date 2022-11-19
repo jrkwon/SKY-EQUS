@@ -1,0 +1,135 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2001.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WSPConnectionMode_WTP__WSPConnectionMode_WTP
+#define X_IFC_z_WSPConnectionMode_WTP__WSPConnectionMode_WTP
+#define XMK_IFC_TIME 995439254
+
+/* *************** DECLARATIONS IN PACKAGE WSPConnectionMode_WTP *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "buffmgt.ifc"
+#include "glbldecl.ifc"
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE TRInvokeReqType  (TYPE section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),3)
+******/
+typedef struct TRInvokeReqType_s {
+    AddressType  SourceAddress;
+    AddressType  DestinationAddress;
+    SDL_Integer  AckType;
+    pdubuf_ptr  UserData;
+    SDL_Integer  ClassType;
+    SDL_Integer  Handle;
+    SDL_Boolean  AllowSegmentedResult;
+    SDL_Boolean  MoreData;
+    SDL_Natural  TotalSize;
+} TRInvokeReqType;
+
+/*****
+* NEWTYPE TRInvokeIndType  (TYPE section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),15)
+******/
+typedef struct TRInvokeIndType_s {
+    AddressType  SourceAddress;
+    AddressType  DestinationAddress;
+    SDL_Integer  AckType;
+    pdubuf_ptr  UserData;
+    SDL_Integer  ClassType;
+    SDL_Integer  Handle;
+} TRInvokeIndType;
+
+/*****
+* NEWTYPE TRResultIndType  (TYPE section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),24)
+******/
+typedef struct TRResultIndType_s {
+    pdubuf_ptr  UserData;
+    SDL_Integer  Handle;
+    SDL_Boolean  MoreData;
+    SDL_Natural  TotalSize;
+} TRResultIndType;
+
+/*****
+* NEWTYPE TRInvokeReqType  (HEADING section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),3)
+******/
+
+#define yAssF_TRInvokeReqType(V,E,A)  V = E
+extern void yDef_TRInvokeReqType XPP(( TRInvokeReqType * ));
+extern SDL_Boolean yEq_TRInvokeReqType XPP(( TRInvokeReqType,
+  TRInvokeReqType ));
+#define yEqF_TRInvokeReqType(Expr1,Expr2)  yEq_TRInvokeReqType(Expr1,Expr2)
+#define yNEqF_TRInvokeReqType(Expr1,Expr2)  ( ! yEq_TRInvokeReqType(Expr1,Expr2) )
+extern TRInvokeReqType yMake_TRInvokeReqType XPP(( AddressType, AddressType,
+  SDL_Integer, pdubuf_ptr, SDL_Integer, SDL_Integer, SDL_Boolean, SDL_Boolean,
+  SDL_Natural ));
+#ifndef ANY_TRInvokeReqType
+#define ANY_TRInvokeReqType  yMake_TRInvokeReqType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Integer, ANY_pdubuf_ptr, ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Boolean, ANY_SDL_Boolean, ANY_SDL_Natural)
+#endif
+#define z_WSPConnectionMode_WTP_C3_copy(P)  P
+
+/*****
+* NEWTYPE TRInvokeIndType  (HEADING section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),15)
+******/
+
+#define yAssF_TRInvokeIndType(V,E,A)  V = E
+extern void yDef_TRInvokeIndType XPP(( TRInvokeIndType * ));
+extern SDL_Boolean yEq_TRInvokeIndType XPP(( TRInvokeIndType,
+  TRInvokeIndType ));
+#define yEqF_TRInvokeIndType(Expr1,Expr2)  yEq_TRInvokeIndType(Expr1,Expr2)
+#define yNEqF_TRInvokeIndType(Expr1,Expr2)  ( ! yEq_TRInvokeIndType(Expr1,Expr2) )
+extern TRInvokeIndType yMake_TRInvokeIndType XPP(( AddressType, AddressType,
+  SDL_Integer, pdubuf_ptr, SDL_Integer, SDL_Integer ));
+#ifndef ANY_TRInvokeIndType
+#define ANY_TRInvokeIndType  yMake_TRInvokeIndType(ANY_AddressType, \
+  ANY_AddressType, ANY_SDL_Integer, ANY_pdubuf_ptr, ANY_SDL_Integer, \
+  ANY_SDL_Integer)
+#endif
+#define z_WSPConnectionMode_WTP_D3_copy(P)  P
+
+/*****
+* NEWTYPE TRResultIndType  (HEADING section)
+* <<PACKAGE WSPConnectionMode_WTP>>
+* #SDTREF(SDL,D:\WIP\Maintenance\4.x\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\wspconnectionmode_wtp.sun(1),164(25,50),24)
+******/
+
+#define yAssF_TRResultIndType(V,E,A)  V = E
+extern void yDef_TRResultIndType XPP(( TRResultIndType * ));
+extern SDL_Boolean yEq_TRResultIndType XPP(( TRResultIndType,
+  TRResultIndType ));
+#define yEqF_TRResultIndType(Expr1,Expr2)  yEq_TRResultIndType(Expr1,Expr2)
+#define yNEqF_TRResultIndType(Expr1,Expr2)  ( ! yEq_TRResultIndType(Expr1,Expr2) )
+extern TRResultIndType yMake_TRResultIndType XPP(( pdubuf_ptr, SDL_Integer,
+  SDL_Boolean, SDL_Natural ));
+#ifndef ANY_TRResultIndType
+#define ANY_TRResultIndType  yMake_TRResultIndType(ANY_pdubuf_ptr, \
+  ANY_SDL_Integer, ANY_SDL_Boolean, ANY_SDL_Natural)
+#endif
+#define z_WSPConnectionMode_WTP_E3_copy(P)  P
+#endif
+   /* X_IFC_z_WSPConnectionMode_WTP__WSPConnectionMode_WTP */

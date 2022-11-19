@@ -1,0 +1,200 @@
+# *====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+#
+#                     SCATTER LOADING DESCRIPTION FILE
+#  
+#  Copyright (c) 1998,1999 by QUALCOMM Incorporated. All Rights Reserved.
+#
+#  GENERAL DESCRIPTION
+#
+#  The scatter loading description file is used by the ARM SDK 2.11
+#  linker to relocate different segments based on user specified
+#  mappings. 
+#
+#  MSM5000 Memory Map
+#
+#  The sample memory map layout is given below.  Virtual Boot Block ROM begins
+#  at 0x00000000, and application ROM begins immediately after that.
+#  Thus, the boundary between the VBB and application code is at an unknown
+#  location.
+#
+#  For MSM5000, the base of RAM is at 0x01380000, with a 256K of RAM, 
+#  the top of RAM is at 0x0103FFFF. Virtual Boot Block RAM begins 
+#  immediately after Application RAM, wherever that happens to be.
+#
+#                         _______________________
+#            0x0103FFFF  |                       |
+#                        |      Boot Block       |
+#                        |         (RAM)         |
+#                        |     (RW & ZI data)    |
+#                        |                       |
+#                        |                       |
+#       Unknown Address   _______________________
+#                        |                       |
+#                        |                       |
+#                        |                       |
+#                        |      Application      |
+#                        |         (RAM)         |
+#                        |     (RW & ZI data)    |
+#                        |                       |
+#                        |                       |
+#            0x01000000   _______________________
+#                        |                       |
+#                        |                       |
+#                        |                       |
+#                        |      Application      |
+#                        |         (ROM)         |
+#                        |     (code & const)    |
+#                        |                       |
+#                        |                       |
+#       Unknown Address   _______________________
+#                        |                       |
+#                        |      Boot Block       |
+#                        |         (ROM)         |
+#                        |     (code & const)    |
+#                        |                       |
+#            0x00000000  -------------------------
+#
+#
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+
+#===========================================================================
+#
+#                           EDIT HISTORY FOR FILE
+#  This section contains comments describing changes made to the module.
+#  Notice that changes are listed in reverse chronological order.
+#
+#  $Header:   L:/src/asw/MSM5000/VCS/msm5000.scv   1.0   04 Oct 1999 16:06:32   lchan  $
+#   
+# when       who     what, where, why
+# --------   ---     -------------------------------------------------------
+# 03/17/99   ms      Incorporated changes for Virtual Boot Block.
+# 09/14/98   hcg     Added BOOT_RAM_TEST area
+# 08/05/98   hcg     Added downloader uart poll file
+# 07/30/98   hcg     Added ROM_3 to move check location to top of ROM
+# 07/26/98   hcg     Revised for coding standard, removed unused code
+# 06/01/98   hcg     Created
+#===========================================================================
+
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+#  Virtual Boot Block
+#
+#  ROM for the Boot Block begins at 0x0.  The interrupt vectors need
+#  to be located first, and are therefore given the +FIRST option.  This
+#  AREA also includes the check block ans some other useful information. We
+#  place all code and constant data for the boot block at the beginning
+#  of ROM.  In addition, we partition the RAM in such a way, that all
+#  RAM needed by the boot block is placed at the top of RAM.
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+
+#  Base of ROM - The interrupt vectors must begin at 0x0.
+CODE_ROM 0x2000 0x5FFFF0
+{
+#    VBB_ROM 0x0 
+#    {
+#      bootsys.o (BOOTSYS_IVT, +FIRST)   
+#      bootsys.o (BOOTSYS_BOOT_CODE)
+#      bootsys.o (BOOTSYS_DATA)
+#      bootsys.o (BOOT_RAM_TEST)
+#      boothw.o (+RO)
+#      lcd.o (+RO)
+#      bootmem.o (+RO)
+#      dloadarm.o (+RO)
+#      dloaduart.o (+RO)
+#      memmove.o (+RO)
+#      call_via.o (+RO)
+#      boot_trap.o (+RO)
+#      crc.o (+RO)
+#      dloadpoll.o(+RO)
+#    }
+
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+# Application Code
+#
+# The application entry point is at the symbol Reset_Handler. This region
+# contains the code from all files not in the Virtual Boot Block.
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+
+    MAIN_APP 0x2000
+    {
+      bootsys.o (BOOTSYS_IVT, +FIRST)   
+      bootsys.o (BOOTSYS_BOOT_CODE)
+      bootsys.o (BOOTSYS_DATA)
+      bootsys.o (BOOT_RAM_TEST)
+      * (+RO)
+    }
+
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+# RAM Locations (B1: 0x01180000 ~ 0x0127FFFF)
+#
+# The first two 32-bit locations are reserved for the IRQ and FIQ interrupt
+# vectors, which are vectored through RAM
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+#   APP_RAM 0x01380000
+#   APP_RAM 0x011C0000
+   APP_RAM 0x01190000
+    {
+      bootapp.o (BOOTAPP_IVECT, +FIRST)
+      * (+RW, +ZI)
+    }
+
+   
+    BB_RAM +0x0
+    {
+        dloadarm.o (+RW)
+        dloaduart.o (+RW)
+        bootmem.o (+ZI)
+    }
+
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+#
+# Share area. (IrDA and WAP) (B1: 0x01180000 ~ 0x0127FFFF)
+#
+#  If APP_SAHRE_RAM == 0x127300F, then 53232 bytes available
+#
+#  *GVM Use 256KBytes shared RAM (01.2.3 woodstok)
+#  *GVM Use 130KBytes shared RAM (01.2.27 woodstok)
+#  *GVM/WAP Use 200KBytes shared RAM (01.3.1 jmpark)
+#  Caution !!! : app_share_ram address should be dword aligned.
+#*====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*
+#   APP_SHARE_RAM 0x123FBF0
+#	APP_SHARE_RAM 0x125F7F0
+#   APP_SHARE_RAM 0x1270000
+#   APP_SHARE_RAM 0x1277800
+	APP_SHARE_RAM 0x1306000
+	{
+# IrDA 관련 SRAM
+      msmuart1.o (+RW, +ZI)
+      msmuart2.o (+RW, +ZI)
+      msmtimer.o (+RW, +ZI)
+# irmodem.c는 share 하면 안됨
+#     irmodem.o  (+RW, +ZI)
+      irdauty.o  (+RW, +ZI)
+      irsirapi.o (+RW, +ZI)
+      irhwif.o   (+RW, +ZI)
+      irsirtx.o  (+RW, +ZI)
+      irsirrx.o  (+RW, +ZI)
+      irtmrapi.o (+RW, +ZI)
+# Ram Area를 잡을 필요 없는 file임
+#      irsircrc.o (+RW, +ZI)	
+      irlap.o    (+RW, +ZI)
+      irlmp.o    (+RW, +ZI)
+      tinytp.o   (+RW, +ZI)
+      ircomm.o   (+RW, +ZI)
+      irmisc.o   (+RW, +ZI)
+# WAP과 동시에 사용되지 않는 SRAM 영역
+#	  SkyTodayNew.o	(+RW, +ZI)
+	  Shared.o		(+RW, +ZI) 
+      ska_irda.o    (+RW, +ZI)
+	  ska_cam.o     (+RW, +ZI)
+# EMAIL       
+	  ska_mbox.o    (+RW, +ZI)      
+      ska_smtp.o    (+RW, +ZI)      
+      ska_pop3.o    (+RW, +ZI)      
+	}
+
+#   NON_INIT_RAM 0x0127FFE0
+    NON_INIT_RAM 0x012FFFE0
+    {
+	  sw_reset.o (+RW)
+    }
+}    

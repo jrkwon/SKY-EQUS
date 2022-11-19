@@ -1,0 +1,48 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2001.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WDPPckg__WDPpckg
+#define X_IFC_z_WDPPckg__WDPpckg
+#define XMK_IFC_TIME 995439254
+
+/* *************** DECLARATIONS IN PACKAGE WDPpckg *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "wdp_ul.ifc"
+
+/*------------------------------ SYNONYMS -------------------------------*/
+#define z_WDPPckg_L_MinSourcePortNo SDL_INTEGER_LIT(0)
+#define MinSourcePortNo SDL_INTEGER_LIT(0)
+
+#define z_WDPPckg_M_MaxSourcePortNo SDL_INTEGER_LIT(90000)
+#define MaxSourcePortNo SDL_INTEGER_LIT(90000)
+
+#define z_WDPPckg_N_MinDestPortNo SDL_INTEGER_LIT(0)
+#define MinDestPortNo SDL_INTEGER_LIT(0)
+
+#define z_WDPPckg_O_MaxDestPortNo SDL_INTEGER_LIT(90000)
+#define MaxDestPortNo SDL_INTEGER_LIT(90000)
+
+#define z_WDPPckg_P_MaxLengthUNSegSMSMessage SDL_INTEGER_LIT(133)
+#define MaxLengthUNSegSMSMessage SDL_INTEGER_LIT(133)
+
+#define z_WDPPckg_Q_MaxLengthSegSMSMessage SDL_INTEGER_LIT(128)
+#define MaxLengthSegSMSMessage SDL_INTEGER_LIT(128)
+
+
+/*------------------------------- SORTS ---------------------------------*/
+#endif
+   /* X_IFC_z_WDPPckg__WDPpckg */

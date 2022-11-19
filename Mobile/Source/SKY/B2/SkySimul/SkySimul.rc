@@ -1,0 +1,331 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\SkySimul.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.kor\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\SkySimul.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SkySimul 정보"
+FONT 9, "굴림"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "SkySimul 버전 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2000",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_SKYSIMUL_DIALOG DIALOGEX 0, 0, 377, 291
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "SkySimul"
+FONT 9, "굴림", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "F1",IDC_BUTTON_F1,244,7,23,20
+    PUSHBUTTON      "F2",IDC_BUTTON_F2,304,7,23,20
+    PUSHBUTTON      "^",IDC_BUTTON_UP,274,27,23,20
+    PUSHBUTTON      "<",IDC_BUTTON_LEFT,249,51,23,20
+    PUSHBUTTON      "OK",IDC_BUTTON_OK,274,51,23,20
+    PUSHBUTTON      ">",IDC_BUTTON_RIGHT,299,51,23,20
+    PUSHBUTTON      "V",IDC_BUTTON_DOWN,274,75,23,20
+    PUSHBUTTON      "Clear",IDC_BUTTON_CLEAR,274,98,23,20
+    PUSHBUTTON      "Call",IDC_BUTTON_CALL,244,117,23,20
+    PUSHBUTTON      "Pwr",IDC_BUTTON_POWER,304,118,23,20
+    PUSHBUTTON      "1ㄱㅋ",IDC_BUTTON_1,244,147,23,20
+    PUSHBUTTON      "2ㅣㅡ",IDC_BUTTON_2,274,147,23,20
+    PUSHBUTTON      "3ㅏㅑ",IDC_BUTTON_3,304,147,23,20
+    PUSHBUTTON      "4ㄷㅌ",IDC_BUTTON_4,244,183,23,20
+    PUSHBUTTON      "5ㄴㄹ",IDC_BUTTON_5,274,183,23,20
+    PUSHBUTTON      "6ㅓㅕ",IDC_BUTTON_6,304,183,23,20
+    PUSHBUTTON      "7ㅁㅅ",IDC_BUTTON_7,244,219,23,20
+    PUSHBUTTON      "8ㅂㅍ",IDC_BUTTON_8,274,219,23,20
+    PUSHBUTTON      "9ㅗㅛ",IDC_BUTTON_9,304,219,23,20
+    PUSHBUTTON      "*ㅈㅊ",IDC_BUTTON_STAR,244,254,23,20
+    PUSHBUTTON      "0ㅇㅎ",IDC_BUTTON_0,274,254,23,20
+    PUSHBUTTON      "#ㅜㅠ",IDC_BUTTON_POUND,304,254,23,20
+    PUSHBUTTON      "REC",IDC_BUTTON_RECORD,338,7,23,20
+    PUSHBUTTON      "PLY",IDC_BUTTON_PLAY,338,32,23,20
+    PUSHBUTTON      "ETQ",IDC_BUTTON_ETIQUETTE,338,57,23,20
+    PUSHBUTTON      "CLSE",IDC_BUTTON_CLOSE,339,227,23,47
+    LTEXT           ".QZ",IDC_STATIC,248,168,13,8
+    LTEXT           "ABC",IDC_STATIC,278,169,15,8
+    LTEXT           "DEF",IDC_STATIC,308,169,14,8
+    LTEXT           "GHI",IDC_STATIC,248,205,12,8
+    LTEXT           "JKL",IDC_STATIC,277,205,13,8
+    LTEXT           "MNO",IDC_STATIC,306,205,18,8
+    LTEXT           "PRS",IDC_STATIC,247,241,15,8
+    LTEXT           "TUV",IDC_STATIC,277,241,15,8
+    LTEXT           "WXY",IDC_STATIC,307,241,16,8
+    LTEXT           "<",IDC_STATIC,244,276,8,8
+    LTEXT           "@",IDC_STATIC,275,276,8,8
+    LTEXT           ">",IDC_STATIC,319,276,8,8
+    LTEXT           "SMS",IDC_STATIC,246,29,16,8
+    LTEXT           "WAP",IDC_STATIC,308,29,16,8
+    GROUPBOX        "",IDC_STATIC,238,0,95,289
+    GROUPBOX        "",IDC_STATIC,335,0,27,289
+END
+
+IDD_KEYPAD DIALOG DISCARDABLE  0, 0, 130, 291
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Key pad"
+FONT 9, "굴림"
+BEGIN
+    PUSHBUTTON      "F1",IDC_BUTTON_F1,7,7,23,20
+    PUSHBUTTON      "F2",IDC_BUTTON_F2,67,7,23,20
+    PUSHBUTTON      "^",IDC_BUTTON_UP,37,27,23,20
+    PUSHBUTTON      "<",IDC_BUTTON_LEFT,12,51,23,20
+    PUSHBUTTON      "OK",IDC_BUTTON_OK,37,51,23,20
+    PUSHBUTTON      ">",IDC_BUTTON_RIGHT,62,51,23,20
+    PUSHBUTTON      "V",IDC_BUTTON_DOWN,37,75,23,20
+    PUSHBUTTON      "Clear",IDC_BUTTON_CLEAR,37,98,23,20
+    PUSHBUTTON      "Call",IDC_BUTTON_CALL,7,117,23,20
+    PUSHBUTTON      "Pwr",IDC_BUTTON_POWER,67,118,23,20
+    PUSHBUTTON      "1ㄱㅋ",IDC_BUTTON_1,7,147,23,20
+    PUSHBUTTON      "2ㅣㅡ",IDC_BUTTON_2,37,147,23,20
+    PUSHBUTTON      "3ㅏㅑ",IDC_BUTTON_3,67,147,23,20
+    PUSHBUTTON      "4ㄷㅌ",IDC_BUTTON_4,7,183,23,20
+    PUSHBUTTON      "5ㄴㄹ",IDC_BUTTON_5,37,183,23,20
+    PUSHBUTTON      "6ㅓㅕ",IDC_BUTTON_6,67,183,23,20
+    PUSHBUTTON      "7ㅁㅅ",IDC_BUTTON_7,7,219,23,20
+    PUSHBUTTON      "8ㅂㅍ",IDC_BUTTON_8,37,219,23,20
+    PUSHBUTTON      "9ㅗㅛ",IDC_BUTTON_9,67,219,23,20
+    PUSHBUTTON      "*ㅈㅊ",IDC_BUTTON_STAR,7,254,23,20
+    PUSHBUTTON      "0ㅇㅎ",IDC_BUTTON_0,37,254,23,20
+    PUSHBUTTON      "#ㅜㅠ",IDC_BUTTON_POUND,67,254,23,20
+    PUSHBUTTON      "REC",IDC_BUTTON_RECORD,101,7,23,20
+    PUSHBUTTON      "PLY",IDC_BUTTON_PLAY,101,32,23,20
+    PUSHBUTTON      "ANS",IDC_BUTTON_ETIQUETTE,101,57,23,20
+    PUSHBUTTON      "CLSE",IDC_BUTTON_CLOSE,102,227,23,47
+    LTEXT           ".QZ",IDC_STATIC,11,168,13,8
+    LTEXT           "ABC",IDC_STATIC,41,169,15,8
+    LTEXT           "DEF",IDC_STATIC,71,169,14,8
+    LTEXT           "GHI",IDC_STATIC,11,205,12,8
+    LTEXT           "JKL",IDC_STATIC,40,205,13,8
+    LTEXT           "MNO",IDC_STATIC,69,205,18,8
+    LTEXT           "PRS",IDC_STATIC,10,241,15,8
+    LTEXT           "TUV",IDC_STATIC,40,241,15,8
+    LTEXT           "WXY",IDC_STATIC,70,241,16,8
+    LTEXT           "<",IDC_STATIC,7,276,8,8
+    LTEXT           "@",IDC_STATIC,38,276,8,8
+    LTEXT           ">",IDC_STATIC,82,276,8,8
+    LTEXT           "SMS",IDC_STATIC,9,29,16,8
+    LTEXT           "WAP",IDC_STATIC,71,29,16,8
+    GROUPBOX        "",IDC_STATIC,1,0,95,289
+    GROUPBOX        "",IDC_STATIC,98,0,29,289
+END
+
+IDD_MAINLCD DIALOG DISCARDABLE  0, 0, 187, 100
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MAIN LCD"
+FONT 9, "굴림"
+BEGIN
+    CONTROL         "",IDC_STATIC,"Static",SS_BITMAP,7,7,20,20
+END
+
+IDD_IDLCD DIALOG DISCARDABLE  0, 0, 187, 100
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "ID LCD"
+FONT 9, "굴림"
+BEGIN
+    CONTROL         "",IDC_STATIC,"Static",SS_BITMAP,7,7,20,20
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041204B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "SkySimul MFC 응용 프로그램\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "SkySimul\0"
+            VALUE "LegalCopyright", "Copyright (C) 2000\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "SkySimul.EXE\0"
+            VALUE "ProductName", "SkySimul 응용 프로그램\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_SKYSIMUL_DIALOG, DIALOG
+    BEGIN
+        RIGHTMARGIN, 368
+        BOTTOMMARGIN, 284
+    END
+
+    IDD_KEYPAD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 127
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 284
+    END
+
+    IDD_MAINLCD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 93
+    END
+
+    IDD_IDLCD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 93
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ABOUTBOX            "SkySimul 정보(&A)..."
+END
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE 18, 1
+#pragma code_page(949)
+#endif //_WIN32
+#include "res\SkySimul.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.kor\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

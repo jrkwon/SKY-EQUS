@@ -1,0 +1,12 @@
+SHT_KOR, FALSE, 0, 1, 1, FALSE,(BYTE*)"신정",
+SHT_KOR,  TRUE, 0, 1, 1,  TRUE,(BYTE*)"설날",
+SHT_KOR, FALSE, 0, 3, 1, FALSE,(BYTE*)"삼일절",
+SHT_KOR, FALSE, 0, 4, 5, FALSE,(BYTE*)"식목일",
+SHT_KOR,  TRUE, 0, 4, 8, FALSE,(BYTE*)"석가탄신일",
+SHT_KOR, FALSE, 0, 5, 5, FALSE,(BYTE*)"어린이날",
+SHT_KOR, FALSE, 0, 6, 6, FALSE,(BYTE*)"현충일",
+SHT_KOR, FALSE, 0, 7,17, FALSE,(BYTE*)"제헌절",
+SHT_KOR, FALSE, 0, 8,15, FALSE,(BYTE*)"광복절",
+SHT_KOR,  TRUE, 0, 8,15,  TRUE,(BYTE*)"추석",
+SHT_KOR, FALSE, 0,10, 3, FALSE,(BYTE*)"개천절",
+SHT_KOR, FALSE, 0,12,25, FALSE,(BYTE*)"성탄절"

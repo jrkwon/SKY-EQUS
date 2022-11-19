@@ -1,0 +1,373 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_ctypes__ctypes
+#define X_IFC_z_ctypes__ctypes
+#define XMK_IFC_TIME 977233142
+
+/* *************** DECLARATIONS IN PACKAGE ctypes *************** */
+
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* GENERATOR CArray  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),559)
+******/
+
+/*****
+* GENERATOR Ref  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),571)
+******/
+
+/*****
+* SYNTYPE ShortInt  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),27)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_ShortInt z_ctypes_6_ShortInt
+#else
+#define ShortInt z_ctypes_6_ShortInt
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),27) */
+typedef short int z_ctypes_6_ShortInt;
+
+
+/*****
+* SYNTYPE LongInt  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),95)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_LongInt z_ctypes_7_LongInt
+#else
+#define LongInt z_ctypes_7_LongInt
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),95) */
+typedef long int z_ctypes_7_LongInt;
+
+
+/*****
+* SYNTYPE UnsignedShortInt  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),163)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_UnsignedShortInt z_ctypes_8_UnsignedShortInt
+#else
+#define UnsignedShortInt z_ctypes_8_UnsignedShortInt
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),163) */
+typedef unsigned short z_ctypes_8_UnsignedShortInt;
+
+
+/*****
+* SYNTYPE UnsignedInt  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),221)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_UnsignedInt z_ctypes_9_UnsignedInt
+#else
+#define UnsignedInt z_ctypes_9_UnsignedInt
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),221) */
+typedef unsigned z_ctypes_9_UnsignedInt;
+
+
+/*****
+* SYNTYPE UnsignedLongInt  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),278)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_UnsignedLongInt z_ctypes_A_UnsignedLongInt
+#else
+#define UnsignedLongInt z_ctypes_A_UnsignedLongInt
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),278) */
+typedef unsigned long z_ctypes_A_UnsignedLongInt;
+
+
+/*****
+* SYNTYPE Float  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),336)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_Float z_ctypes_B_Float
+#else
+#define Float z_ctypes_B_Float
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),336) */
+#ifndef XNOUSEOFREAL
+typedef float z_ctypes_B_Float;
+#endif
+
+
+/*****
+* NEWTYPE CharStar  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),391)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_CharStar z_ctypes_3_CharStar
+#else
+#define CharStar z_ctypes_3_CharStar
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),399) */
+typedef char * z_ctypes_3_CharStar;
+
+
+/*****
+* NEWTYPE VoidStar  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),505)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_VoidStar z_ctypes_4_VoidStar
+#else
+#define VoidStar z_ctypes_4_VoidStar
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),508) */
+typedef void * z_ctypes_4_VoidStar;
+
+
+/*****
+* NEWTYPE VoidStarStar  (TYPE section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),523)
+******/
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_VoidStarStar z_ctypes_5_VoidStarStar
+#else
+#define VoidStarStar z_ctypes_5_VoidStarStar
+#endif
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),535) */
+typedef void ** z_ctypes_5_VoidStarStar;
+
+
+/*****
+* GENERATOR CArray  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),559)
+******/
+
+/*****
+* GENERATOR Ref  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),571)
+******/
+
+/*****
+* SYNTYPE ShortInt  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),27)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),27) */
+#define yDef_z_ctypes_6_ShortInt(yVar)  *(yVar) = 0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_6_ShortInt XPP((void *));
+extern char *yWri_z_ctypes_6_ShortInt XPP((void *));
+#endif
+
+
+#define yAssF_z_ctypes_6_ShortInt(V,E,A)  yAssF_SDL_Integer(V,E,A)
+#define yEqF_z_ctypes_6_ShortInt(Expr1,Expr2)  yEqF_SDL_Integer(Expr1,Expr2)
+#define yNEqF_z_ctypes_6_ShortInt(Expr1,Expr2)  yNEqF_SDL_Integer(Expr1,Expr2)
+#ifndef ANY_z_ctypes_6_ShortInt
+#define ANY_z_ctypes_6_ShortInt
+#endif
+
+/*****
+* SYNTYPE LongInt  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),95)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),95) */
+#define yDef_z_ctypes_7_LongInt(yVar)  *(yVar) = 0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_7_LongInt XPP((void *));
+extern char *yWri_z_ctypes_7_LongInt XPP((void *));
+#endif
+
+
+#define yAssF_z_ctypes_7_LongInt(V,E,A)  yAssF_SDL_Integer(V,E,A)
+#define yEqF_z_ctypes_7_LongInt(Expr1,Expr2)  yEqF_SDL_Integer(Expr1,Expr2)
+#define yNEqF_z_ctypes_7_LongInt(Expr1,Expr2)  yNEqF_SDL_Integer(Expr1,Expr2)
+#ifndef ANY_z_ctypes_7_LongInt
+#define ANY_z_ctypes_7_LongInt
+#endif
+
+/*****
+* SYNTYPE UnsignedShortInt  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),163)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),163) */
+#define yDef_z_ctypes_8_UnsignedShortInt(yVar)  *(yVar) = 0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_8_UnsignedShortInt XPP((void *));
+extern char *yWri_z_ctypes_8_UnsignedShortInt XPP((void *));
+#endif
+
+
+#define yAssF_z_ctypes_8_UnsignedShortInt(V,E,A)  yAssF_SDL_Integer(V,E,A)
+#define yEqF_z_ctypes_8_UnsignedShortInt(Expr1,Expr2)  yEqF_SDL_Integer(Expr1,Expr2)
+#define yNEqF_z_ctypes_8_UnsignedShortInt(Expr1,Expr2)  yNEqF_SDL_Integer(Expr1,Expr2)
+#ifndef ANY_z_ctypes_8_UnsignedShortInt
+#define ANY_z_ctypes_8_UnsignedShortInt
+#endif
+
+/*****
+* SYNTYPE UnsignedInt  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),221)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),221) */
+#define yDef_z_ctypes_9_UnsignedInt(yVar)  *(yVar) = 0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_9_UnsignedInt XPP((void *));
+extern char *yWri_z_ctypes_9_UnsignedInt XPP((void *));
+#endif
+
+
+#define yAssF_z_ctypes_9_UnsignedInt(V,E,A)  yAssF_SDL_Integer(V,E,A)
+#define yEqF_z_ctypes_9_UnsignedInt(Expr1,Expr2)  yEqF_SDL_Integer(Expr1,Expr2)
+#define yNEqF_z_ctypes_9_UnsignedInt(Expr1,Expr2)  yNEqF_SDL_Integer(Expr1,Expr2)
+#ifndef ANY_z_ctypes_9_UnsignedInt
+#define ANY_z_ctypes_9_UnsignedInt
+#endif
+
+/*****
+* SYNTYPE UnsignedLongInt  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),278)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),278) */
+#define yDef_z_ctypes_A_UnsignedLongInt(yVar)  *(yVar) = 0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_A_UnsignedLongInt XPP((void *));
+extern char *yWri_z_ctypes_A_UnsignedLongInt XPP((void *));
+#endif
+
+
+#define yAssF_z_ctypes_A_UnsignedLongInt(V,E,A)  yAssF_SDL_Integer(V,E,A)
+#define yEqF_z_ctypes_A_UnsignedLongInt(Expr1,Expr2)  yEqF_SDL_Integer(Expr1,Expr2)
+#define yNEqF_z_ctypes_A_UnsignedLongInt(Expr1,Expr2)  yNEqF_SDL_Integer(Expr1,Expr2)
+#ifndef ANY_z_ctypes_A_UnsignedLongInt
+#define ANY_z_ctypes_A_UnsignedLongInt
+#endif
+
+/*****
+* SYNTYPE Float  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),336)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),336) */
+#define yDef_z_ctypes_B_Float(yVar)  *(yVar) = 0.0
+#ifdef XREADANDWRITEF
+#ifndef XNOUSEOFREAL
+extern int yRead_z_ctypes_B_Float XPP((void *));
+extern char *yWri_z_ctypes_B_Float XPP((void *));
+#endif
+#endif
+
+
+#define yAssF_z_ctypes_B_Float(V,E,A)  yAssF_SDL_Real(V,E,A)
+#define yEqF_z_ctypes_B_Float(Expr1,Expr2)  yEqF_SDL_Real(Expr1,Expr2)
+#define yNEqF_z_ctypes_B_Float(Expr1,Expr2)  yNEqF_SDL_Real(Expr1,Expr2)
+#ifndef ANY_z_ctypes_B_Float
+#define ANY_z_ctypes_B_Float
+#endif
+
+/*****
+* NEWTYPE CharStar  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),391)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),399) */
+#define yDef_z_ctypes_3_CharStar(yVar)  *(yVar) = (z_ctypes_3_CharStar)0
+#ifdef XREADANDWRITEF
+extern int yRead_z_ctypes_3_CharStar XPP((void *));
+extern char *yWri_z_ctypes_3_CharStar XPP((void *));
+#endif
+#define z_ctypes_30_Null()       0
+#ifndef XSCT_CMICRO
+extern SDL_Charstring z_ctypes_31_CStar2CString XPP((z_ctypes_3_CharStar));
+extern z_ctypes_3_CharStar z_ctypes_32_CString2CStar XPP((SDL_Charstring));
+#endif
+#define z_ctypes_33_CStar2VStar(P) ((z_ctypes_4_VoidStar)P)
+#define z_ctypes_34_VStar2CStar(P) ((z_ctypes_3_CharStar)P)
+
+
+
+#define yAssF_z_ctypes_3_CharStar(V,E,A)  V = E
+#define yEqF_z_ctypes_3_CharStar(Expr1,Expr2)  (Expr1) == (Expr2)
+#define yNEqF_z_ctypes_3_CharStar(Expr1,Expr2)  (Expr1) != (Expr2)
+#ifndef ANY_z_ctypes_3_CharStar
+#define ANY_z_ctypes_3_CharStar
+#endif
+#define z_ctypes_38_copy(P)  P
+
+/*****
+* NEWTYPE VoidStar  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),505)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),508) */
+#define yDef_z_ctypes_4_VoidStar(yVar)  *(yVar) = (z_ctypes_4_VoidStar)0
+#define z_ctypes_40_Null()       0
+
+
+#define yAssF_z_ctypes_4_VoidStar(V,E,A)  V = E
+#define yEqF_z_ctypes_4_VoidStar(Expr1,Expr2)  (Expr1) == (Expr2)
+#define yNEqF_z_ctypes_4_VoidStar(Expr1,Expr2)  (Expr1) != (Expr2)
+#ifndef ANY_z_ctypes_4_VoidStar
+#define ANY_z_ctypes_4_VoidStar
+#endif
+#define z_ctypes_44_copy(P)  P
+
+/*****
+* NEWTYPE VoidStarStar  (HEADING section)
+* <<PACKAGE ctypes>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),523)
+******/
+                /* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\ctypes.sun(1),119(25,40),535) */
+#define yDef_z_ctypes_5_VoidStarStar(yVar)  *(yVar) = (z_ctypes_5_VoidStarStar)0
+#define yExtr_z_ctypes_5_VoidStarStar(yVar)  (*(yVar))
+#define yAddr_z_ctypes_5_VoidStarStar(yVar)  (*(yVar))
+#define z_ctypes_50_Null()       0
+#ifdef XVALIDATOR_LIB
+#define z_ctypes_51_Alloc()      (z_ctypes_5_VoidStarStar)xSysMalloc(sizeof(VoidStar))
+#else
+#define z_ctypes_51_Alloc()      (z_ctypes_5_VoidStarStar)xAlloc(sizeof(VoidStar))
+#endif
+#define z_ctypes_57_VStarStar2VStar(P) ((z_ctypes_4_VoidStar)P)
+#define z_ctypes_58_VStar2VStarStar(P) ((z_ctypes_5_VoidStarStar)P)
+
+
+#define yAssF_z_ctypes_5_VoidStarStar(V,E,A)  V = E
+#define yEqF_z_ctypes_5_VoidStarStar(Expr1,Expr2)  (Expr1) == (Expr2)
+#define yNEqF_z_ctypes_5_VoidStarStar(Expr1,Expr2)  (Expr1) != (Expr2)
+#ifndef ANY_z_ctypes_5_VoidStarStar
+#define ANY_z_ctypes_5_VoidStarStar
+#endif
+#define z_ctypes_5C_copy(P)  P
+#endif
+   /* X_IFC_z_ctypes__ctypes */

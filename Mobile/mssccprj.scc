@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[Bunny.mak]
+SCC_Aux_Path = "\\Sky_server\SKY2\"
+SCC_Project_Name = "$/B2/Mobile", MALHAAAA
+
+[BunnyADS.mak]
+SCC_Aux_Path = "\\Sky_server\SKY2\"
+SCC_Project_Name = "$/B2/Mobile", MALHAAAA

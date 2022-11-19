@@ -1,0 +1,46 @@
+"S0119028a"				// 2001.12.06 tortol	
+//"S0119028"			// 2001.12.06 tortol	(0x30D3)
+//"S0119027a"			// 
+//"S0119027"			// 2001.11.27 jrkwon	(0xBFA0)
+//"S0119026"			// 2001.11.27 tortol	(0xCFE4)
+//"S0119025a"			// 2001.11.20 bbyes
+//"S0119024a"			// 2001.11.17 bbyes
+//"S0119023"			// 2001.11.16 undersea
+//"S0119022a"			// 2001.11.
+//"S0119022"			// 2001.11.14 jrkwon	
+//"S0119021"			// 2001.10.31 redstar
+//"S0119020"			// 2001.10.24 undersea
+//"S0119019"			// 2001.10.18 jrkwon
+//"S0119018"			// 2001.10.17 tortol 
+//"S0119017a"			// 2001.10.16 
+//"S0119017"			// 2001.10.16 jrkwon
+//"S0119016"			// 2001.10.09 yhlee
+//"S0119015"            //2001.09.27 hjcho
+//"S0119014"            // 2001.09.24 bgjung
+//"S0119013"            // 2001.09.21 rosa
+//"S0119012"			// 2001.09.10 rosa
+//"S0119011"			// 2001.09.05 undersea
+//"S0119010"			// 2001.09.04
+//"S0000001"			// 2000.06 !! B2 start
+
+//################################################
+//# DOCUMENT REVISION NUMBER: 1.0
+//# DATE : 07/30/1999
+//# CREATED BY YONG HOON KIM
+//# Copyright (C) 1999. SK Teletech. co
+//# ----------------------------------------------
+//# This file is to manage version of the software
+//# mounted on a mobile hand set.
+//# The version number string format should be kept 
+//# strictly and this file should be increase upward, i.e.
+//# new version number should be inserted at TOP LINE OF THIS FILE
+//#
+//# A version number should complies ECR (Engineering Change Request - Appendix for Software.
+//#
+//# [FORMAT]
+//# SMT Line S/W:		"S*******"
+//# Rework S/W:			"R*******"
+//# Wrap S/W:			"W*******"
+//# Customer Upgrade:	"C*******"
+//#
+//##################################################

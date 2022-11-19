@@ -1,0 +1,1199 @@
+#-------------------------------------------------------------------------------
+# SOURCE / MEMORY
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_UTIL_MEM_DIR)
+EQUS_UTIL_MEM_OBJS = $(TARGETDIR)\au_mem.o
+                    
+$(EQUS_UTIL_MEM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_WAP) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+ 
+#-------------------------------------------------------------------------------
+# EQUS / State
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_STATE_DIR)
+
+EQUS_STATE_OBJS =  $(TARGETDIR)\eqs_aapi.o \
+                   $(TARGETDIR)\eqs_swin.o
+
+$(EQUS_STATE_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_EQUS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# EQUS / UTIL
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_UTIL_DIR)
+
+EQUS_UTIL_OBJS =  $(TARGETDIR)\eqs_list.o \
+                  $(TARGETDIR)\eqs_timr.o \
+                  $(TARGETDIR)\eqs_mem.o \
+                  $(TARGETDIR)\eqs_util.o 
+
+$(EQUS_UTIL_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_EQUS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# EQUS / Display
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_DISPLAY_DIR)
+
+EQUS_DISPLAY_OBJS = $(TARGETDIR)\eqs_grph.o \
+                    $(TARGETDIR)\eqs_dc.o \
+                    $(TARGETDIR)\eqs_gui.o \
+                    $(TARGETDIR)\eqs_frmt.o 
+
+$(EQUS_DISPLAY_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_EQUS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# EQUS / Control
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_CTRL_DIR)
+
+EQUS_CTRL_OBJS =    $(TARGETDIR)\eqc.o \
+                    $(TARGETDIR)\eqc_stxt.o \
+                    $(TARGETDIR)\eqc_scrl.o \
+                    $(TARGETDIR)\eqc_nedt.o \
+                    $(TARGETDIR)\eqc_tedt.o \
+                    $(TARGETDIR)\eqc_msgb.o \
+                    $(TARGETDIR)\eqc_pmnu.o \
+                    $(TARGETDIR)\eqc_anim.o \
+                    $(TARGETDIR)\eqc_aicn.o \
+                    $(TARGETDIR)\eqc_img.o \
+                    $(TARGETDIR)\eqc_spin.o  \
+                    $(TARGETDIR)\eqc_rbtn.o \
+                    $(TARGETDIR)\eqc_ckbx.o \
+                    $(TARGETDIR)\eqc_pbar.o \
+                    $(TARGETDIR)\eqc_pbtn.o \
+                    $(TARGETDIR)\eqc_menu.o \
+					$(TARGETDIR)\eqc_time.o
+
+
+$(EQUS_CTRL_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_EQUS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# EQUS / I18N 
+#-------------------------------------------------------------------------------
+SRC_DIR = $(EQUS_I18N_DIR)
+
+EQUS_I18N_OBJS = $(TARGETDIR)\eqs_i18n.o \
+                 $(TARGETDIR)\eqs_tokn.o
+
+$(EQUS_I18N_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_EQUS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# EQUS / PLATFORM
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# EQUS / RESOURCE 
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(EQUS_RES_IMG_DIR)
+
+EQUS_RES_IMG_OBJS = $(TARGETDIR)\eqs_data.o                     
+
+$(EQUS_RES_IMG_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+
+#-------------------------------------------------------------------------------
+# SKY / DEVICE / LCD
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_DEVICE_LCD_DIR)
+
+SKY_DEVICE_LCD_OBJS = $(TARGETDIR)\sky_lcd.o \
+                      $(TARGETDIR)\sky_slcd.o
+
+$(SKY_DEVICE_LCD_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS0) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / I18N 
+#-------------------------------------------------------------------------------
+SRC_DIR = $(SKY_I18N_DIR)
+
+SKY_I18N_OBJS = $(TARGETDIR)\sky_tokn.o
+
+$(SKY_I18N_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / PLATFORM / REX
+#-------------------------------------------------------------------------------
+SRC_DIR = $(SKY_PLT_REX_DIR)
+
+SKY_PLT_REX_OBJS = $(TARGETDIR)\skyrefs.o \
+                   $(TARGETDIR)\skyrrex.o  
+
+$(SKY_PLT_REX_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+
+#-------------------------------------------------------------------------------
+# SKY / RESOURCE 
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_RES_IMG_DIR)
+
+SKY_RES_IMG_OBJS = $(TARGETDIR)\sky_data.o                     
+
+$(SKY_RES_IMG_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / RESOURCE / MENU
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_RES_MENU_DIR)
+
+SKY_RES_MENU_OBJS = $(TARGETDIR)\sky_mtxt.o                     
+
+$(SKY_RES_MENU_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / SYSTEM
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_SYS_DIR)
+
+SKY_SYS_OBJS = $(TARGETDIR)\sky_mem.o \
+               $(TARGETDIR)\sky_cm.o \
+               $(TARGETDIR)\sky_cml.o \
+               $(TARGETDIR)\sky_conf.o \
+               $(TARGETDIR)\sky_evnt.o \
+               $(TARGETDIR)\sky_file.o \
+               $(TARGETDIR)\sky_hcbt.o \
+               $(TARGETDIR)\sky_hcmd.o \
+               $(TARGETDIR)\sky_hkey.o \
+               $(TARGETDIR)\sky_hs.o \
+               $(TARGETDIR)\sky_hsig.o \
+!IFDEF IRDA
+               $(TARGETDIR)\sky_irda.o \
+!ENDIF              
+               $(TARGETDIR)\sky_nv.o \
+               $(TARGETDIR)\sky_scrn.o \
+               $(TARGETDIR)\sky_sms.o \
+               $(TARGETDIR)\sky_snd.o \
+               $(TARGETDIR)\sky_annu.o \
+               $(TARGETDIR)\sky_ui.o \
+!IFDEF VAS
+               $(TARGETDIR)\sky_sock.o \
+!ENDIF
+               $(TARGETDIR)\uixcm.o
+
+
+$(SKY_SYS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / TEMP - only 4 build 
+#-------------------------------------------------------------------------------
+
+#SRC_DIR = $(SKY_APP_TEST_DIR)
+#
+#SKY_TEMP_OBJS = $(TARGETDIR)\sky_temp.o
+#
+#$(SKY_TEMP_OBJS) : $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+#        @echo OBJECT $(@F)
+#        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / SYSTEM
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_SYS_DIR)
+
+SKY_APP_SYS_OBJS =  $(TARGETDIR)\ska_off.o \
+                    $(TARGETDIR)\ska_strt.o \
+                    $(TARGETDIR)\ska_idle.o \
+                    $(TARGETDIR)\ska_call.o \
+                    $(TARGETDIR)\ska_clid.o \
+                    $(TARGETDIR)\ska_code.o \
+                    $(TARGETDIR)\ska_nam.o
+
+$(SKY_APP_SYS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKT Teletech Data Service Module. author : khekim,htg,jylee
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+SRC_DIR = Source\DS
+DSSKT_OBJS = $(TARGETDIR)\dsskt.o \
+             $(TARGETDIR)\dsatskt.o
+$(DSSKT_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_DS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+SRC_DIR = Source\SOCKAPI
+SOCKAPI_OBJS = $(TARGETDIR)\uisockApi.o \
+               $(TARGETDIR)\sockctl.o \
+			   $(TARGETDIR)\sockApi.o 
+$(SOCKAPI_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_DS) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE) 
+        @echo ------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / EIF
+#-------------------------------------------------------------------------------
+
+
+
+
+SRC_DIR = $(SKY_APP_EIF_DIR)
+
+SKY_APP_EIF_OBJS = $(TARGETDIR)\ska_eif.o 
+
+
+$(SKY_APP_EIF_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / PBOOK
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_PBOOK_DIR)
+
+SKY_APP_PBOOK_OBJS = $(TARGETDIR)\ska_bstr.o \
+                     $(TARGETDIR)\ska_bapi.o \
+                     $(TARGETDIR)\ska_butl.o \
+                     $(TARGETDIR)\ska_pbo.o  			
+
+$(SKY_APP_PBOOK_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / BELL_VIB
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_BELL_VIB_DIR)
+
+SKY_APP_BELL_VIB_OBJS = $(TARGETDIR)\ska_bell.o \
+                        $(TARGETDIR)\ska_mbel.o \
+                        $(TARGETDIR)\ska_warn.o 
+                                                   
+
+$(SKY_APP_BELL_VIB_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!IFDEF CHARACTER_BELL
+#-------------------------------------------------------------------------------
+# SKY / APPLET / CHARACBELL
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_CHARACBELL_DIR)
+
+SKY_APP_CHARACBELL_OBJS = $(TARGETDIR)\ska_cbel.o 
+
+$(SKY_APP_CHARACBELL_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+!ENDIF
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / CALC
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_CALC_DIR)
+
+SKY_APP_CALC_OBJS = $(TARGETDIR)\ska_calc.o \
+                                                   
+
+$(SKY_APP_CALC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / SWATCH
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_SWATCH_DIR)
+
+SKY_APP_SWATCH_OBJS = $(TARGETDIR)\ska_stop.o \
+                                                   
+
+$(SKY_APP_SWATCH_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / WORLDTIME
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_WTIME_DIR)
+
+SKY_APP_WTIME_OBJS = $(TARGETDIR)\ska_wtim.o \
+                                                   
+
+$(SKY_APP_WTIME_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / RECPLAY
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_RECPLAY_DIR)
+
+SKY_APP_RECPLAY_OBJS = $(TARGETDIR)\ska_vmemo.o
+
+$(SKY_APP_RECPLAY_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / VOCODER
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_VOCODER_DIR)
+
+SKY_APP_VOCODER_OBJS = $(TARGETDIR)\ska_vcmm.o
+
+$(SKY_APP_VOCODER_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / AUTO ANSWER
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_AUTOANS_DIR)
+
+SKY_APP_AUTOANS_OBJS = $(TARGETDIR)\ska_aans.o \
+                       $(TARGETDIR)\ska_ment.o\
+                       $(TARGETDIR)\ska_aapi.o\
+                       $(TARGETDIR)\ska_crec.o\
+                       $(TARGETDIR)\ska_hdon.o
+
+$(SKY_APP_AUTOANS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Memo
+#-------------------------------------------------------------------------------
+
+#SRC_DIR = $(SKY_APP_MEMO_DIR)
+
+#SKY_APP_MEMO_OBJS = $(TARGETDIR)\ska_memo.o 
+
+#$(SKY_APP_MEMO_OBJS) : $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+#        @echo OBJECT $(@F)
+#        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Schedule
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_SCHEDULE_DIR)
+
+SKY_APP_SCHEDULE_OBJS = $(TARGETDIR)\ska_schl.o \
+						$(TARGETDIR)\ska_sfil.o \
+						$(TARGETDIR)\ska_sbel.o \
+						$(TARGETDIR)\ska_scal.o \
+						$(TARGETDIR)\ska_slst.o \
+						$(TARGETDIR)\ska_shld.o
+
+$(SKY_APP_SCHEDULE_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Alarm
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_ALARM_DIR)
+
+SKY_APP_ALARM_OBJS = $(TARGETDIR)\ska_alrm.o 
+
+$(SKY_APP_ALARM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Memo
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_MEMO_DIR)
+
+SKY_APP_MEMO_OBJS = $(TARGETDIR)\ska_memo.o 
+
+$(SKY_APP_MEMO_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!IFDEF MCOMMERCE
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Mobile Wallet
+#-------------------------------------------------------------------------------
+MW_DIR = SOURCE\MCommerce
+CFLAGS_MW = -I $(MW_DIR)
+
+SRC_DIR = $(SKY_APP_MWALLET_DIR)
+
+SKY_APP_MWALLET_OBJS = $(TARGETDIR)\ska_mwlt.o 
+
+$(SKY_APP_MWALLET_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(CFLAGS_MW) -ec $(DMSS_CFLAGS_SKY) $(DMSS_CFLAGS_MW) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+!ENDIF
+
+!IFDEF PHOTOMAIL
+#-------------------------------------------------------------------------------
+# SKY / APPLET / PM
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_PM_DIR)
+
+SKY_APP_PM_OBJS = $(TARGETDIR)\ska_vm.o \
+
+$(SKY_APP_PM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#SKY_APP_PM_ENCODER_OBJS = $(SKY_APP_PM_DIR)\TCM2Encode.o
+
+!ENDIF
+
+!IFDEF VAS
+#-------------------------------------------------------------------------------
+# SKY / APPLET / VAS
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_VAS_DIR)
+
+SKY_APP_VAS_OBJS = $(TARGETDIR)\ska_vas.o 
+
+$(SKY_APP_VAS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!ENDIF
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / SETTING
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_SETTING_DIR)
+
+SKY_APP_SETTING_OBJS = $(TARGETDIR)\ska_011.o \
+                       $(TARGETDIR)\ska_017.o \
+                       $(TARGETDIR)\ska_2get.o \
+                       $(TARGETDIR)\ska_info.o \
+                       $(TARGETDIR)\ska_init.o \
+                       $(TARGETDIR)\ska_lock.o \
+                       $(TARGETDIR)\ska_NAMs.o \
+                       $(TARGETDIR)\ska_ntop.o \
+                       $(TARGETDIR)\ska_tnum.o \
+                       $(TARGETDIR)\ska_ligt.o \
+					   $(TARGETDIR)\ska_volm.o \
+                       $(TARGETDIR)\ska_add.o \
+                       $(TARGETDIR)\ska_ver.o \
+                       $(TARGETDIR)\ska_thme.o
+
+$(SKY_APP_SETTING_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / DATACFG
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_DATACFG_DIR)
+
+SKY_APP_DATACFG_OBJS = $(TARGETDIR)\ska_dscf.o 
+
+$(SKY_APP_DATACFG_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / DATAMGR
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_DATAMGR_DIR)
+
+SKY_APP_DATAMGR_OBJS = $(TARGETDIR)\ska_dmgr.o \
+                       $(TARGETDIR)\ska_dsvc.o 
+
+$(SKY_APP_DATAMGR_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / CALL LIST
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_CALLLIST_DIR)
+
+SKY_APP_CALLLIST_OBJS = $(TARGETDIR)\ska_clst.o
+
+
+$(SKY_APP_CALLLIST_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+!IF "$(MODEL_ID)" == "MODEL_B2"
+#-------------------------------------------------------------------------------
+# SKY / APPLET / CAMERA
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_CAMERA_DIR)
+
+SKY_APP_CAMERA_OBJS = $(TARGETDIR)\ska_cam.o 
+
+$(SKY_APP_CAMERA_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+!ENDIF
+
+!IF "$(MODEL_ID)" == "MODEL_B2"
+#-------------------------------------------------------------------------------
+# Select WAVELET compiling  #yoursun 01/06/08
+#-------------------------------------------------------------------------------
+
+!IFDEF FEATURE_WAVELET
+
+SOCKAPI = FEATURE_SKT_SOCKAPI
+SKY_APP_WAVELET_DIR         = $(SKY_APP_DIR)\WAVELET
+
+SKY_APP_WAVDECODE_OBJS		= $(SKY_APP_WAVELET_DIR)\LIB\tcm2-skteletech-ads101-1.0.2.5.lib 
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / WAVELET
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_WAVELET_DIR)
+
+SKY_APP_WAVELET_OBJS = $(TARGETDIR)\ska_wav.o \
+					   $(TARGETDIR)\wav_multisock.o 
+
+$(SKY_APP_WAVELET_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) -ec $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+!ENDIF #### !IFDEF FEATURE_WAVELET
+!ENDIF #### !IF "$(MODEL_ID)" == "MODEL_B2"
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Menu
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_MENU_DIR)
+
+SKY_APP_MENU_OBJS = $(TARGETDIR)\ska_menu.o  
+
+$(SKY_APP_MENU_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / Control Panel
+#-------------------------------------------------------------------------------
+
+#SRC_DIR = $(SKY_APP_CTRL_DIR)
+
+#SKY_APP_CTRL_OBJS = $(TARGETDIR)\ska_ctrl.o  
+
+#$(SKY_APP_CTRL_OBJS) : $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+#        @echo OBJECT $(@F)
+#        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / SMS                   by reo 00-07-28
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_SMS_DIR)
+
+SKY_APP_SMS_OBJS = $(TARGETDIR)\ska_sms.o \
+		           $(TARGETDIR)\ska_smsl.o \
+		           $(TARGETDIR)\ska_mybe.o \
+                   $(TARGETDIR)\ska_vms.o \
+                   $(TARGETDIR)\ska_mo.o  \
+				   $(TARGETDIR)\ska_loca.o
+
+
+
+$(SKY_APP_SMS_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / PICTURE                   by woodstok 00-12-30
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_PIC_DIR)
+
+SKY_APP_PIC_OBJS = $(TARGETDIR)\ska_pic.o \
+                   $(TARGETDIR)\ska_mani.o
+
+$(SKY_APP_PIC_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+!IFDEF IRDA
+#-------------------------------------------------------------------------------
+# SKY / APPLET / IRDA                   by woodstok 01-01-04
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_IRDA_DIR)
+
+SKY_APP_IRDA_OBJS = $(TARGETDIR)\ska_irpc.o \
+                    $(TARGETDIR)\ska_irph.o \
+                    $(TARGETDIR)\ska_irda.o \
+                    $(TARGETDIR)\ska_ftrs.o \
+                    $(TARGETDIR)\ska_iani.o \
+!IF "$(MODEL_ID)" == "MODEL_B2"
+                    $(TARGETDIR)\ska_ipht.o \
+!ENDIF
+                    $(TARGETDIR)\ska_imel.o \
+                    $(TARGETDIR)\ska_ibok.o 
+
+$(SKY_APP_IRDA_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!ENDIF
+           
+#-------------------------------------------------------------------------------
+# SKY / APPLET / GAME
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_GAME_LIB_DIR)
+
+SKY_APP_GAME_LIB_OBJS = $(TARGETDIR)\GExt.o \
+                        $(TARGETDIR)\GLibMain.o \
+                        $(TARGETDIR)\GLibScore.o 
+
+$(SKY_APP_GAME_LIB_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+SRC_DIR = $(SKY_APP_GAME_DIR)
+
+SKY_APP_GAME_OBJS = $(TARGETDIR)\Apache5.o \
+                        $(TARGETDIR)\MarsScouter3.o \
+                        $(TARGETDIR)\Puzzle3.o \
+                        $(TARGETDIR)\Raccoon3.o \
+                        $(TARGETDIR)\samtris3.o 
+
+$(SKY_APP_GAME_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+ 
+                 
+SRC_DIR = $(SKY_APP_GAMEAPP_DIR)
+
+SKY_APP_GAMEAPP_OBJS = $(TARGETDIR)\ska_game.o 
+                       
+
+$(SKY_APP_GAMEAPP_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / EMail                   by woodstok 01-02-08
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_EMAIL_DIR)
+
+SKY_APP_EMAIL_OBJS = $(TARGETDIR)\ska_mail.o \
+                     $(TARGETDIR)\ska_mbox.o \
+                     $(TARGETDIR)\ska_smtp.o \
+                     $(TARGETDIR)\ska_pop3.o
+
+$(SKY_APP_EMAIL_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+# SKY / APPLET / TEST 
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_TEST_DIR)
+
+SKY_APP_TEST_OBJS = $(TARGETDIR)\MelodyTest.o \
+#                    $(TARGETDIR)\ska_efs.o \
+#                    $(TARGETDIR)\ctrltest.o \
+                    $(TARGETDIR)\LcdTest.o \
+                    $(TARGETDIR)\RFTest.o \
+!IF "$(MODEL_ID)" == "MODEL_B0"
+                    $(TARGETDIR)\ska_smb.o \
+!endif
+!IF "$(MODEL_ID)" == "MODEL_B2"
+                    $(TARGETDIR)\cameratest.o \
+!ENDIF
+                    $(TARGETDIR)\ska_test.o
+#                        $(TARGETDIR)\testgrph.o \
+#$(TARGETDIR)\TestMenu.o \
+#							 $(TARGETDIR)\AudioTest.o \
+# tasik 00.08.01			 $(TARGETDIR)\BatteryTest.o \
+#							 $(TARGETDIR)\IrDATest.o \
+#							 $(TARGETDIR)\McTest.o \
+#							 $(TARGETDIR)\RssiTest.o \
+#							 $(TARGETDIR)\BlightTest.o \
+#							 $(TARGETDIR)\VolumeTest.o \
+#							 $(TARGETDIR)\VolumeUpDTest.o \
+#							 $(TARGETDIR)\LedTest.o \
+#	tasik 00.08.01			 $(TARGETDIR)\LcdTest.o \
+#                             $(TARGETDIR)\LcdTest.o \
+#							 $(TARGETDIR)\RingTest.o 
+
+
+$(SKY_APP_TEST_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!IFDEF WAP2
+#-------------------------------------------------------------------------------
+# SKY / APPLET / WAP_APP
+#-------------------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_WAP_DIR)
+
+SKY_APP_WAP_OBJS = $(TARGETDIR)\ska_WAPAPP.o  \
+				   $(TARGETDIR)\ska_wapdev.o
+$(SKY_APP_WAP_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+		@echo OBJECT $(@F)
+		$(CC) $(CFLAGS) $(DMSS_CFLAGS_WAP) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+		@echo ------------------------------------------------------------------
+!ENDIF
+
+!IFDEF GVM
+#-------------------------------------------------------------------------------
+# SKY / APPLET / GVM
+#-------------------------------------------------------------------------------
+SRC_DIR = $(SKY_APP_GVM_DIR)
+GVM_OBJS = $(TARGETDIR)\ska_gvm.o
+#           $(TARGETDIR)\gvmShare.o
+           
+$(GVM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(GVM_CFLAGS) $(DMSS_CFLAGS_GVM) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+SRC_DIR = $(SKY_APP_GVM_DIR)\SWAP
+GVM_LIB_OBJS = $(TARGETDIR)\Mil.o \
+                $(TARGETDIR)\SCL.o \
+				$(TARGETDIR)\SVM.o \
+				$(TARGETDIR)\MILNet.o \
+				$(TARGETDIR)\Midd.o
+$(GVM_LIB_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(GVM_CFLAGS) $(DMSS_CFLAGS_GVM) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+
+SRC_DIR = $(SKY_APP_GVM_DIR)\AtSWAP
+GVM_ATSWAP_OBJS = $(TARGETDIR)\AtSWAP.o
+$(GVM_ATSWAP_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(GVM_CFLAGS) $(DMSS_CFLAGS_GVM) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+!ENDIF
+
+!IFDEF SKVM
+#-------------------------------------------------------------------------------
+# SKY / APPLET / SKVM            
+#-------------------------------------------------------------------------------
+SRC_DIR = $(SKY_APP_SKVM_DIR)
+SKY_APP_SKVM_OBJS = $(TARGETDIR)\ska_skvm.o \
+				  $(TARGETDIR)\graphics.o \
+#				  $(TARGETDIR)\mdarm.o \
+				  $(TARGETDIR)\mdarm_main.o \
+				  $(TARGETDIR)\mdarm_sys.o \
+				  $(TARGETDIR)\mdarm_skt.o \
+				  $(TARGETDIR)\mdarm_net.o \
+				  $(TARGETDIR)\mdarm_terminal.o \
+				  $(TARGETDIR)\romfile.o
+$(SKY_APP_SKVM_OBJS) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+		$(CC) $(SKVM_CFLAGS) $(DMSS_CFLAGS_SKVM) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+
+        @echo ------------------------------------------------------------------
+#이 make 파일은 ADS 컴파일러를 지원합니다.
+#ADS를 지원하는 오브젝트로 바꾸어야 합니다.
+#문제가 생기면 오정택에게 연락바랍니다.
+SKY_APP_SKVM_LIB_OBJS = $(SKY_APP_SKVM_LIB_DIR)\externlib_ads.o \
+#               $(SKY_APP_SKVM_LIB_DIR)\mdsock.o \
+				$(SKY_APP_SKVM_LIB_DIR)\romlib_ads.o \
+				$(SKY_APP_SKVM_LIB_DIR)\xvmlib_ads.o \
+				$(SKY_APP_SKVM_LIB_DIR)\nativelib_ads.o 
+!ENDIF
+
+!IFDEF MCOMMERCE
+
+SRC_DIR = SOURCE\MCommerce
+SKY_INC = -I SOURCE\SKY\B2\APPLET\INCLUDE
+
+MCOMMERCE_WPKI =$(TARGETDIR)\asn1enc_new.o \
+				$(TARGETDIR)\asn1param_new.o \
+				$(TARGETDIR)\asn1pri_new.o \
+				$(TARGETDIR)\asn1pub_new.o \
+				$(TARGETDIR)\asn1sig_new.o \
+				$(TARGETDIR)\asn1_lib_new.o \
+				$(TARGETDIR)\a_bitstr_new.o \
+				$(TARGETDIR)\a_bytes_new.o \
+				$(TARGETDIR)\a_int_new.o \
+				$(TARGETDIR)\a_object_new.o \
+				$(TARGETDIR)\a_octet_new.o \
+				$(TARGETDIR)\base64_new.o \
+				$(TARGETDIR)\bn_add_new.o \
+				$(TARGETDIR)\bn_asm_new.o \
+				$(TARGETDIR)\bn_ctx_new.o \
+				$(TARGETDIR)\bn_div_new.o \
+				$(TARGETDIR)\bn_exp_new.o \
+				$(TARGETDIR)\bn_gcd_new.o \
+				$(TARGETDIR)\bn_lib_new.o \
+				$(TARGETDIR)\bn_mont_new.o \
+				$(TARGETDIR)\bn_mul_new.o \
+				$(TARGETDIR)\bn_prime_new.o \
+				$(TARGETDIR)\bn_print_new.o \
+				$(TARGETDIR)\bn_rand_new.o \
+				$(TARGETDIR)\bn_shift_new.o \
+				$(TARGETDIR)\bn_sqr_new.o \
+				$(TARGETDIR)\bn_word_new.o \
+				$(TARGETDIR)\buffer_new.o \
+				$(TARGETDIR)\cert_manage_new.o \
+				$(TARGETDIR)\cert_request_new.o \
+				$(TARGETDIR)\content_lib_new.o \
+				$(TARGETDIR)\create_Signed_Certificate_new.o \
+				$(TARGETDIR)\cryptlib_new.o \
+				$(TARGETDIR)\crypto_script_new.o \
+				$(TARGETDIR)\crypto_size_new.o \
+				$(TARGETDIR)\d2i_r_pr_new.o \
+				$(TARGETDIR)\d2i_r_pu_new.o \
+				$(TARGETDIR)\decrypttext_new.o \
+				$(TARGETDIR)\des_enc_new.o \
+				$(TARGETDIR)\dummy_new.o \
+				$(TARGETDIR)\Ecc_new.o \
+				$(TARGETDIR)\Ecdh_new.o \
+				$(TARGETDIR)\Ecdsa_new.o \
+				$(TARGETDIR)\Ecelgamal_new.o \
+				$(TARGETDIR)\encrypttext_new.o \
+				$(TARGETDIR)\esc2str_new.o \
+				$(TARGETDIR)\ex_data_new.o \
+				$(TARGETDIR)\Field163_new.o \
+				$(TARGETDIR)\get_ca_certificate_new.o \
+				$(TARGETDIR)\Group163_new.o \
+				$(TARGETDIR)\i2d_r_pr_new.o \
+				$(TARGETDIR)\i2d_r_pu_new.o \
+				$(TARGETDIR)\key_hash_new.o \
+				$(TARGETDIR)\key_op_new.o \
+				$(TARGETDIR)\manage_TCA_Cert_Info_new.o \
+				$(TARGETDIR)\md5_dgst_new.o \
+				$(TARGETDIR)\md5_one_new.o \
+				$(TARGETDIR)\md_rand_new.o \
+				$(TARGETDIR)\mem_new.o \
+				$(TARGETDIR)\parse_Hashed_Certificate_new.o \
+				$(TARGETDIR)\parse_Signed_Certificate_new.o \
+				$(TARGETDIR)\parse_wtls_new.o \
+				$(TARGETDIR)\parse_x509_new.o \
+				$(TARGETDIR)\proc_cert_response_new.o \
+				$(TARGETDIR)\rand_key_new.o \
+				$(TARGETDIR)\rand_lib_new.o \
+				$(TARGETDIR)\rsa_chk_new.o \
+				$(TARGETDIR)\rsa_eay_new.o \
+				$(TARGETDIR)\rsa_gen_new.o \
+				$(TARGETDIR)\rsa_lib_new.o \
+				$(TARGETDIR)\rsa_oaep_new.o \
+				$(TARGETDIR)\rsa_pk1_new.o \
+				$(TARGETDIR)\rsa_ssl_new.o \
+				$(TARGETDIR)\rsa_verify_new.o \
+				$(TARGETDIR)\seed_new.o \
+				$(TARGETDIR)\seed_rand_key_new.o \
+				$(TARGETDIR)\set_key_new.o \
+				$(TARGETDIR)\sha1dgst_new.o \
+				$(TARGETDIR)\sha1_one_new.o \
+				$(TARGETDIR)\signtext_new.o \
+				$(TARGETDIR)\signtext_rsa_new.o \
+				$(TARGETDIR)\sig_template_new.o \
+				$(TARGETDIR)\stack_new.o \
+				$(TARGETDIR)\verify_cert_new.o \
+				$(TARGETDIR)\verify_Hashed_Certificate_new.o \
+				$(TARGETDIR)\verify_Signed_Certificate_new.o \
+				$(TARGETDIR)\x509_verify_new.o \
+
+
+$(MCOMMERCE_WPKI) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(SKY_INC) -DGETPID_IS_MEANINGLESS -DL_ENDIAN -DSCRIPT_ECC $(DMSS_CFLAGS_WAP) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+SRC_DIR = SOURCE\MCommerce
+
+MCOMMERCE_WALLET =$(TARGETDIR)\mwcore_new.o \
+				  $(TARGETDIR)\mwdata_new.o \
+                  $(TARGETDIR)\mwgetdata_new.o \
+				  $(TARGETDIR)\mwscript_new.o \
+
+$(MCOMMERCE_WALLET) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(SKY_INC) -DGETPID_IS_MEANINGLESS -DL_ENDIAN -DSCRIPT_ECC $(DMSS_CFLAGS_WAP) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+MCOMMERCE_OBJS = $(MCOMMERCE_WPKI) \
+                 $(MCOMMERCE_WALLET) \
+!ENDIF
+
+#-------------------------------------------------------------------------------
+# Add here !!!
+#-------------------------------------------------------------------------------
+#SRC_DIR = 
+#
+#EQUS_XXXX_OBJS = $(TARGETDIR)\
+#
+#$(EQUS_XXXX_OBJS) : $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+#        @echo OBJECT $(@F)
+#        $(CC) $(CFLAGS) $(DMSS_CFLAGS_SKY) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+#        @echo ------------------------------------------------------------------
+
+!IFDEF IRDA
+#-------------------------------------------------------------------------------
+# IrDA Module Porting
+#-------------------------------------------------------------------------------
+
+#----------
+#  APP
+#----------
+SRC_DIR  = $(IRDA_DIR)
+IRDA_OBJ = $(TARGETDIR)\msmuart1.o \
+		   $(TARGETDIR)\msmuart2.o \
+		   $(TARGETDIR)\msmtimer.o \
+		   $(TARGETDIR)\irmodem.o  \
+		   $(TARGETDIR)\irdatool_b0.o
+
+$(IRDA_OBJ) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_IRDA) $(IRDA_INC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+
+#----------
+#  LIB
+#----------
+SRC_DIR       = $(IRDA_IRUTY)
+IRDA_IRUTYOBJ = $(TARGETDIR)\irdauty.o
+
+$(IRDA_IRUTYOBJ) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_IRDA) $(IRDA_INC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+##
+SRC_DIR       = $(IRDA_IRSIR)
+IRDA_IRSIROBJ = $(TARGETDIR)\irsirapi.o \
+                $(TARGETDIR)\irhwif.o   \
+				$(TARGETDIR)\irsirtx.o  \
+				$(TARGETDIR)\irsirrx.o  \
+				$(TARGETDIR)\irtmrapi.o \
+				$(TARGETDIR)\irsircrc.o
+
+$(IRDA_IRSIROBJ) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_IRDA) $(IRDA_INC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+##
+SRC_DIR       = $(IRDA_PROTO)
+IRDA_PROTOOBJ = $(TARGETDIR)\irlap.o  \
+                $(TARGETDIR)\irlmp.o  \
+				$(TARGETDIR)\tinytp.o \
+				$(TARGETDIR)\ircomm.o \
+				$(TARGETDIR)\irmisc.o 
+
+$(IRDA_PROTOOBJ) : $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+        @echo OBJECT $(@F)
+        $(CC) $(CFLAGS) $(DMSS_CFLAGS_IRDA) $(IRDA_INC) $(MSG_FILE) $(OBJ_FILE) $(SRC_FILE)
+        @echo ------------------------------------------------------------------
+##
+IRDA_OBJS = $(IRDA_OBJ)      \
+            $(IRDA_IRUTYOBJ) \
+		    $(IRDA_IRSIROBJ) \
+		    $(IRDA_PROTOOBJ)
+
+!ENDIF      # !IFDEF IRDA #
+
+
+# set source folder
+SRC_DIR = $(QUALCOMMDIR)
+
+#===============================================================================
+# make Image file
+#===============================================================================
+
+STAMP_OBJ = $(OBJ_CMD) $(TARGETDIR)\mobile.o
+STAMP_SRC = $(SRC_DIR)\mobile.c
+
+
+$(TARGET).$(EXETYPE) : $(TARGETDIR)\exist sources $(OBJECTS)
+        @echo Recompile mobile.c for Time Stamp
+        -$(CC) $(CFLAGS) $(DMSS_CFLAGS_MOB) $(MSG_FILE) $(STAMP_OBJ) $(STAMP_SRC)
+        @echo ---------------------------------------------------------------
+        @echo TARGET $@
+        $(LD) -$(EXETYPE) $(LFLAGS) $(OBJ_CMD) .\DownLoad\$@ $(LIBS) -VIA <<
+        $(OBJECTS)
+<<
+
+
+
+
+
+

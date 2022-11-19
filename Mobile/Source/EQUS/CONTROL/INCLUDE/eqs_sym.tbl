@@ -1,0 +1,66 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     EQUSIMUL
+**
+** File:
+**     eqs_sym.tbl
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-10-24 woodstok     Created.
+**
+** ============================================================================
+*/
+
+#ifndef _EQS_SYM_TBL_
+#define _EQS_SYM_TBL_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define TE_SYMBOL_DX			120	
+#define TE_SYMBOL_DY			76
+#define SYMBOL_PAGE_NUMBER		8
+#define SK_SYMBOL_PAGE_NUMBER	11
+
+// Symbole Page Code
+
+// One-Byte symbol code
+STATIC ROM BYTE SymbolCode1[3][14] = {	
+	"~ .,!:;?\"'`^",
+	"$+-_*#@<>=\\%",
+	" ()[]{}/|&   "
+};
+
+// Two-Byte symbol code
+STATIC ROM BYTE SymbolCode2[5][25] = {
+	"¡¦¡Ø¡×¡É¡Í¡Î¡Ï¡Ä¡Å¡Æ¡¤¡¨",
+	"¢Ü¢Â¢Ã¢Ä¢Å¢Î¢Ï¢Í¢Ð¢Ñ¢Û¢Ý",
+	"¢½¡Ù¡Û¡Ý¡Þ¡à¡â¡ä¢·¢¹¢»¢¿",
+	"¢¾¡Ú¡Ü¢Á¡ß¡á¡ã¡å¢¸¢º¢¼¢À",
+	"¢¡¡æ¡ç¡ê¡è¡é¢Õ¢Ö¢×¢Ø¢Ù¢¢"
+};
+	
+// Special-Font symbol code
+STATIC ROM BYTE SymbolCode3[3][25] = {
+	"\x81\xce\x81\xA5\x81\xB9\x81\xC8\x81\xA2\x81\xC9\x81\xBF\x81\xA3\x81\xC3\x81\xD1\x81\xbd\x81\xcf",
+	"\x81\xb6\x81\xa6\x81\xD5\x81\xD6\x81\xD2\x81\xD3\x81\xD4\x81\xAF\x81\xC2\x81\xB0\x84\xab\x81\xb8",
+	"\x81\xd9\x81\xf9\x81\xE7\x81\xA7\x81\xe1\x81\xca\x81\xc4\x81\xb7\x84\xb1\x81\xb2\x81\xc5\x81\xd7"
+};
+
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
+#endif  /* _EQS_SYM_TBL_ */

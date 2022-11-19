@@ -1,0 +1,1300 @@
+/*
+** ============================================================================
+**
+** Project: 
+**     SKY
+**
+** File:
+**     sky_usa.tkn
+**
+** Description:
+**     @DesciptionAboutThisFileHere
+**
+** Copyright (c) 2000 SK Teletech, Co. All Rights Reserved.
+**
+** History:
+**
+** When       who        what, where, why
+** ---------- --------   ------------------------------------------------------
+** 2000-11-20 jrkwon     Created.
+**
+** ============================================================================
+*/
+
+DEFINE_TOKEN(BLANK,                         EQS_T("                "))
+
+/* Image file name */
+DEFINE_TOKEN(IMG_STARTUP,                   EQS_T("eng_strt.ebi"))
+
+/* Date */
+DEFINE_TOKEN(DAT_YEAR,                      EQS_T("")) /* not used in English */
+DEFINE_TOKEN(DAT_MONTH,                     EQS_T("")) /* not used in English */
+DEFINE_TOKEN(DAT_DAY,                       EQS_T("")) /* not used in English */
+DEFINE_TOKEN(DAT_AM,                        EQS_T("AM"))
+DEFINE_TOKEN(DAT_PM,                        EQS_T("PM"))
+DEFINE_TOKEN(DAT_JAN,                       EQS_T("JAN"))
+DEFINE_TOKEN(DAT_FEB,                       EQS_T("FEB"))
+DEFINE_TOKEN(DAT_MAR,                       EQS_T("MAR"))
+DEFINE_TOKEN(DAT_APR,                       EQS_T("APR"))
+DEFINE_TOKEN(DAT_MAY,                       EQS_T("MAY"))
+DEFINE_TOKEN(DAT_JUN,                       EQS_T("JUN"))
+DEFINE_TOKEN(DAT_JUL,                       EQS_T("JUL"))
+DEFINE_TOKEN(DAT_AUG,                       EQS_T("AUG"))
+DEFINE_TOKEN(DAT_SEP,                       EQS_T("SEP"))
+DEFINE_TOKEN(DAT_OCT,                       EQS_T("OCT"))
+DEFINE_TOKEN(DAT_NOV,                       EQS_T("NOV"))
+DEFINE_TOKEN(DAT_DEC,                       EQS_T("DEC"))
+DEFINE_TOKEN(DAT_SUN,                       EQS_T("SUN"))
+DEFINE_TOKEN(DAT_MON,                       EQS_T("MON"))
+DEFINE_TOKEN(DAT_TUE,                       EQS_T("TUE"))
+DEFINE_TOKEN(DAT_WED,                       EQS_T("WED"))
+DEFINE_TOKEN(DAT_THU,                       EQS_T("THU"))
+DEFINE_TOKEN(DAT_FRI,                       EQS_T("FRI"))
+DEFINE_TOKEN(DAT_SAT,                       EQS_T("SAT"))
+DEFINE_TOKEN(DAT_DAYOFWEEK,                 EQS_T("")) /* not used in English */
+
+/* Call */
+DEFINE_TOKEN(CALL_ALERT,                     EQS_T("INCOMMING CALL"))
+DEFINE_TOKEN(CALL_ATTEMPT,                   EQS_T("ATTEMPTING CONNECT"))
+DEFINE_TOKEN(CALL_CONNECTED,                 EQS_T("CONNECTED"))
+DEFINE_TOKEN(CALL_WAITRETRY,                 EQS_T("RETRYING CONNECT"))
+DEFINE_TOKEN(CALL_DS_ORIGINATE,              EQS_T("ATTEMPTING DATA SERVICE"))
+DEFINE_TOKEN(CALL_ADJUST_CONVERSATION_VOL,   EQS_T("ADJUSTING VOICE VOLUME"))
+DEFINE_TOKEN(CALL_CDMA_LOCK,                 EQS_T("Maintenance Required"))
+DEFINE_TOKEN(CALL_HOT_MENU1,                 EQS_T("I do not know!!"))
+DEFINE_TOKEN(CALL_HOT_MENU2,                 EQS_T("I do not know!!"))
+DEFINE_TOKEN(CALL_HOT_MENU3,                 EQS_T("I do not know!!"))
+DEFINE_TOKEN(CALL_HOT_MENU4,                 EQS_T("I do not know!!"))
+DEFINE_TOKEN(CALL_MUTE,                      EQS_T("MUTED"))
+DEFINE_TOKEN(CALL_CALLFORWARD,               EQS_T("I do not know!!"))
+DEFINE_TOKEN(CALL_RETRY,                     EQS_T("Retry"))
+DEFINE_TOKEN(NO_SERVICE,                     EQS_T("No Service Area"))
+DEFINE_TOKEN(CALL_HISTORY,                   EQS_T("Call History"))
+DEFINE_TOKEN(CALL_HISTORY_DETAILINFO,        EQS_T("상세정보"))
+DEFINE_TOKEN(CALL_HISTORY_PHONEBOOK,         EQS_T("전화부"))
+DEFINE_TOKEN(CALL_HISTORY_SMS,               EQS_T("SMS"))
+DEFINE_TOKEN(CALL_HISTORY_EDIT,              EQS_T("전화번호편집"))
+DEFINE_TOKEN(CALL_CALLEDBY,                  EQS_T("Called By"))
+DEFINE_TOKEN(CALL_CALLTO,                    EQS_T("Call To"))
+DEFINE_TOKEN(CALL_MISSEDCALL,                EQS_T("Missed Call"))
+DEFINE_TOKEN(CALL_SMSMT,                     EQS_T("SMS착신"))
+DEFINE_TOKEN(CALL_SMSMO,                     EQS_T("SMS발신"))
+DEFINE_TOKEN(INIT_CUMMULATIVE_INFO,          EQS_T("누적통화시간초기화"))
+DEFINE_TOKEN(INIT_ALL_INFO,                  EQS_T("모든정보초기화"))
+DEFINE_TOKEN(CALL_LASTCALL,                  EQS_T("최종통화시간"))
+DEFINE_TOKEN(CALL_CUMMULATIVE,               EQS_T("누적통화시간"))
+DEFINE_TOKEN(CALL_TOTAL,                     EQS_T("총통화시간"))
+DEFINE_TOKEN(CALL_CNIR,                      EQS_T("발신번호 표시제한"))
+DEFINE_TOKEN(CALL_TWONUMBER_MESSAGE,         EQS_T("수신번호"))
+
+
+/* Hold On */
+DEFINE_TOKEN(HOLDON_TITLE,                   EQS_T("Hold On"))
+DEFINE_TOKEN(HOLDON_MESSAGE,                 EQS_T("잠시만 기다려주세요.\n 곧 전화를 받겠습니다."))
+
+
+/* Start Up & Shou Down */
+DEFINE_TOKEN(POWER_DOWN_ON_BAD_BATT,         EQS_T("Powering Down on Bad Battery"))
+
+/* Idle */
+DEFINE_TOKEN(IDLE_MISSED_CALL,               EQS_T("MISSED CALL"))
+DEFINE_TOKEN(IDLE_MISSED_CALL_AM,            EQS_T("AM"))
+DEFINE_TOKEN(IDLE_MISSED_CALL_PM,            EQS_T("PM"))
+DEFINE_TOKEN(IDLE_FMT_MISSED_CALL,           EQS_T("[%2d Items]"))
+DEFINE_TOKEN(IDLE_INPUT_DIALNUM,             EQS_T("INPUT DIAL NUMBER"))
+DEFINE_TOKEN(IDLE_PRESS_ANY_KEY,             EQS_T("Press Any Key"))
+DEFINE_TOKEN(IDLE_NO_CALLHISTORY,            EQS_T("착발신 이력이 없습니다."))
+DEFINE_TOKEN(IDLE_QUESTION_ERASE,            EQS_T("삭제할까요?"))
+DEFINE_TOKEN(IDLE_QUESTION_ERASEALL,         EQS_T("착발신이력을 전부 삭제할까요?"))
+DEFINE_TOKEN(IDLE_AM,                        EQS_T("AM"))
+DEFINE_TOKEN(IDLE_PM,                        EQS_T("PM"))
+
+
+/* System message */
+DEFINE_TOKEN(CHARGING_NEEDED,                EQS_T("Low Battery"))
+DEFINE_TOKEN(WAITING_A_MOMENT,               EQS_T("Waiting a moment"))
+DEFINE_TOKEN(SYSTEM_MESSAGE,                 EQS_T("System Message"))
+
+
+/* Phone Book */
+DEFINE_TOKEN(PBOOK_MAIN_MENU1,               EQS_T("SPEED SEARCH"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU2,               EQS_T("SEARCH BY NAME"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU3,               EQS_T("SEARCH BY NUMBER"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU4,               EQS_T("SAVE PHONEBOOK"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU5,               EQS_T("ADDITIONAL SERVICES"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU6,               EQS_T("EDIT SHORT DIAL"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU7,               EQS_T("EDIT GROUP"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU8,               EQS_T("SCHEDULER"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU9,               EQS_T("VIEW PERSONAL INFO"))
+DEFINE_TOKEN(PBOOK_MAIN_MENU10,              EQS_T("TEST MENU"))
+
+DEFINE_TOKEN(PBOOK_SAVE,                     EQS_T("SAVE BOOK"))
+DEFINE_TOKEN(PBOOK_EDIT,                     EQS_T("EDIT BOOK"))
+DEFINE_TOKEN(PBOOK_SEARCH_NAME,              EQS_T("SEARCH BY NAME"))
+DEFINE_TOKEN(PBOOK_SEARCH_NUMBER,            EQS_T("SEARCH BY NUMBER"))
+DEFINE_TOKEN(PBOOK_SEARCH,                   EQS_T("SEARCH BOOK"))
+DEFINE_TOKEN(PBOOK_SELECT_NUMBER,            EQS_T("SELECT NUMBER"))
+DEFINE_TOKEN(PBOOK_DATA_INIT,                EQS_T("전화부 초기화"))
+
+DEFINE_TOKEN(PBOOK_EDIT_SDIAL,               EQS_T("EDIT SHORT DIAL")) 
+DEFINE_TOKEN(PBOOK_DELETE_SDIAL,             EQS_T("DELETE SHORT DIAL"))
+DEFINE_TOKEN(PBOOK_SET_SDIAL,                EQS_T("SET SHORT DIAL"))
+DEFINE_TOKEN(PBOOK_SET_NUMBER,               EQS_T("SET TITLE DIAL"))
+
+DEFINE_TOKEN(PBOOK_NO_NAME,                  EQS_T("NO NAME"))
+DEFINE_TOKEN(PBOOK_ITEM_NAME,                EQS_T("NAME"))
+DEFINE_TOKEN(PBOOK_ITEM_GROUP,               EQS_T("GROUP"))
+DEFINE_TOKEN(PBOOK_ITEM_NUMBER,              EQS_T("TELEPHONE"))
+DEFINE_TOKEN(PBOOK_ITEM_EMAIL,               EQS_T("EMAIL"))
+DEFINE_TOKEN(PBOOK_ITEM_MEMO,                EQS_T("MEMO"))
+DEFINE_TOKEN(PBOOK_ITEM_ANNIV,               EQS_T("ANNIVASARY"))
+DEFINE_TOKEN(PBOOK_ITEM_ANNIV_TEXT,          EQS_T("기념"))
+DEFINE_TOKEN(PBOOK_ITEM_DAY,                 EQS_T("날짜"))
+
+DEFINE_TOKEN(PBOOK_PERSON_INFO,              EQS_T("PERSON INFO"))
+DEFINE_TOKEN(PBOOK_ITEM_MOBILE,              EQS_T("Mobile"))
+DEFINE_TOKEN(PBOOK_ITEM_HOME,                EQS_T("Home"))
+DEFINE_TOKEN(PBOOK_ITEM_ADDR,                EQS_T("Addr"))
+DEFINE_TOKEN(PBOOK_GROUP_SECRET,             EQS_T("비밀그룹"))
+DEFINE_TOKEN(PBOOK_GROUP_NONSECRET,          EQS_T("일반그룹"))
+
+
+DEFINE_TOKEN(PBOOK_NUMBER_TYPE1,             EQS_T("\204\301MOBILE NUMBER"))
+DEFINE_TOKEN(PBOOK_NUMBER_TYPE2,             EQS_T("\204\302HOME NUMBER"))
+DEFINE_TOKEN(PBOOK_NUMBER_TYPE3,             EQS_T("\204\303OFFICE NUMBER"))
+DEFINE_TOKEN(PBOOK_NUMBER_TYPE4,             EQS_T("\204\304PAGER NUMBER"))
+DEFINE_TOKEN(PBOOK_NUMBER_TYPE5,             EQS_T("\204\305FAX NUMBER"))
+
+DEFINE_TOKEN(PBOOK_ADD_GROUP,                EQS_T("Not Assign"))
+DEFINE_TOKEN(PBOOK_ADD_ITEM,                 EQS_T("ADD ITEM"))
+DEFINE_TOKEN(PBOOK_DELETE_ITEM,              EQS_T("DELETE ITEM"))  
+
+DEFINE_TOKEN(PBOOK_GROUP_ITEM1,              EQS_T("FAMILY"))
+DEFINE_TOKEN(PBOOK_GROUP_ITEM2,              EQS_T("COMPANY"))
+DEFINE_TOKEN(PBOOK_GROUP_ITEM3,              EQS_T("FRIENDS"))
+DEFINE_TOKEN(PBOOK_GROUP_ITEM4,              EQS_T("NEIBORHOOD"))
+DEFINE_TOKEN(PBOOK_GROUP_ITEM5,              EQS_T("SCHOOL"))
+DEFINE_TOKEN(PBOOK_GROUP_ITEM6,              EQS_T("ETC"))
+
+DEFINE_TOKEN(PBOOK_NUMBER_MENU1,             EQS_T("MOBILE"))
+DEFINE_TOKEN(PBOOK_NUMBER_MENU2,             EQS_T("OFFICE"))
+DEFINE_TOKEN(PBOOK_NUMBER_MENU3,             EQS_T("HOME"))
+DEFINE_TOKEN(PBOOK_NUMBER_MENU4,             EQS_T("PAGER"))
+DEFINE_TOKEN(PBOOK_NUMBER_MENU5,             EQS_T("FAX"))
+
+DEFINE_TOKEN(PBOOK_ANNIV_MENU1,              EQS_T("Birth"))
+DEFINE_TOKEN(PBOOK_ANNIV_MENU2,              EQS_T("Wed"))
+DEFINE_TOKEN(PBOOK_ANNIV_MENU3,              EQS_T("Meet"))
+DEFINE_TOKEN(PBOOK_ANNIV_MENU ,              EQS_T("Add"))
+
+
+DEFINE_TOKEN(PBOOK_GROUP_ADD,                EQS_T("ADD GROUP"))        // Group Edit MENU
+DEFINE_TOKEN(PBOOK_GROUP_EDIT_NAME,          EQS_T("EDIT NAME"))    
+DEFINE_TOKEN(PBOOK_GROUP_EDIT_BELL,          EQS_T("EDIT GROUP BELL"))
+DEFINE_TOKEN(PBOOK_GROUP_DELETE,             EQS_T("DELETE GROUP"))
+DEFINE_TOKEN(PBOOK_GROUP_EDIT_ORDER,         EQS_T("EDIT ORDER"))
+DEFINE_TOKEN(PBOOK_GROUP_SORT,               EQS_T("SORT GROUP"))
+
+DEFINE_TOKEN(PBOOK_ON_SAVING,                EQS_T("Saving Book"))
+DEFINE_TOKEN(PBOOK_ON_DELETING,              EQS_T("Deleting Book"))
+DEFINE_TOKEN(PBOOK_ON_SEARCHING,             EQS_T("Searching Book"))
+DEFINE_TOKEN(PBOOK_SAVE_NEW_DATA,            EQS_T("Save ON New Name"))
+DEFINE_TOKEN(PBOOK_SAVE_OLD_DATA,            EQS_T("Add ON Old Name"))
+DEFINE_TOKEN(PBOOK_SAVE_PHONE_NUMBER,        EQS_T("전화번호 저장"))
+
+DEFINE_TOKEN(PBOOK_NEW_GROUP,                EQS_T("새그룹"))
+DEFINE_TOKEN(PBOOK_ENTIRE_LIST,              EQS_T("<ALL NAME>"))
+
+DEFINE_TOKEN(PBOOK_SEARCH_NAME_RESULT,       EQS_T("이름으로 찾기결과"))
+DEFINE_TOKEN(PBOOK_SEARCH_NUMBER_RESULT,     EQS_T("번호로 찾기결과"))
+DEFINE_TOKEN(PBOOK_SECRET_GROUP,             EQS_T("비밀그룹설정"))
+
+DEFINE_TOKEN(PBOOK_GROUP_BELL,               EQS_T("그룹벨 설정"))
+DEFINE_TOKEN(PBOOK_GROUP_NAME,               EQS_T("그룹이름"))
+DEFINE_TOKEN(PBOOK_GROUP_MEMBER,             EQS_T("그룹멤버"))
+DEFINE_TOKEN(PBOOK_GROUP_LCD_COLOR,          EQS_T("그룹 LCD 설정"))
+DEFINE_TOKEN(PBOOK_PICTURE_VIEW,             EQS_T("사진보기"))
+DEFINE_TOKEN(PBOOK_PICTURE_ADD,              EQS_T("사진"))
+DEFINE_TOKEN(PBOOK_EMAIL_LIST_TITLE,         EQS_T("상대방 주소 지정"))
+
+
+// Phone Token for making string 
+DEFINE_TOKEN(PBOOK_STRING_ENTIRE_LIST,       EQS_T("ALL NAME"))
+DEFINE_TOKEN(PBOOK_STRING_NO_MATCH,          EQS_T("%s를 가진 %s를 찾을수 없습니다"))
+DEFINE_TOKEN(PBOOK_STRING_NO_DATA_MATCH,     EQS_T("%s 를 찾을수 없습니다"))
+DEFINE_TOKEN(PBOOK_STRING_DELETE_ASK,        EQS_T("%s을 삭제하겠습니까?"))
+
+
+// Phone Book Message
+DEFINE_TOKEN(PBOOK_OVERWRITE_BOOK_MSG,       EQS_T("%d 이(가) 존재합니다. 여기 저장할까요 ?")) 
+DEFINE_TOKEN(PBOOK_SECRET_GROUP_MSG,         EQS_T("This Group is Secret"))
+DEFINE_TOKEN(PBOOK_NO_EDITGROUP_EXIST_MSG,   EQS_T("편집할 그룹이 없습니다"))
+DEFINE_TOKEN(PBOOK_SAME_GROUP_EXIST_MSG,     EQS_T("같은 그룹이 존재합니다"))
+DEFINE_TOKEN(PBOOK_SECRET_GROUP_ASK_MSG,     EQS_T("비밀로 할까요?"))
+DEFINE_TOKEN(PBOOK_NO_DATA_MSG,              EQS_T("저장된데이터가 없습니다"))
+DEFINE_TOKEN(PBOOK_INPUT_NAME_MSG,           EQS_T("이름을 입력하세요"))
+DEFINE_TOKEN(PBOOK_INPUT_NUMBER_MSG,         EQS_T("번호를 입력하세요"))
+DEFINE_TOKEN(PBOOK_GROUP_INFO_ERR,           EQS_T("그룹정보 오류"))
+DEFINE_TOKEN(PBOOK_INPUT_ERR,                EQS_T("입력오류"))
+DEFINE_TOKEN(PBOOK_CREATE_GROUP_ERR,         EQS_T("그룹을 생성할 수 없습니다"))
+DEFINE_TOKEN(PBOOK_ILLEGAL_SECRET_MSG,       EQS_T("비밀번호가 틀립니다"))
+DEFINE_TOKEN(PBOOK_ILLEGAL_DELETE_MSG,       EQS_T("기본항목은 삭제할수 없습니다"))
+DEFINE_TOKEN(PBOOK_FULL_NUMBER_MSG,          EQS_T("번호를 더이상 추가할수 없습니다"))
+DEFINE_TOKEN(PBOOK_SEARCH_FAIL_MSG,          EQS_T("일치하는 데이터가 없습니다"))
+DEFINE_TOKEN(PBOOK_NO_NUMBER_EXIST_MSG,      EQS_T("전화번호 정보가 없습니다"))
+DEFINE_TOKEN(PBOOK_SAVE_MSG,                 EQS_T("정보 메시지"))
+DEFINE_TOKEN(PBOOK_FULL_ITEM_MSG,            EQS_T("항목을 추가할 수 없습니다"))
+DEFINE_TOKEN(PBOOK_ASK_SAVING_MSG,           EQS_T("저장하시겠습니까 ?"))
+DEFINE_TOKEN(PBOOK_NONVALID_SDIAL_MSG,       EQS_T("지정되지 않은 단축다이얼 입니다"))
+DEFINE_TOKEN(PBOOK_INVALID_DELETE_GROUP_MSG, EQS_T("삭제할수 없는 그룹입니다"))
+DEFINE_TOKEN(PBOOK_INVALID_TITLENUMBER_MSG,  EQS_T("전화번호가 없습니다"))
+DEFINE_TOKEN(PBOOK_DELETE_MSG,			     EQS_T("삭제되었습니다"))
+DEFINE_TOKEN(PBOOK_ASK_DELETE_MSG,           EQS_T("삭제할까요 ?"))
+DEFINE_TOKEN(PBOOK_IN_INITIALIZING_MSG,      EQS_T("전화부 초기화중"))
+DEFINE_TOKEN(PBOOK_COMPLETE_DATA_INIT_MSG,   EQS_T("전화부 데이터가\n초기화 되었습니다"))
+DEFINE_TOKEN(PBOOK_ASK_INIT_DATA_MSG,        EQS_T("전화부 데이터를\n   초기화\n 하시겠습니까?"))
+DEFINE_TOKEN(PBOOK_USAGE_MSG,                EQS_T("사용률:%d%d%d/%d%d%d"))
+DEFINE_TOKEN(PBOOK_CHANGE_EDIT_MODE_MSG,     EQS_T("편집모드로 전환합니다"))
+
+// Phone Test Menu 
+DEFINE_TOKEN(PBOOK_TEST_TITLE,               EQS_T("Book Test"))
+DEFINE_TOKEN(PBOOK_TEST_INIT,                EQS_T("Book Init"))
+DEFINE_TOKEN(PBOOK_TEST_DATASAVE,            EQS_T("Data Save"))
+DEFINE_TOKEN(PBOOK_TEST_GROUPSAVE,           EQS_T("Group Save"))
+DEFINE_TOKEN(PBOOK_TEST_MEMBERSAVE,          EQS_T("Member Save"))
+DEFINE_TOKEN(PBOOK_TEST_APPLET,              EQS_T("Test Function"))
+
+
+/* SKY Scheduler */
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU1,            EQS_T("1.TODAY SCHEDULE"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU2,            EQS_T("2.TOTAL SCHEDULE"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU3,            EQS_T("3.SEARCH SCHEDULE"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU4,            EQS_T("4.ADD SCHEDULE"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU5,            EQS_T("5.DELETE SCHEDULE"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU6,            EQS_T("6.VIEW ANNIVASARY"))
+DEFINE_TOKEN(SCHEDULE_MAIN_MENU7,            EQS_T("7.TEST MENU"))
+
+
+DEFINE_TOKEN(SCHEDULE_TEST_MENU1,            EQS_T("1.1TH ADD DATA"))
+DEFINE_TOKEN(SCHEDULE_TEST_MENU2,            EQS_T("2.2TH ADD DATA"))
+DEFINE_TOKEN(SCHEDULE_TEST_MENU3,            EQS_T("3.3TH ADD DATA"))
+DEFINE_TOKEN(SCHEDULE_TEST_MENU4,            EQS_T("4.4TH ADD DATA"))
+DEFINE_TOKEN(SCHEDULE_TEST_MENU5,            EQS_T("5.5TH ADD DATA"))
+DEFINE_TOKEN(SCHEDULE_TEST_MENU6,            EQS_T("6.TEST MENU"))
+
+/* POPUP Menu */
+DEFINE_TOKEN(POPUP_MENU_SET,		         EQS_T("SAVE"))
+DEFINE_TOKEN(POPUP_MENU_RESET,               EQS_T("RESET"))
+DEFINE_TOKEN(POPUP_MENU_DELETE,              EQS_T("DELETE"))
+DEFINE_TOKEN(POPUP_MENU_CANCEL,              EQS_T("CANCEL"))
+
+/* formatted string token */
+DEFINE_TOKEN(TEST_FMT_TEST1,                  EQS_T("Chicken : %d %s"))
+
+/* JUST FOR TEST */
+DEFINE_TOKEN(TEST_PRIMITIVE,                  EQS_T(SF_BLACK_NUM1"Primitive"))
+DEFINE_TOKEN(TEST_TEXT,                       EQS_T(SF_BLACK_NUM2"Text"))
+DEFINE_TOKEN(TEST_IMAGE,                      EQS_T(SF_BLACK_NUM3"Image"))
+DEFINE_TOKEN(TEST_DRAWMODE,                   EQS_T(SF_BLACK_NUM4"Draw Mode"))
+DEFINE_TOKEN(TEST_MULTILANG,                  EQS_T(SF_BLACK_NUM5"Multilanguage"))
+DEFINE_TOKEN(TEST_GUI,                        EQS_T(SF_BLACK_NUM6"GUI"))
+DEFINE_TOKEN(TEST_SLIDING,                    EQS_T(SF_BLACK_NUM7"Sliding Window"))
+
+DEFINE_TOKEN(TEST_TEXT_DIM,                   EQS_T("dim"))
+DEFINE_TOKEN(TEST_TEXT_BOLD,                  EQS_T("bold text"))
+DEFINE_TOKEN(TEST_TEXT_REV,                   EQS_T("reverse"))
+DEFINE_TOKEN(TEST_TEXT_UNDER,                 EQS_T("underline"))
+DEFINE_TOKEN(TEST_TEXT_SHADOW,                EQS_T("shadow"))
+DEFINE_TOKEN(TEST_TEXT_OUTLINE,               EQS_T("outline"))
+DEFINE_TOKEN(TEST_TEXT_STRING,                EQS_T("abcdefghijABCDEFGHIJ"))
+
+DEFINE_TOKEN(TEST_TEXT_LANG,                  EQS_T("USA - English"))
+DEFINE_TOKEN(TEST_TEXT_MSG,                   EQS_T("Um... Uh... - -; ^^ Give me your half... I'll give you the half of mine... Please be happy!!"))
+
+/* Command Line : girin. 2000.10.6 */
+DEFINE_TOKEN(CML_BROWSE,                      EQS_T("      [Select]      "))
+DEFINE_TOKEN(CML_MENU,                        EQS_T("[Menu]              "))
+DEFINE_TOKEN(CML_ADD_DEL,                     EQS_T("[Add]       [Delete]"))
+DEFINE_TOKEN(CML_IDLE_TOP,                    EQS_T("[SKY] [Menu] [pbook]"))
+DEFINE_TOKEN(CML_MENU_CANCEL,                 EQS_T("[Menu]      [Cancel]"))
+DEFINE_TOKEN(CML_MENU_SAVE,                   EQS_T("[Menu]        [Save]"))
+DEFINE_TOKEN(CML_MENU_SEARCH,                 EQS_T("[Menu]      [Search]"))
+DEFINE_TOKEN(CML_MENU_DELETE,                 EQS_T("[Menu]      [Delete]"))
+DEFINE_TOKEN(CML_MENU_ADD,                    EQS_T("[Menu]         [Add]"))
+DEFINE_TOKEN(CML_MENU_EDIT,                   EQS_T("[Menu]        [Edit]"))
+DEFINE_TOKEN(CML_CANCEL_SELECT,               EQS_T("[Cancel][Select]    "))
+// Command Line for Text Editor //
+DEFINE_TOKEN(CML_TEDIT_ENG_UPPER,             EQS_T("[Cancel]    [Upper]"))
+DEFINE_TOKEN(CML_TEDIT_ENG_LOWER,             EQS_T("[Cancel]    [Lower]"))
+DEFINE_TOKEN(CML_TEDIT_KOREAN,                EQS_T("[Cancel]   [Korean]"))
+DEFINE_TOKEN(CML_TEDIT_SYMBOL,                EQS_T("[Cancel]   [Symbol]"))
+DEFINE_TOKEN(CML_TEDIT_NUMBER,                EQS_T("[Cancel]   [Number]"))
+DEFINE_TOKEN(CML_TEDIT_ERROR,                 EQS_T("[Cancel]    [Error]"))
+
+// Menu List test.
+DEFINE_TOKEN(TEST_MENU_LIST_TITLE,              EQS_T("TEST MENU"))
+DEFINE_TOKEN(TEST_MENU_LIST_STR_1,              EQS_T("TEST 1"))
+DEFINE_TOKEN(TEST_MENU_LIST_STR_2,              EQS_T("TEST 2"))
+DEFINE_TOKEN(TEST_MENU_LIST_STR_3,              EQS_T("TEST 3"))
+DEFINE_TOKEN(TEST_MENU_LIST_STR_4,              EQS_T("TEST 4"))
+
+DEFINE_TOKEN(UNDER_CONSTRUCTION,                EQS_T("Under Construction"))
+
+// NAM Programming 
+DEFINE_TOKEN(NAM_1,								EQS_T("NAM 1"))
+DEFINE_TOKEN(NAM_2,								EQS_T("NAM 2"))
+DEFINE_TOKEN(NAM_3,								EQS_T("NAM 3"))
+DEFINE_TOKEN(NAM_4,								EQS_T("NAM 4"))
+DEFINE_TOKEN(NAM_5,								EQS_T("NAM 5"))
+DEFINE_TOKEN(SCI,								EQS_T("SCI"))
+DEFINE_TOKEN(SCM,								EQS_T("SCM"))
+
+DEFINE_TOKEN(NAM_TOP_TITLE,						EQS_T("NAM Program"))
+
+DEFINE_TOKEN(NAM_PREF_SYS_TITLE,                EQS_T("Prefered System"))
+DEFINE_TOKEN(NAM_AONLY,                         EQS_T("A Only"))
+DEFINE_TOKEN(NAM_APREF,                         EQS_T("A Prefered"))
+DEFINE_TOKEN(NAM_BONLY,                         EQS_T("B Only"))
+DEFINE_TOKEN(NAM_BPREF,                         EQS_T("B Prefered"))
+
+DEFINE_TOKEN(NAM_PHONENUMBER,                   EQS_T("Phone Number"))
+DEFINE_TOKEN(NAM_CDMA_1STCHANN,                 EQS_T("Primary Channel"))
+DEFINE_TOKEN(NAM_CDMA_2NDCHANN,                 EQS_T("Secondary Channel"))
+DEFINE_TOKEN(NAM_SID,                           EQS_T("CDMA-SID"))
+DEFINE_TOKEN(NAM_NID,                           EQS_T("CDMA-NID"))
+DEFINE_TOKEN(NAM_SCI,                           EQS_T("Slot Cycle Index"))
+DEFINE_TOKEN(NAM_SCM,                           EQS_T("Station Class Mark"))
+
+DEFINE_TOKEN(NAM_SIDNID,                        EQS_T("SID-NID"))
+DEFINE_TOKEN(NAM_HOMESIDNID,                    EQS_T("HOME SID-NID"))
+DEFINE_TOKEN(NAM_OTHER,                         EQS_T("Other Items"))
+
+DEFINE_TOKEN(NAM_CHANNEL,                       EQS_T("Channel"))
+DEFINE_TOKEN(NAM_CDMA_1STCHANNA,                EQS_T("Primary   CH A"))
+DEFINE_TOKEN(NAM_CDMA_2NDCHANNA,                EQS_T("Secondary CH A"))
+DEFINE_TOKEN(NAM_CDMA_1STCHANNB,                EQS_T("Primary   CH B"))
+DEFINE_TOKEN(NAM_CDMA_2NDCHANNB,                EQS_T("Secondary CH B"))
+DEFINE_TOKEN(NAM_MCC,                           EQS_T("MCC"))
+DEFINE_TOKEN(NAM_MNC,                           EQS_T("MNC"))
+DEFINE_TOKEN(NAM_PRL,                           EQS_T("PRL Enabled"))
+DEFINE_TOKEN(NAM_YES,                           EQS_T("YES"))
+DEFINE_TOKEN(NAM_NO,                            EQS_T("NO"))
+
+// Voice Record and Replay
+DEFINE_TOKEN(VMEMO_INFO,				        EQS_T("Rec. Info"))
+DEFINE_TOKEN(VMEMO_TIME,                        EQS_T("Available"))
+DEFINE_TOKEN(VMEMO_FMT_REMAIN_TIME, 		    EQS_T("%02d:%02d"))
+DEFINE_TOKEN(VMEMO_FMT_INFO,                    EQS_T("[%2d/%2d]"))
+DEFINE_TOKEN(VMEMO_FMT_INDEX,                   EQS_T("[%2d]"))
+DEFINE_TOKEN(VMEMO_FMT_RECINDEX,                EQS_T("[%2d items]"))
+DEFINE_TOKEN(VMEMO_START,                       EQS_T("Start"))
+DEFINE_TOKEN(VMEMO_PLAY,                        EQS_T("Play"))
+DEFINE_TOKEN(VMEMO_PLAY_NEXT,                   EQS_T("Next"))
+DEFINE_TOKEN(VMEMO_PLAYING,                     EQS_T("Playing"))
+DEFINE_TOKEN(VMEMO_LONG,                        EQS_T("Long:"))
+DEFINE_TOKEN(VMEMO_RECORD_TITLE,                EQS_T("Recording"))
+DEFINE_TOKEN(VMEMO_RECORD_TIME,                 EQS_T("REC. Time"))
+DEFINE_TOKEN(VMEMO_RECORD_STOP,                 EQS_T("짧게:녹음저장"))
+DEFINE_TOKEN(VMEMO_DELETE,                      EQS_T("Delete All"))
+DEFINE_TOKEN(VMEMO_DELETE_ONE,                  EQS_T("Delete"))
+DEFINE_TOKEN(VMEMO_NOSPACE,                     EQS_T("녹음할 공간이 없습니다."))
+DEFINE_TOKEN(VMEMO_HELP,                        EQS_T("도움말"))
+DEFINE_TOKEN(VMEMO_SAVING,                      EQS_T("저장 중 입니다."))
+DEFINE_TOKEN(VMEMO_CANCEL,                      EQS_T("사용자음성녹음을 취소했습니다."))
+DEFINE_TOKEN(VMEMO_COMPLETE_SAVE,               EQS_T("사용자음성녹음이 완료되었습니다."))
+DEFINE_TOKEN(VMEMO_COMPLETE_PLAY,               EQS_T("사용자음성재생이 완료되었습니다."))
+DEFINE_TOKEN(VMEMO_QUESTION_DELETEING,          EQS_T("사용자음성녹음을 삭제 중 입니다."))
+DEFINE_TOKEN(VMEMO_QUESTION_DELETED,            EQS_T("사용자음성녹음을 삭제 했습니다."))
+DEFINE_TOKEN(VMEMO_DELETING_PREVIOUSMEMT,       EQS_T("이전 녹음을 삭제 중 입니다."))
+DEFINE_TOKEN(VMEMO_NOMORE_RECORDING,            EQS_T("더 이상 녹음할 수 없습니다."))
+DEFINE_TOKEN(VMEMO_NOUSERMENT,                  EQS_T("녹음된 사용자음성이 없습니다."))
+DEFINE_TOKEN(VMEMO_SAVE_SUCCESS,                EQS_T("성공적으로 저장되었습니다."))
+DEFINE_TOKEN(VMEMO_DELETE_ALL,                  EQS_T("녹음내용을 전부삭제 중 입니다."))
+DEFINE_TOKEN(VMEMO_QUESTION_DELETEALL,          EQS_T("녹음된 내용을 전부 삭제할까요?"))
+DEFINE_TOKEN(VMEMO_FMT_DELETEONE1,              EQS_T("녹음내용 [%2d]을 삭제할까요?"))
+DEFINE_TOKEN(VMEMO_FMT_DELETEONE2,              EQS_T("녹음내용 [%2d]를 삭제할까요?"))
+DEFINE_TOKEN(VMEMO_FMT_DELETINGONE1,            EQS_T("녹음내용 [%2d]을 삭제 중 입니다."))
+DEFINE_TOKEN(VMEMO_FMT_DELETINGONE2,            EQS_T("녹음내용 [%2d]를 삭제 중 입니다."))
+DEFINE_TOKEN(VMEMO_FMT_DELETEONE1_SUCCESS,      EQS_T("녹음내용 [%2d]을 삭제했습니다."))
+DEFINE_TOKEN(VMEMO_FMT_DELETEONE2_SUCCESS,      EQS_T("녹음내용 [%2d]를 삭제했습니다."))
+DEFINE_TOKEN(VMEMO_RECORD_NONE,                 EQS_T("녹음된 내용이 없습니다."))
+DEFINE_TOKEN(VMEMO_WRONG_TIME,                  EQS_T("잘못된 시각"))
+DEFINE_TOKEN(VMEMO_RECORD_CANCEL,               EQS_T("녹음내용 저장을 취소합니다."))
+DEFINE_TOKEN(VMEMO_RECORD_PLAY_TITLE,           EQS_T("녹음/재생"))
+DEFINE_TOKEN(VMEMO_RECORD_TOTAL_NUM,            EQS_T("녹음개수"))
+DEFINE_TOKEN(VMEMO_RECORD_NUM,                  EQS_T("녹음번호"))
+
+
+// Main Menu
+DEFINE_TOKEN(BELL_VIB,                          EQS_T("Bell/Vib."))
+DEFINE_TOKEN(DISPLAY_SET,                       EQS_T("Display"))
+DEFINE_TOKEN(PHONE_BOOK,                        EQS_T("Phone Book"))
+DEFINE_TOKEN(FACILITY,                          EQS_T("Facility"))
+DEFINE_TOKEN(AUTO_ANSWER,                       EQS_T("Auto Answer"))
+DEFINE_TOKEN(GAME,                              EQS_T("Game"))
+DEFINE_TOKEN(IRDA,                              EQS_T("IrDA")) 
+DEFINE_TOKEN(DATA_SERVICE,                      EQS_T("Data Svc."))
+DEFINE_TOKEN(CONTROL_PANEL,                     EQS_T("Control Panel"))
+DEFINE_TOKEN(SMS,                               EQS_T("SMS"))
+DEFINE_TOKEN(EMAIL,                             EQS_T("E-Mail"))
+DEFINE_TOKEN(TEST_MENU,                         EQS_T("Test Menu"))
+DEFINE_TOKEN(MAIN_MENU_TOP_TITLE,               EQS_T("Menu"))
+
+DEFINE_TOKEN(IDLE_DISPAY,                       EQS_T("Idle Display"))
+DEFINE_TOKEN(PICTURE_SET,                       EQS_T("Picture Set"))
+DEFINE_TOKEN(LCD_BRIGHTNESS,                    EQS_T("LCD Brightness"))
+DEFINE_TOKEN(DISPLAY_SET_TITLE,                 EQS_T("Display"))
+
+DEFINE_TOKEN(SPEED_SEARCH,                      EQS_T("SPEED Search"))
+DEFINE_TOKEN(NAME_SEARCH,                       EQS_T("Name Search"))
+DEFINE_TOKEN(NUMBER_SEARCH,                     EQS_T("Number Search"))
+//DEFINE_TOKEN(PBOOK_EDIT,                        EQS_T("PBook Edit"))
+DEFINE_TOKEN(PHONE_BOOK_SAVE,                   EQS_T("Book Save"))
+DEFINE_TOKEN(EDIT_SHORT_DIAL,                   EQS_T("Short Dial Edit"))
+DEFINE_TOKEN(GROUP_EDIT,                        EQS_T("Group Edit"))
+DEFINE_TOKEN(PHONE_TEST,                        EQS_T("TEST"))
+DEFINE_TOKEN(011_SERVICE,                       EQS_T("011 Svc."))
+DEFINE_TOKEN(PHONE_BOOK_TITLE,                  EQS_T("Phone Book"))
+
+DEFINE_TOKEN(SKY_SCHEDULER,                     EQS_T("SKY Scheduler"))
+DEFINE_TOKEN(TIME_TABLE,                        EQS_T("Time Table"))
+DEFINE_TOKEN(CALENDAR,                          EQS_T("Calendar"))
+DEFINE_TOKEN(ALARM,                             EQS_T("Alarm"))
+DEFINE_TOKEN(CALCULATOR,                        EQS_T("Calculator"))
+DEFINE_TOKEN(STOPWATCH,                         EQS_T("Stop Watch"))
+DEFINE_TOKEN(WORLD_TIME,                        EQS_T("World Time"))
+DEFINE_TOKEN(MEMO,                              EQS_T("Meno"))
+DEFINE_TOKEN(FACILITY_TITLE,                    EQS_T("Facility"))
+
+DEFINE_TOKEN(AUTO_ANSWER_SET,                   EQS_T("Auto Answer Set"))
+DEFINE_TOKEN(AUTO_ANSWER_INFO,                  EQS_T("자동응답정보"))
+DEFINE_TOKEN(USER_MENT_RECORD,                  EQS_T("User Voice Rec."))
+DEFINE_TOKEN(USER_MENT_RECORDING,               EQS_T("사용자음성녹음중"))
+DEFINE_TOKEN(USER_MENT_PLAYING,                 EQS_T("사용자음성재생중"))
+DEFINE_TOKEN(USER_MENT_REPLAY,                  EQS_T("녹음확인"))
+DEFINE_TOKEN(USER_MENT_DELETE,                  EQS_T("녹음삭제"))
+DEFINE_TOKEN(AUTO_ANSWER_TITLE,                 EQS_T("Auto Answer"))
+DEFINE_TOKEN(AUTOANSWER_START,                  EQS_T("자동응답기능이 설정되었습니다"))
+DEFINE_TOKEN(AUTOANSWER_END,                    EQS_T("자동응답기능이 해제되었습니다"))
+DEFINE_TOKEN(AUTOANSWER_RECORDING,              EQS_T("자동응답녹음"))
+DEFINE_TOKEN(AUTOANSWER_SETTING_SAVE,           EQS_T("자동응답설정사항을 저장 중 입니다."))
+
+DEFINE_TOKEN(SAMTRIS,                           EQS_T("Samtris"))
+DEFINE_TOKEN(PUZZLE,                            EQS_T("Puzzle"))
+DEFINE_TOKEN(DUDEOGI,                           EQS_T("Moles"))
+DEFINE_TOKEN(MOON_PATROL,                       EQS_T("Moon Patrol"))
+DEFINE_TOKEN(GAME_TITLE,                        EQS_T("Game"))
+
+// 적외선 통신
+DEFINE_TOKEN(PHONE_TO_PHONE,                    EQS_T("Phone-to-Phone"))
+DEFINE_TOKEN(PHONE_TO_PC,                       EQS_T("Phone-to-PC"))
+DEFINE_TOKEN(IRDA_TITLE,                        EQS_T("IrDA"))
+DEFINE_TOKEN(PHONE_TO_PHONE_RECEIVE,            EQS_T("수신모드"))
+DEFINE_TOKEN(PHONE_TO_PHONE_BELL,               EQS_T("나만의벨전송"))
+DEFINE_TOKEN(PHONE_TO_PHONE_ANIMATION,          EQS_T("나만의그림전송"))
+DEFINE_TOKEN(PHONE_TO_PHONE_BOOK,               EQS_T("전화부전송"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_ALL,           EQS_T("전체전송"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_BELL,          EQS_T("전송할벨선택"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_ANI,           EQS_T("전송할그림선택"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_GROUP,         EQS_T("그룹별"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_NAME,          EQS_T("이름별"))
+DEFINE_TOKEN(PHONE_TO_PC_ON,                    EQS_T("ON"))
+DEFINE_TOKEN(PHONE_TO_PC_OFF,                   EQS_T("OFF"))
+DEFINE_TOKEN(PHONE_TO_PC_ON_MSG,                EQS_T("PC와 적외선통신으로 연결합니다"))
+DEFINE_TOKEN(PHONE_TO_PC_OFF_MSG,               EQS_T("적외선통신을 사용하지 않습니다"))
+DEFINE_TOKEN(PHONE_TO_PHONE_RCV_MSG,            EQS_T("수신대기중입니다"))
+DEFINE_TOKEN(PHONE_TO_PHONE_CONNECT_MSG,        EQS_T("연결되었습니다"))
+DEFINE_TOKEN(PHONE_TO_PHONE_SEND_MSG,           EQS_T("전송중입니다"))
+// End. 적외선 통신
+
+DEFINE_TOKEN(DATA_SERVICE_SET,                  EQS_T("Data Svc. Set"))
+DEFINE_TOKEN(AIR_DATA_MANAGER,                  EQS_T("Air DataManager"))
+DEFINE_TOKEN(DATA_SERVICE_TITLE,                EQS_T("Data Svc."))
+
+/* 
+**----------------------------------------------------------------------------
+**  AIR DATAMANAGER
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(AIR_DATAMGR_SEND,                  EQS_T("모뎀으로걸기"))	
+DEFINE_TOKEN(AIR_DATAMGR_GET,                   EQS_T("모뎀으로받기"))	
+DEFINE_TOKEN(IP_AIR_DATAMGR,                    EQS_T("IP주소로접속"))	
+DEFINE_TOKEN(CONNECT_MODEM_NUM,                 EQS_T("연결할모뎀번호?"))	
+DEFINE_TOKEN(WAIT_AIR_DATAMGR,                  EQS_T("AIR데이터매니저 착신을 대기중입니다"))	
+DEFINE_TOKEN(CONNECT_IP_ADDR,                   EQS_T("접속PC의 IP주소"))	
+DEFINE_TOKEN(NO_INPUT_IP_ADDR,                  EQS_T("입력된 IP주소가 없습니다"))	
+
+DEFINE_TOKEN(CONFIRM_SAVE,                      EQS_T("저장할까요?"))	
+
+/* white 4333-12-28 --> @why, what */
+DEFINE_TOKEN(NEW_PASSWORD,                      EQS_T("New Password"))
+DEFINE_TOKEN(CONFIRM_PASSWORD,                  EQS_T("One More"))
+DEFINE_TOKEN(DONE_SAVE,                         EQS_T("Saved"))
+DEFINE_TOKEN(DONE_CANCEL,                       EQS_T("Canceled"))
+/* <-- */
+
+/* white 4333-12-19 --> @why, what */
+DEFINE_TOKEN(AUTOLOCK_STAT,                     EQS_T("Auto Lock State"))
+DEFINE_TOKEN(INTERCALLLOCK_STAT,                EQS_T("Inter Call Lock State"))
+DEFINE_TOKEN(PBOOKLOCK_STAT,                    EQS_T("Phone Book Lock State"))
+DEFINE_TOKEN(MENULOCK_STAT,                     EQS_T("Menu Lock State"))
+DEFINE_TOKEN(CSTACKLOCK_STAT,                   EQS_T("CallStack Lock State"))
+DEFINE_TOKEN(RECLOCK_STAT,                      EQS_T("Rec.&Play Lock State"))
+DEFINE_TOKEN(MEMOLOCK_STAT,                     EQS_T("Memo Lock State"))
+DEFINE_TOKEN(NTOPLOCK_STAT,                     EQS_T("n.TOP Lock State"))
+DEFINE_TOKEN(SMSLOCK_STAT,                      EQS_T("SMS Lock State"))
+
+DEFINE_TOKEN(INPUT_PASSWORD,                    EQS_T("비밀번호를 입력해 주세요"))
+DEFINE_TOKEN(WRONG_PASSWORD,                    EQS_T("비밀번호가 틀립니다"))
+DEFINE_TOKEN(NO_INPUT_NUM,                      EQS_T("번호가 입력되지 않았습니다"))
+DEFINE_TOKEN(ONE_MORE_PUT,                      EQS_T("다시 한번 입력하여 주십시오"))
+DEFINE_TOKEN(NOT_IDENTITY,                      EQS_T("일치하지않습니다"))
+
+DEFINE_TOKEN(CON_PHONE_NUM,                     EQS_T("Number to Connect?"))
+DEFINE_TOKEN(REV_PHONE_NUM,                     EQS_T("Number to ...?"))
+DEFINE_TOKEN(INTER_CTRL,                        EQS_T("International Call Limit"))
+DEFINE_TOKEN(ALL_CTRL,                          EQS_T("All Call Limit"))
+DEFINE_TOKEN(CANCEL_CTRL,                       EQS_T("Call Limit Cancellation"))
+
+DEFINE_TOKEN(ONLY_OPEN,                         EQS_T("Open Folder"))
+DEFINE_TOKEN(OPEN_PRESS,                        EQS_T("Open & Press Key"))
+
+DEFINE_TOKEN(INPUT_SEL_HANGUL,                  EQS_T("한글입력방안선택"))
+DEFINE_TOKEN(SEL_OLD_HANGUL,                    EQS_T("기존한글입력방안"))
+DEFINE_TOKEN(SEL_SKY_HANGUL,                    EQS_T("SKY한글입력방안"))
+
+DEFINE_TOKEN(011_SORISAM,                       EQS_T("SORISAM"))
+DEFINE_TOKEN(011_AUTOCONEC,                     EQS_T("AUTO connect"))
+DEFINE_TOKEN(011_REVERSECALL,                   EQS_T("..."))
+DEFINE_TOKEN(011_INFOSAM,                       EQS_T("Info. SAM"))
+DEFINE_TOKEN(011_TRAFFICINFO,                   EQS_T("TRAFFIC Info."))
+DEFINE_TOKEN(011_SECRETCALL,                    EQS_T("Password Call"))
+
+DEFINE_TOKEN(CONNECT,                           EQS_T("Connection"))
+DEFINE_TOKEN(REGISTRY,                          EQS_T("Registration"))
+DEFINE_TOKEN(DIRECT_REGI,                       EQS_T("Direct Registration"))
+DEFINE_TOKEN(CANCEL,                            EQS_T("Cancellation"))
+DEFINE_TOKEN(EDITING,                           EQS_T("Editing"))
+
+DEFINE_TOKEN(INTERCALL_CTRL,                    EQS_T("International Call"))
+DEFINE_TOKEN(ALLCALL_CTRL,                      EQS_T("All Call"))
+
+DEFINE_TOKEN(SORISAM_EDIT,                      EQS_T("Sorisam Edit"))
+DEFINE_TOKEN(AUTOCONNECT_EDIT,                  EQS_T("AutoConnect Edit"))
+DEFINE_TOKEN(REVERSECALL_EDIT,                  EQS_T("... Edit"))
+DEFINE_TOKEN(INFOSAM_EDIT,                      EQS_T("Info Sam Edit"))
+DEFINE_TOKEN(TRAFFICINFO_EDIT,                  EQS_T("Traffic Info Edit"))
+DEFINE_TOKEN(SECRETCALL_EDIT,                   EQS_T("Password Call Edit"))
+DEFINE_TOKEN(HOT_MENU3_EDIT,                    EQS_T("..."))
+DEFINE_TOKEN(HOT_MENU4_EDIT,                    EQS_T("..."))
+/* <-- */
+
+/* white 4333-12-18 --> @why, what */
+DEFINE_TOKEN(TWO_NUM,                           EQS_T("Add Num."))
+DEFINE_TOKEN(ON_DISPLAY,                        EQS_T("Display Yes"))
+DEFINE_TOKEN(OFF_DISPLAY,                       EQS_T("Display No"))
+
+DEFINE_TOKEN(PROXY_ADDR,                        EQS_T("PROXY Addr."))
+DEFINE_TOKEN(INIT_URL,                          EQS_T("Init URL"))
+DEFINE_TOKEN(NTOP_INIT,                         EQS_T("Init Set"))
+
+DEFINE_TOKEN(LOCK_ALL,                          EQS_T("Lock All"))
+DEFINE_TOKEN(LOCK_MENU,                         EQS_T("Lcok Menu"))
+DEFINE_TOKEN(LOCK_PHONEBOOK,                    EQS_T("Lock PhoneBook"))
+DEFINE_TOKEN(LOCK_MESSAGE,                      EQS_T("Lock SMS"))
+DEFINE_TOKEN(LOCK_CALLSTACK,                    EQS_T("Lock Callstack"))
+DEFINE_TOKEN(LOCK_NTOP,                         EQS_T("Lock n.Top"))
+DEFINE_TOKEN(LOCK_REC,                          EQS_T("Lock Rec.&Play"))
+DEFINE_TOKEN(LOCK_MEMO,                         EQS_T("Lock Memo"))
+DEFINE_TOKEN(LOCK_INTERCALL,                    EQS_T("Lcok InterCall"))
+/* <-- */
+
+/* white 4333-12-16 --> @why, what */
+DEFINE_TOKEN(PHONE_NAME,						EQS_T("Phone Name"))
+DEFINE_TOKEN(PHONE_PASSWORD,					EQS_T("Password"))
+DEFINE_TOKEN(HOW_TO_GETCALL,		    		EQS_T("How To Receive Call"))
+
+DEFINE_TOKEN(PHONE_INFO,						EQS_T("Phone INFO"))
+DEFINE_TOKEN(LOCK,							    EQS_T("LOCK"))
+DEFINE_TOKEN(NTOP_SET,							EQS_T("n.TOP Set"))
+DEFINE_TOKEN(NAM_SET,							EQS_T("NAM Set"))
+DEFINE_TOKEN(TWO_NUM_SRVC_SET,					EQS_T("Two Num. Set"))
+DEFINE_TOKEN(SYSTEM_INIT,						EQS_T("System Init."))
+/* <-- */
+
+/* white 4334-01-03 --> @why, what 부가기능 */
+DEFINE_TOKEN(AUTO_LOCALNUM,                     EQS_T("Auto Local Num."))
+DEFINE_TOKEN(AUTO_LCD_BACKLIGHT,                EQS_T("ID LCD Backlight"))
+DEFINE_TOKEN(AUTO_IDLCD_BACKLIGHT,              EQS_T("Main LCD Backlight"))
+DEFINE_TOKEN(AUTO_REDIAL,                       EQS_T("Auto Redial"))
+DEFINE_TOKEN(AUTO_GET,                          EQS_T("....???"))
+
+DEFINE_TOKEN(INPUT_AUTO_LOCALNUM,               EQS_T("지역번호입력"))
+DEFINE_TOKEN(USE,                               EQS_T("사용함"))
+DEFINE_TOKEN(NOT_USE,                           EQS_T("사용안함"))
+
+DEFINE_TOKEN(AUTO_LCD_ON,                       EQS_T("Auto Backlight"))
+DEFINE_TOKEN(ALWAYS_ON,                         EQS_T("Always On"))
+DEFINE_TOKEN(TIME_AUTO_ON,                      EQS_T("Time Auto ON"))
+DEFINE_TOKEN(TIME_ALWAYS_ON,                    EQS_T("Time Always ON"))
+DEFINE_TOKEN(NOTUSED,                           EQS_T("Not Used"))
+
+DEFINE_TOKEN(WHEN_IDLE,                         EQS_T("대기상태"))
+DEFINE_TOKEN(WHEN_CALL_ALERT,                   EQS_T("착신시"))
+DEFINE_TOKEN(WHEN_SMS_ALERT,                    EQS_T("SMS수신시"))
+DEFINE_TOKEN(WHEN_GROUP_ALERT,                  EQS_T("그룹별착신시"))
+
+DEFINE_TOKEN(SEL_GROUP_LIGHT,                   EQS_T("조명지정그룹?"))
+DEFINE_TOKEN(SEL_BACKLIGHT,                     EQS_T("조명선택"))
+
+DEFINE_TOKEN(BLUE,                              EQS_T("파란색"))
+DEFINE_TOKEN(GREEN,                             EQS_T("녹색"))
+DEFINE_TOKEN(RED,                               EQS_T("빨간색"))
+DEFINE_TOKEN(VIOLET,                            EQS_T("보라색"))
+DEFINE_TOKEN(BLUE_GREEN,                        EQS_T("청록색"))
+DEFINE_TOKEN(ORANGE,                            EQS_T("오렌지색"))
+DEFINE_TOKEN(WHITE,                             EQS_T("흰색"))
+DEFINE_TOKEN(RAINBOW,                           EQS_T("무지개색"))
+DEFINE_TOKEN(GROUP_LIGHT_NONE,                  EQS_T("그룹조명해제"))
+
+DEFINE_TOKEN(AUTO_HANDSFREE,                     EQS_T("Handsfree"))
+DEFINE_TOKEN(AUTO_EARPHONE_MIC,                 EQS_T("EarPhone MIC"))
+/* <-- */
+
+DEFINE_TOKEN(SYSTEM_SET,                        EQS_T("System Set"))
+DEFINE_TOKEN(VOLUME_WARN_SET,                   EQS_T("Tone/Warning"))
+DEFINE_TOKEN(VOLUME_SET,                        EQS_T("Tone Set"))
+DEFINE_TOKEN(FACILITY_SET,                      EQS_T("Facility Set"))
+//DEFINE_TOKEN(LCD_BRIGHTNESS,                  EQS_T("LCD Brightness"))
+DEFINE_TOKEN(011_SERVICE_SET,                   EQS_T("011 Svc Set"))
+DEFINE_TOKEN(SELF_INFO_SET,                     EQS_T("Self Info."))
+DEFINE_TOKEN(SMART_BATTERY_INFO,                EQS_T("Battery Info."))
+DEFINE_TOKEN(SW_VERSION,                        EQS_T("S/W Version"))
+DEFINE_TOKEN(MENU_SET,                          EQS_T("Menu Set"))
+DEFINE_TOKEN(CALL_TIME,                         EQS_T("Call Time"))
+DEFINE_TOKEN(USER_FILE,                         EQS_T("User File"))
+DEFINE_TOKEN(INFO_LINE_SET,                     EQS_T("Info Window"))
+DEFINE_TOKEN(MULT_LANGUAGE_SET,                 EQS_T("Multilanguage"))
+DEFINE_TOKEN(CONTROL_PANEL_TITLE,               EQS_T("Control Panel"))
+
+DEFINE_TOKEN(SMS_IN_BOX,                        EQS_T("In Box"))
+DEFINE_TOKEN(SMS_SENT_BOX,                      EQS_T("Sent Box"))
+DEFINE_TOKEN(SMS_OUTGOING_BOX,                  EQS_T("Outgoing Box"))
+DEFINE_TOKEN(SMS_EDIT,                          EQS_T("Mesg Edit"))
+DEFINE_TOKEN(SMS_COMMON_PHRASE,                 EQS_T("Common Phrase"))
+DEFINE_TOKEN(SMS_SET,                           EQS_T("SMS Set"))
+DEFINE_TOKEN(SMS_DELETE,                        EQS_T("SMS Delete"))
+DEFINE_TOKEN(SMS_TITLE,                         EQS_T("SMS"))
+
+DEFINE_TOKEN(EMAIL_IN_BOX,                      EQS_T("In Mail"))
+DEFINE_TOKEN(EMAIL_SENT_BOX,                    EQS_T("Sent Mail"))
+DEFINE_TOKEN(EMAIL_OUTGOING_BOX,                EQS_T("Outgoing Mail"))
+DEFINE_TOKEN(EMAIL_EDIT,                        EQS_T("Mail Edit"))
+DEFINE_TOKEN(EMAIL_COMMON_PHRASE,               EQS_T("Common Phrase"))
+DEFINE_TOKEN(EMAIL_ACCOUNT_SET,                 EQS_T("Account"))
+DEFINE_TOKEN(EMAIL_TITLE,                       EQS_T("E-Mail"))
+
+DEFINE_TOKEN(IO_CONTROL_TEST,                   EQS_T("I/O Control"))
+DEFINE_TOKEN(GRAPHIC_TEST,                      EQS_T("Graphic Test"))
+DEFINE_TOKEN(AUDIO_GAIN_TEST,					EQS_T("Audio Gain"))
+DEFINE_TOKEN(MELODY_TEST,					    EQS_T("Melody Test"))
+DEFINE_TOKEN(SMART_BATTERY_TEST,				EQS_T("Smart Battery"))
+DEFINE_TOKEN(IRDA_TEST,					        EQS_T("IrDA Test"))
+DEFINE_TOKEN(DEBUG_SCREEN_TOGGLE,		        EQS_T("Debug Screen"))
+DEFINE_TOKEN(LED_TEST,					        EQS_T("LED Test"))
+DEFINE_TOKEN(GVM_VOICE_TEST,					EQS_T("GVM Voice Test"))
+DEFINE_TOKEN(VOICE_PLAYING,					    EQS_T("Voice is playing"))
+DEFINE_TOKEN(VOICE_END,					        EQS_T("Playing is over"))
+DEFINE_TOKEN(RING_INDICATOR_TEST,				EQS_T("Ring Indicator"))
+DEFINE_TOKEN(BACKLIGHT_TEST,					EQS_T("Backlight Test"))
+DEFINE_TOKEN(LCD_BRIGHTNESS_TEST,				EQS_T("LCD Brightness"))
+DEFINE_TOKEN(SW_VERSION_TEST,					EQS_T("S/W Version"))
+DEFINE_TOKEN(TEST_MENU_TITLE,                   EQS_T("Test Menu"))
+
+DEFINE_TOKEN(MELODY_TEST_TITLE,                   EQS_T("Melody Test"))
+DEFINE_TOKEN(MELODY_TEST_MELODY_LIST,             EQS_T("Melody List"))
+DEFINE_TOKEN(MELODY_TEST_EFS_MELODY_LIST,         EQS_T("EFS Melody List"))
+DEFINE_TOKEN(MELODY_TEST_MELODY_OPTION,           EQS_T("Melody Options"))
+
+//Added by happykid 00.12.30  
+DEFINE_TOKEN(SMARTBATT_TEST_TITLE,                  EQS_T("Smart batteryTEST"))
+DEFINE_TOKEN(SMARTBATT_TEST_INIT,					EQS_T("Initialization"))
+DEFINE_TOKEN(SMARTBATT_TEST_MEM_DUMP,				EQS_T("Dump"))
+DEFINE_TOKEN(SMARTBATT_TEST_BATT_CAL_LIST,          EQS_T("Smart batt cal"))
+//End of happkid
+
+// Language Select
+DEFINE_TOKEN(LANGUAGE_KOREAN,                   EQS_T("KOREAN"))
+DEFINE_TOKEN(LANGUAGE_ENGLISH,                  EQS_T("ENGLISH"))
+
+/* rosa 00-11-22 --> @why, what */
+DEFINE_TOKEN(FACILITY_MEMO_MENU1,				EQS_T("Reedit"))
+DEFINE_TOKEN(FACILITY_MEMO_MENU2,				EQS_T("Lock"))
+DEFINE_TOKEN(FACILITY_MEMO_MENU3,				EQS_T("Delete"))
+DEFINE_TOKEN(FACILITY_MEMO_MENU4,				EQS_T("DeleteAll"))
+
+DEFINE_TOKEN(SCHEDULE_DAY_MENU1,				EQS_T("Copy"))
+DEFINE_TOKEN(SCHEDULE_DAY_MENU2,				EQS_T("Paste"))
+DEFINE_TOKEN(SCHEDULE_DAY_MENU3,				EQS_T("Delete"))
+DEFINE_TOKEN(SCHEDULE_DAY_MENU4,				EQS_T("Set Alarm Time"))
+
+
+DEFINE_TOKEN(SCHEDULE_DAY_TITLE,				EQS_T("%2d.%2d.%2d( %2d )"))
+DEFINE_TOKEN(SCHEDULE_START_END_TITLE,			EQS_T("Start & End Time"))
+DEFINE_TOKEN(SCHEDULE_START_END_HYPEN,			EQS_T(" ~ "))
+
+DEFINE_TOKEN(SCHEDULE_START_TIME,				EQS_T("Start"))
+DEFINE_TOKEN(SCHEDULE_END_TIME,					EQS_T("End"))
+
+DEFINE_TOKEN(SCHEDULE_DAY_DATA,					EQS_T("Memo"))
+
+DEFINE_TOKEN(SCHEDULE_EVENT_TITLE,				EQS_T("%2d.%2d.%2d(%2d/%2d)"))
+
+DEFINE_TOKEN(SCHEDULE_ALARM_TITLE,				EQS_T("Set Alarm Time"))
+
+DEFINE_TOKEN(SCHEDULE_CALENDAR_MENU1,			EQS_T("Search Calendar"))
+DEFINE_TOKEN(SCHEDULE_CALENDAR_MENU2,			EQS_T("Event List"))
+DEFINE_TOKEN(SCHEDULE_CALENDAR_MENU3,			EQS_T("My Holiday"))
+DEFINE_TOKEN(SCHEDULE_CALENDAR_MENU4,			EQS_T("Set Alert Bell"))
+DEFINE_TOKEN(SCHEDULE_CALENDAR_MENU5,			EQS_T("Delete"))
+
+
+DEFINE_TOKEN(SCHEDULE_SEARCH_CALENDAR_TITLE,	EQS_T("Calendar Search"))
+DEFINE_TOKEN(SCHEDULE_SEARCH_CALENDAR_RANGE,	EQS_T("[1996~2015]"))
+
+DEFINE_TOKEN(SCHEDULE_DELETE_DATE_TITLE,		EQS_T("Search Event"))
+
+DEFINE_TOKEN(SCHEDULE_MY_HOLIDAY_TITLE,			EQS_T("My Holiday"))
+DEFINE_TOKEN(SCHEDULE_MY_HOLIDAY_MENU1,			EQS_T("Delete My Holiday"))
+
+// Alarm
+DEFINE_TOKEN(ALARM_NEW_MENU1,					EQS_T("Every Day"))
+DEFINE_TOKEN(ALARM_NEW_MENU2,					EQS_T("Every Week"))
+DEFINE_TOKEN(ALARM_NEW_MENU3,					EQS_T("Every Month"))
+
+DEFINE_TOKEN(ALARM_LIST_MENU1,					EQS_T("Delete"))
+DEFINE_TOKEN(ALARM_LIST_MENU2,					EQS_T("Set Alarm Bell"))
+DEFINE_TOKEN(ALARM_LIST_MENU3,					EQS_T("Set Holiday"))
+
+DEFINE_TOKEN(ALARM_MY_HOLIDAY_TITLE,			EQS_T("Set My Holiday"))
+DEFINE_TOKEN(ALARM_MY_HOLIDAY_TEXT,				EQS_T("Play Alarm"))
+
+// Memo
+DEFINE_TOKEN(MEMO_LIST_TITLE,					EQS_T("Memo"))
+DEFINE_TOKEN(MEMO_LIST_MENU1,					EQS_T("Delete"))
+DEFINE_TOKEN(MEMO_MAKE_TITLE,					EQS_T("Make Memo"))
+DEFINE_TOKEN(MEMO_MAKE_DATE,					EQS_T("Date"))
+DEFINE_TOKEN(MEMO_MAKE_DATA,					EQS_T("Memo"))
+
+/* <-- */
+
+// Menu set.
+DEFINE_TOKEN(TEXT_MENU,				            EQS_T("Text Mode"))
+DEFINE_TOKEN(ICON_MENU,				            EQS_T("Graphic Mode"))
+
+
+// SMS Menu
+DEFINE_TOKEN(SMS_FMT_RECEIVE1,                 EQS_T("%s  [%d]"))
+DEFINE_TOKEN(SMS_FMT_RECEIVE2,                 EQS_T("%s [%2d]"))
+DEFINE_TOKEN(SMS_MENU1,                        EQS_T("Receive Msg"))
+DEFINE_TOKEN(SMS_MENU2,                        EQS_T("Send Message"))
+DEFINE_TOKEN(SMS_MENU3,                        EQS_T("Sent Message"))
+DEFINE_TOKEN(SMS_MENU4,                        EQS_T("Set Alarm"))
+DEFINE_TOKEN(SMS_MENU5,                        EQS_T("DelAll Msg"))
+DEFINE_TOKEN(SMS_MENU6,                        EQS_T("E-Mail"))
+
+DEFINE_TOKEN(SMS_SUB_TITLE,                    EQS_T("Receive Msg"))
+DEFINE_TOKEN(SMS_SUB_MENU1,                    EQS_T("Text Message"))
+DEFINE_TOKEN(SMS_SUB_MENU2,                    EQS_T("Voice Message"))
+DEFINE_TOKEN(SMS_SUB_MENU3,                    EQS_T("Mybell"))
+
+DEFINE_TOKEN(SMS_NOTIF_TEXT,                   EQS_T("New Text Message"))
+DEFINE_TOKEN(SMS_NOTIF_URGENT_TEXT,            EQS_T("Urgent Text Msg"))
+DEFINE_TOKEN(SMS_NOTIF_VOICE,                  EQS_T("New Voice Message"))
+DEFINE_TOKEN(SMS_NOTIF_URGENT_VOICE,           EQS_T("Urgent Voice Msg"))
+DEFINE_TOKEN(SMS_NOTIF_NULL,                   EQS_T(""))
+
+DEFINE_TOKEN(SMS_ALARM_SET,                    EQS_T("Alert Type"))
+DEFINE_TOKEN(SMS_ALARM_KIND,                   EQS_T("Set Alert Tone"))
+DEFINE_TOKEN(SMS_ALARM_VOL,                    EQS_T("Set Alert Vol"))
+
+DEFINE_TOKEN(SMS_ALARM_SET1,                   EQS_T("No Alert"))
+DEFINE_TOKEN(SMS_ALARM_SET2,                   EQS_T("Alert Once"))
+DEFINE_TOKEN(SMS_ALARM_SET3,                   EQS_T("Every 2Minutes"))
+
+DEFINE_TOKEN(SMS_ALARM_TONE1,                  EQS_T("Bell 1"))
+DEFINE_TOKEN(SMS_ALARM_TONE2,                  EQS_T("Bell 2"))
+DEFINE_TOKEN(SMS_ALARM_TONE3,                  EQS_T("Bell 3"))
+DEFINE_TOKEN(SMS_ALARM_TONE4,                  EQS_T("Bell 4"))
+DEFINE_TOKEN(SMS_ALARM_TONE5,                  EQS_T("Bell 5"))
+DEFINE_TOKEN(SMS_ALARM_TONE6,                  EQS_T("Bell 6"))
+DEFINE_TOKEN(SMS_ALARM_TONE7,                  EQS_T("Bell 7"))
+
+DEFINE_TOKEN(SMS_DELETE_RECEIVE,               EQS_T("Delete In-Box"))
+DEFINE_TOKEN(SMS_DELETE_SEND,                  EQS_T("Delete SentMsgs"))
+DEFINE_TOKEN(SMS_DELETE_SENT,                  EQS_T("Delete Out-Box"))
+DEFINE_TOKEN(SMS_DELETE_ALL,                   EQS_T("Delete All Msgs"))
+
+
+// calculator  
+DEFINE_TOKEN(CAL_COMMAND_1,                    EQS_T("\203\267\203\270\203\271\203\272"))
+DEFINE_TOKEN(CAL_COMMAND_2,                    EQS_T("\203\325\203\326\203\327\203\330\203\331\203\332\203\333\203\334"))
+DEFINE_TOKEN(CAL_OP_PLUS,                      EQS_T("\203\265"))
+DEFINE_TOKEN(CAL_OP_MINUS,                     EQS_T("\203\266"))
+DEFINE_TOKEN(CAL_OP_MULTIPLAY,                 EQS_T("\203\273"))
+DEFINE_TOKEN(CAL_OP_DIVISOR,                   EQS_T("\203\274"))
+
+
+DEFINE_TOKEN(SWATCH_MIN,                       EQS_T("00M"))
+DEFINE_TOKEN(SWATCH_SEC,                       EQS_T("00S"))
+DEFINE_TOKEN(SWATCH_SEC100,                       EQS_T("00"))
+
+// Volume Setting
+DEFINE_TOKEN(VOLUME_EARPIECE,		           EQS_T("Earpiece"))
+DEFINE_TOKEN(VOLUME_KEYTONE,                   EQS_T("KeyTone"))
+DEFINE_TOKEN(VOLUME_MIC,				       EQS_T("Mic"))
+DEFINE_TOKEN(VOLUME_RINGER,                    EQS_T("Ringer"))
+DEFINE_TOKEN(VOLUME_ALARM,                     EQS_T("Alarm"))
+DEFINE_TOKEN(VOLUME_SMS,                       EQS_T("SMS Alert"))
+
+// BELL_VIB
+DEFINE_TOKEN(BELLVIB_TYPE,	                   EQS_T("Ringer Style"))
+DEFINE_TOKEN(BELLVIB_MODE,                     EQS_T("Ring/Vibrate"))
+DEFINE_TOKEN(BELLVIB_VOLUME,                   EQS_T("Ringer Volume"))
+DEFINE_TOKEN(BELLVIB_TIME,                     EQS_T("Ring Duration"))
+DEFINE_TOKEN(BELLVIB_GROUPBELL,                EQS_T("그룹별벨지정"))
+DEFINE_TOKEN(BELLVIB_GROUPBELL_GROUP,          EQS_T("벨지정 그룹?"))
+DEFINE_TOKEN(BELLVIB_GROUPBELL_BELL,           EQS_T("지정할 벨?"))
+DEFINE_TOKEN(BELLVIB_GROUPBELL_UNSET,          EQS_T("<그룹벨지정해제>"))
+
+DEFINE_TOKEN(BELLVIB_MYBELL,                   EQS_T("나만의벨관리"))
+DEFINE_TOKEN(BELLVIB_MYBELL_FILESIZE,          EQS_T("파일용량"))
+DEFINE_TOKEN(BELLVIB_MYBELL_ALLOC,             EQS_T("사용한용량"))
+DEFINE_TOKEN(BELLVIB_MYBELL_FREE,              EQS_T("남은용량"))
+DEFINE_TOKEN(BELLVIB_MYBELL_DELETE,            EQS_T("삭제"))
+
+DEFINE_TOKEN(BELLVIB_MODE_BELL,                EQS_T("Ring Only"))
+DEFINE_TOKEN(BELLVIB_MODE_VIB,                 EQS_T("Vibrator Only"))
+DEFINE_TOKEN(BELLVIB_MODE_BELL_AFTER_VIB,      EQS_T("Vib. Then Ring"))
+DEFINE_TOKEN(BELLVIB_MODE_BELL_AND_VIB,        EQS_T("Ring and Vib"))
+
+DEFINE_TOKEN(BELLVIB_TIME_UNLIMIT,             EQS_T("Continuous"))
+DEFINE_TOKEN(BELLVIB_TIME_5SEC,                EQS_T("Ring For  5sec"))
+DEFINE_TOKEN(BELLVIB_TIME_10SEC,               EQS_T("Ring For 10sec"))
+DEFINE_TOKEN(BELLVIB_TIME_15SEC,               EQS_T("Ring For 15sec"))
+
+DEFINE_TOKEN(BELLVIB_NOGROUP,                  EQS_T("벨지정할 그룹이 없습니다"))
+DEFINE_TOKEN(BELLVIB_NOMYBELL,                 EQS_T("나만의벨이 없습니다"))
+DEFINE_TOKEN(MYBELL_CONFIRM_DELETE,            EQS_T("나만의벨을 삭제하시겠습니까?"))
+DEFINE_TOKEN(MYBELL_DELETED,                   EQS_T("나만의벨이 삭제되었습니다"))
+
+// 경보음
+DEFINE_TOKEN(BELLVIB_WARNING,                  EQS_T("경보음설정"))
+DEFINE_TOKEN(BELLVIB_WARNING_CALL,             EQS_T("통화연결음"))
+DEFINE_TOKEN(BELLVIB_WARNING_1MIN,             EQS_T("통화1분경과음"))
+DEFINE_TOKEN(BELLVIB_WARNING_NOSERVICE,        EQS_T("서비스이탈경보"))
+DEFINE_TOKEN(BELLVIB_WARNING_LOBAT,            EQS_T("저전압경고"))
+
+// WORLD TIME
+DEFINE_TOKEN(WORLD_TIME_CITY1,                 EQS_T("\205\241Seoul"))
+DEFINE_TOKEN(WORLD_TIME_CITY2,                 EQS_T("\205\242NewYork/Miami"))
+DEFINE_TOKEN(WORLD_TIME_CITY3,                 EQS_T("\205\243Dallas"))
+DEFINE_TOKEN(WORLD_TIME_CITY4,                 EQS_T("\205\244Denver/Pinics"))
+DEFINE_TOKEN(WORLD_TIME_CITY5,                 EQS_T("\205\245Detroit"))
+DEFINE_TOKEN(WORLD_TIME_CITY6,                 EQS_T("\205\246London/Madrid"))
+DEFINE_TOKEN(WORLD_TIME_CITY7,                 EQS_T("\205\247Roma/Paris"))
+DEFINE_TOKEN(WORLD_TIME_CITY8,                 EQS_T("\205\250LosAngles"))
+DEFINE_TOKEN(WORLD_TIME_CITY9,                 EQS_T("\205\251Lisbon"))
+DEFINE_TOKEN(WORLD_TIME_CITY10,                 EQS_T("\205\252Riodejaneiro"))
+DEFINE_TOKEN(WORLD_TIME_CITY11,                 EQS_T("\205\253Manila/HongKong"))
+DEFINE_TOKEN(WORLD_TIME_CITY12,                 EQS_T("\205\254MaxicoCity"))
+DEFINE_TOKEN(WORLD_TIME_CITY13,                 EQS_T("\205\255Mascow"))
+DEFINE_TOKEN(WORLD_TIME_CITY14,                 EQS_T("\205\256Montreal"))
+DEFINE_TOKEN(WORLD_TIME_CITY15,                 EQS_T("\205\257Bagdad"))
+DEFINE_TOKEN(WORLD_TIME_CITY16,                 EQS_T("\205\260Bangkok"))
+DEFINE_TOKEN(WORLD_TIME_CITY17,                 EQS_T("\205\261Berlin"))
+DEFINE_TOKEN(WORLD_TIME_CITY18,                 EQS_T("\205\262Beirut"))
+DEFINE_TOKEN(WORLD_TIME_CITY19,                 EQS_T("\205\263Beston"))
+DEFINE_TOKEN(WORLD_TIME_CITY20,                 EQS_T("\205\300Beijing"))
+DEFINE_TOKEN(WORLD_TIME_CITY21,                 EQS_T("\205\301Vienna"))
+DEFINE_TOKEN(WORLD_TIME_CITY22,                 EQS_T("\205\302Samoa"))
+DEFINE_TOKEN(WORLD_TIME_CITY23,                 EQS_T("\205\303San Francisco"))
+DEFINE_TOKEN(WORLD_TIME_CITY24,                 EQS_T("\205\304Sydney/Melbourne"))
+DEFINE_TOKEN(WORLD_TIME_CITY25,                 EQS_T("\205\305Seattle"))
+DEFINE_TOKEN(WORLD_TIME_CITY26,                 EQS_T("\205\306Chicago"))
+DEFINE_TOKEN(WORLD_TIME_CITY27,                 EQS_T("\205\307Singapore"))
+DEFINE_TOKEN(WORLD_TIME_CITY28,                 EQS_T("\205\310Athens"))
+DEFINE_TOKEN(WORLD_TIME_CITY29,                 EQS_T("\205\311Amsterdam"))
+DEFINE_TOKEN(WORLD_TIME_CITY30,                 EQS_T("\205\312Washington. D.C"))
+DEFINE_TOKEN(WORLD_TIME_CITY31,                 EQS_T("\205\313Wellington"))
+DEFINE_TOKEN(WORLD_TIME_CITY32,                 EQS_T("\205\314Georgetown"))
+DEFINE_TOKEN(WORLD_TIME_CITY33,                 EQS_T("\205\315Cairl"))
+DEFINE_TOKEN(WORLD_TIME_CITY34,                 EQS_T("\205\316Taipei"))
+DEFINE_TOKEN(WORLD_TIME_CITY35,                 EQS_T("\205\317Teheran"))
+DEFINE_TOKEN(WORLD_TIME_CITY36,                 EQS_T("\205\320Hanover"))
+DEFINE_TOKEN(WORLD_TIME_CITY37,                 EQS_T("\205\321Helsinki"))
+DEFINE_TOKEN(WORLD_TIME_CITY38,                 EQS_T("\205\322Honolulu"))
+
+/* 
+**----------------------------------------------------------------------------
+**  TEST APPLET
+**----------------------------------------------------------------------------
+*/
+
+DEFINE_TOKEN(TEST_APPLET_TEXT_EDIT,            EQS_T("TextEditor"))
+
+
+
+/* 
+**----------------------------------------------------------------------------
+**  Application
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(APP_VERSION,                   EQS_T("1.0.0"))
+DEFINE_TOKEN(APP_NAME,                      EQS_T("SKY"))
+
+/* 
+**----------------------------------------------------------------------------
+**  Audio file name
+**----------------------------------------------------------------------------
+*/
+/*----------------------------------------------------------------------------
+**  bell group
+*/
+#if (SKY_MODEL_ID == SKY_MODEL_B0)
+DEFINE_TOKEN(BELL_GROUP_BASIC,              EQS_T("Various"))
+DEFINE_TOKEN(BELL_GROUP_CLASSIC1,           EQS_T("Classic1"))
+DEFINE_TOKEN(BELL_GROUP_CLASSIC2,           EQS_T("Classic2"))
+DEFINE_TOKEN(BELL_GROUP_SOUND_EFFECT,       EQS_T("Sound Effect"))
+DEFINE_TOKEN(BELL_GROUP_MY_BELL,            EQS_T("My Songs"))
+
+#elif (SKY_MODEL_ID == SKY_MODEL_B1)
+DEFINE_TOKEN(BELL_GROUP_BASIC,              EQS_T("Various"))
+#endif
+
+#if (SKY_MODEL_ID == SKY_MODEL_B0)
+/*----------------------------------------------------------------------------
+**  bell - child verse/folk song/misc.
+*/
+DEFINE_TOKEN(BELL_SILENT_NIGHT,             EQS_T("Silence Night"))
+DEFINE_TOKEN(BELL_ROAST_CHESTNUT,           EQS_T("Gunbam Ballad"))
+DEFINE_TOKEN(BELL_CUTE_BOY,                 EQS_T("Cute Kid"))
+DEFINE_TOKEN(BELL_JOY_OF_GOD,               EQS_T("Joy ToTheWorld"))
+DEFINE_TOKEN(BELL_ROAD_OF_DREAM,            EQS_T("Dream Way..."))
+DEFINE_TOKEN(BELL_IN_ROW,                   EQS_T("Line Up"))
+DEFINE_TOKEN(BELL_DOREMI_SONG,              EQS_T("Doremi Song"))
+DEFINE_TOKEN(BELL_NOSE_OF_RUDOLPH,          EQS_T("Rudolph"))
+DEFINE_TOKEN(BELL_MONGKUMPO,                EQS_T("Monggumpo..."))
+DEFINE_TOKEN(BELL_MILYANG_ARIRANG,          EQS_T("MillYang Ari."))
+DEFINE_TOKEN(BELL_YODEL_OF_FOREST,          EQS_T("Forest'Yoddle"))
+DEFINE_TOKEN(BELL_LITTLE_ELEPHANT,          EQS_T("Baby Elephant"))
+DEFINE_TOKEN(BELL_UMBRELLA,                 EQS_T("Umbrella"))
+DEFINE_TOKEN(BELL_GIANT,                    EQS_T("Giant"))
+DEFINE_TOKEN(BELL_BE_WELL,                  EQS_T("New Town"))
+DEFINE_TOKEN(BELL_SING_A_SONG,              EQS_T("Deckhall"))
+DEFINE_TOKEN(BELL_JINGLE_BELL,              EQS_T("Jinglebell"))
+DEFINE_TOKEN(BELL_MERRY_XMAS,               EQS_T("Merry Xmas"))
+DEFINE_TOKEN(BELL_CONGRATULATION,           EQS_T("Congratulation"))
+DEFINE_TOKEN(BELL_FUNIKUL,                  EQS_T("Funikula"))
+DEFINE_TOKEN(BELL_GOOD_HARVEST,             EQS_T("Harvest song"))
+DEFINE_TOKEN(BELL_HYPER_PIPER,              EQS_T("Hyper Piper"))
+DEFINE_TOKEN(BELL_YELLOW_RIBBON,            EQS_T("Yellow Ribbon"))
+DEFINE_TOKEN(BELL_CHIM_CHIM,                EQS_T("Chim Chim"))
+
+/*----------------------------------------------------------------------------
+**  bell - classic 1
+*/
+DEFINE_TOKEN(BELL_TRIUMPH,                  EQS_T("Aida"))
+DEFINE_TOKEN(BELL_GOLDEN_WEDDING,           EQS_T("Golden Wedding"))
+DEFINE_TOKEN(BELL_WALTZ_OF_FLOWER,          EQS_T("Flower Waltz"))
+DEFINE_TOKEN(BELL_DONAU_WALTZ,              EQS_T("Donau River..."))
+DEFINE_TOKEN(BELL_LADETZKY,                 EQS_T("Ladetzky ..."))
+DEFINE_TOKEN(BELL_MENDELSSOHN,              EQS_T("Violinc"))
+DEFINE_TOKEN(BELL_CELLO_SUITE,	    	    EQS_T("Cello suite"))
+DEFINE_TOKEN(BELL_MINUET,                   EQS_T("Minuet"))
+DEFINE_TOKEN(BELL_VIOLIN_ROMANCE,           EQS_T("Violin Romance"))
+DEFINE_TOKEN(BELL_SWAN,                     EQS_T("Swan Song"))
+DEFINE_TOKEN(BELL_V_MINUET,                 EQS_T("Boccherini..."))
+DEFINE_TOKEN(BELL_SONG_OF_SPRING,           EQS_T("Spring's Song"))
+DEFINE_TOKEN(BELL_SOUND_OF_SPRING,          EQS_T("Spring's Sound"))
+DEFINE_TOKEN(BELL_PATHETIC_1,               EQS_T("Pathetic Son.1"))
+DEFINE_TOKEN(BELL_PATHETIC_2,               EQS_T("Pathetic Son.2"))
+DEFINE_TOKEN(BELL_SPRING,                   EQS_T("Spring in Sea"))
+DEFINE_TOKEN(BELL_SABRE_DANCE,              EQS_T("Sabre Dance"))
+DEFINE_TOKEN(BELL_TROUT,                    EQS_T("Trout"))
+DEFINE_TOKEN(BELL_NOCTURN,                  EQS_T("Nocturn"))
+DEFINE_TOKEN(BELL_FOR_ELISE,                EQS_T("For Elise"))
+
+
+/*----------------------------------------------------------------------------
+**  bell - classic 2
+*/
+
+DEFINE_TOKEN(BELL_MAGICFLUTE,               EQS_T("Magic Flute"))
+DEFINE_TOKEN(BELL_SOUSA3,				    EQS_T("WashingtonPost"))
+DEFINE_TOKEN(BELL_MARCH,				    EQS_T("Majestic March"))
+DEFINE_TOKEN(BELL_WILLIAMTELL,              EQS_T("Williamtell"))
+DEFINE_TOKEN(BELL_HUMORESQUE,               EQS_T("Homoresque"))
+DEFINE_TOKEN(BELL_IGOR,						EQS_T("Igor"))
+DEFINE_TOKEN(BELL_SOUSA2,					EQS_T("Sousa"))
+DEFINE_TOKEN(BELL_TOY,						EQS_T("Toy Sympony"))
+DEFINE_TOKEN(BELL_FANTASY,					EQS_T("Fantasy"))
+DEFINE_TOKEN(BELL_WEDD,						EQS_T("Wedding March"))
+DEFINE_TOKEN(BELL_CARMEN,					EQS_T("Carmen"))
+DEFINE_TOKEN(BELL_CANCAN,					EQS_T("CanCan"))
+DEFINE_TOKEN(BELL_TURKEY,					EQS_T("Turkey March 1"))
+DEFINE_TOKEN(BELL_TURKISH,					EQS_T("Turkey March 2"))
+DEFINE_TOKEN(BELL_TOREDOR,					EQS_T("Toredor"))
+DEFINE_TOKEN(BELL_CANON,					EQS_T("Cannon"))
+DEFINE_TOKEN(BELL_TRUMPET,					EQS_T("Hydan Trumpet"))
+DEFINE_TOKEN(BELL_HALLELLUJAH,              EQS_T("Hallelujah"))
+DEFINE_TOKEN(BELL_ARIA2,					EQS_T("G-line's Aria"))
+DEFINE_TOKEN(BELL_SOUSA1,					EQS_T("The Stars .."))
+
+
+/*----------------------------------------------------------------------------
+**  bell - sound effect
+*/
+
+DEFINE_TOKEN(BELL_CHINESE_NOODLES,          EQS_T("ChineseNoodles"))
+DEFINE_TOKEN(BELL_JAPAN_FESTIVAL,           EQS_T("Festival"))
+DEFINE_TOKEN(BELL_WIND_CLOCK,			    EQS_T("Wind Clock"))
+DEFINE_TOKEN(BELL_CUCKOO,                   EQS_T("Cuckoo"))
+DEFINE_TOKEN(BELL_AMBULANCE,                EQS_T("Ambulance"))
+DEFINE_TOKEN(BELL_W_BELL,                   EQS_T("Westminster"))
+DEFINE_TOKEN(BELL_CRACTION,                 EQS_T("Horn"))
+DEFINE_TOKEN(BELL_BICYCLE_BELL,             EQS_T("Bicycle bell"))
+DEFINE_TOKEN(BELL_RAILROAD,                 EQS_T("Railroad"))
+DEFINE_TOKEN(BELL_TRAIN,                    EQS_T("Train"))
+DEFINE_TOKEN(BELL_GUDDY,                    EQS_T("Guddy"))
+DEFINE_TOKEN(BELL_CICADAS,                  EQS_T("Cicadas"))
+DEFINE_TOKEN(BELL_WAVE,                     EQS_T("Wave"))
+DEFINE_TOKEN(BELL_JINGLE1,                  EQS_T("Bell 1"))
+DEFINE_TOKEN(BELL_JINGLE2,                  EQS_T("Bell 2"))
+DEFINE_TOKEN(BELL_JINGLE3,                  EQS_T("Bell 3"))
+DEFINE_TOKEN(BELL_JINGLE4,                  EQS_T("Bell 4"))
+DEFINE_TOKEN(BELL_JINGLE5,                  EQS_T("Bell 5"))
+DEFINE_TOKEN(BELL_JINGLE6,                  EQS_T("Bell 6"))
+DEFINE_TOKEN(BELL_JINGLE7,                  EQS_T("Bell 7"))
+DEFINE_TOKEN(BELL_JINGLE8,                  EQS_T("Bell 8"))
+DEFINE_TOKEN(BELL_JINGLE9,                  EQS_T("Bell 9"))
+DEFINE_TOKEN(BELL_JINGLE10,                 EQS_T("Bell 10"))
+DEFINE_TOKEN(BELL_TELEPHONE1,               EQS_T("Telephone 1"))
+DEFINE_TOKEN(BELL_TELEPHONE2,               EQS_T("Telephone 2"))
+DEFINE_TOKEN(BELL_TELEPHONE3,               EQS_T("Telephone 3"))
+DEFINE_TOKEN(BELL_TELEPHONE4,               EQS_T("Telephone 4"))
+DEFINE_TOKEN(BELL_TELEPHONE5,               EQS_T("Telephone 5"))
+
+
+#elif (SKY_MODEL_ID == SKY_MODEL_B1)
+DEFINE_TOKEN(BELL_BELL1,                    EQS_T("기본벨1"))
+DEFINE_TOKEN(BELL_BELL2,                    EQS_T("기본벨2"))
+DEFINE_TOKEN(BELL_BELL3,                    EQS_T("기본벨3"))
+DEFINE_TOKEN(BELL_TELEVISION,               EQS_T("텔레비젼에.."))
+DEFINE_TOKEN(BELL_CHANJUNG,                 EQS_T("날닮은 너"))
+DEFINE_TOKEN(BELL_FOURFOUR,                 EQS_T("네박자"))
+DEFINE_TOKEN(BELL_WINTER1,                  EQS_T("사계중겨울 1악장"))
+DEFINE_TOKEN(BELL_WINTER2,                  EQS_T("사계중겨울 2악장"))
+DEFINE_TOKEN(BELL_AUTUMN,                   EQS_T("사계중 가을"))
+DEFINE_TOKEN(BELL_SUMMER,                   EQS_T("사계중 여름"))
+#endif
+
+/* 
+**----------------------------------------------------------------------------
+**  Application
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(SCHEDULER_TITLE,                   EQS_T("Scheduler"))
+
+/* 
+**----------------------------------------------------------------------------
+**  WAP
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(NTOP_INITDISP,                     EQS_T("n -Top접속화면"))
+DEFINE_TOKEN(NTOP_DNSDISP,                      EQS_T("DNS query중"))
+DEFINE_TOKEN(CALL_USETIME,                      EQS_T("Call Use Time"))
+DEFINE_TOKEN(NTOP_USETIME,                      EQS_T("n.Top Use Time"))
+DEFINE_TOKEN(NTOPINIT_ACCUM_INFO,               EQS_T("Intialize Accumulated n.Top Time"))
+DEFINE_TOKEN(NTOPINIT_ALL_INFO,                 EQS_T("Intialize All n.Top Time"))
+DEFINE_TOKEN(NTOP_LAST_TIME,                    EQS_T("Recent n.Top Use Time"))
+DEFINE_TOKEN(NTOP_ACCUM_TIME,                   EQS_T("Accumulated n.Top Time"))
+DEFINE_TOKEN(NTOP_TOTAL_TIME,                   EQS_T("Total n.Top Time"))
+DEFINE_TOKEN(WAP_INPUT_TITLE,                   EQS_T("Input some words"))
+DEFINE_TOKEN(WAP_NEW_URL,		                EQS_T("Input New URL"))
+DEFINE_TOKEN(NTOP_MAIL_TITLE,	                EQS_T("n.Top 메일작성"))
+DEFINE_TOKEN(NTOP_MAIL_NEW,			            EQS_T("새 메일작성"))
+DEFINE_TOKEN(NTOP_MAIL_OLD,						EQS_T("기존 메일수정"))
+DEFINE_TOKEN(NTOP_MAIL_DELETE,					EQS_T("메일을 삭제하시겠습니까?"))
+DEFINE_TOKEN(DELETE_DONE_MAIL,					EQS_T("메일이 삭제됐습니다."))
+DEFINE_TOKEN(WAP_INPUT_ALERT,                   EQS_T("입력해주세요"))
+DEFINE_TOKEN(NTOP_FLAG_TEST,					EQS_T("n.Top TEST"))
+DEFINE_TOKEN(NTOP_FLAG_TEST_1,					EQS_T("TEST Flag 1"))
+DEFINE_TOKEN(NTOP_FLAG_TEST_2,					EQS_T("TEST Flag 2"))
+DEFINE_TOKEN(NTOP_CHANGE_FLAG_T,                EQS_T("값이 TRUE로 변경됐습니다"))
+DEFINE_TOKEN(NTOP_CHANGE_FLAG_F,                EQS_T("값이 FALSE로 변경됐습니다"))
+
+
+/* 
+**----------------------------------------------------------------------------
+**  Auto Answer
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(AUTOANS_TITLE,                  EQS_T("Auto Answer"))
+DEFINE_TOKEN(AUTOANS_NEW,                    EQS_T("New Auto Answer"))
+DEFINE_TOKEN(AUTOANS_DRIVE,                  EQS_T("Driving"))
+DEFINE_TOKEN(AUTOANS_MEETING,                EQS_T("Meeting"))
+DEFINE_TOKEN(AUTOANS_GENERAL,                EQS_T("General"))
+DEFINE_TOKEN(AUTOANS_USER,                   EQS_T("User Ment"))
+DEFINE_TOKEN(AUTOANS_RECORD,                 EQS_T("Recording"))
+DEFINE_TOKEN(FMT_AUTOANS_ITEM,               EQS_T("[%2d]Items"))
+DEFINE_TOKEN(FMT_AUTOANS_TIME,               EQS_T("%02d:%02d"))
+DEFINE_TOKEN(FMT_AUTOANS_SEC,                EQS_T("%02dSECS"))
+DEFINE_TOKEN(AUTOANS_RING_TIME1,             EQS_T("즉시자동응답"))
+DEFINE_TOKEN(AUTOANS_RING_TIME2,             EQS_T("진동1회울림"))
+DEFINE_TOKEN(AUTOANS_RING_TIME3,             EQS_T("벨5초울림"))
+DEFINE_TOKEN(AUTOANS_RING_TIME4,             EQS_T("벨10초울림"))
+DEFINE_TOKEN(AUTOANS_RING_TITLE,             EQS_T("벨울림시간조절"))
+DEFINE_TOKEN(AUTOANS_MENT_TITLE,             EQS_T("안내음성선택"))
+DEFINE_TOKEN(AUTOANS_START_RECORDING,        EQS_T("Start REC."))
+DEFINE_TOKEN(AUTOANS_LISTEN_USERMENT,        EQS_T("Listen Ment"))
+
+
+
+/* 
+**----------------------------------------------------------------------------
+**  Picture
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(PICTURE_CALL,                  EQS_T("전화가왔을때"))
+DEFINE_TOKEN(PICTURE_STARTUP,               EQS_T("전원을켤때"))
+DEFINE_TOKEN(PICTURE_POWEROFF,              EQS_T("전원을끌때"))
+DEFINE_TOKEN(PICTURE_WAP,                   EQS_T("N.TOP시작시"))
+
+DEFINE_TOKEN(PIC_SKY_EXPLODE,                EQS_T("SKY"))
+DEFINE_TOKEN(PIC_ORIG_CALL,                  EQS_T("Calling.."))
+DEFINE_TOKEN(PIC_GOOD_BYE,                  EQS_T("GoodBye"))
+DEFINE_TOKEN(PIC_WAP,                       EQS_T("N-TOP"))
+
+
+/*
+**----------------------------------------------------------------------------
+**  World Time
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(SEOUL,                         EQS_T("서울"))
+DEFINE_TOKEN(NEWYORK,                       EQS_T("뉴욕/마이애미"))
+DEFINE_TOKEN(DALLAS,                        EQS_T("달라스"))
+DEFINE_TOKEN(DENVER,                        EQS_T("덴버"))
+DEFINE_TOKEN(DIT,                           EQS_T("디트로이트"))
+DEFINE_TOKEN(LONDON,                        EQS_T("런던"))
+DEFINE_TOKEN(ROME,                          EQS_T("로마"))
+DEFINE_TOKEN(LA,                            EQS_T("로스앤젤레스"))
+DEFINE_TOKEN(RIS,                           EQS_T("리스본"))
+DEFINE_TOKEN(RIO,                           EQS_T("리오데자네이로"))
+DEFINE_TOKEN(MANILA,                        EQS_T("마닐라/홍콩"))
+DEFINE_TOKEN(MADRIG,                        EQS_T("마드리그"))
+DEFINE_TOKEN(MEXICO,                        EQS_T("멕시코시티"))
+DEFINE_TOKEN(MOSCOW,                        EQS_T("모스코바"))
+DEFINE_TOKEN(MONT,                          EQS_T("몬트리올"))
+DEFINE_TOKEN(BAGHDAD,                       EQS_T("바그다드"))
+DEFINE_TOKEN(BANG,                          EQS_T("방콕"))
+DEFINE_TOKEN(BERLIN,                        EQS_T("베를린"))
+DEFINE_TOKEN(BEIRUT,                        EQS_T("베이루트"))
+DEFINE_TOKEN(BOSTON,                        EQS_T("보스톤"))
+DEFINE_TOKEN(BEIJING,                       EQS_T("북경"))
+DEFINE_TOKEN(VIENNA,                        EQS_T("비엔나"))
+DEFINE_TOKEN(SAMOA,                         EQS_T("사모아"))
+DEFINE_TOKEN(SANFRAN,                       EQS_T("샌프란시스코"))
+DEFINE_TOKEN(SIDNEY,                        EQS_T("시드니/멜버른"))
+DEFINE_TOKEN(SEATTLE,                       EQS_T("시애틀"))
+DEFINE_TOKEN(CICAGO,                        EQS_T("시카고"))
+DEFINE_TOKEN(SINGAPORE,                     EQS_T("싱가포르"))
+DEFINE_TOKEN(ATHENS,                        EQS_T("아테네"))
+DEFINE_TOKEN(AMSTERDAM,                     EQS_T("암스테르담"))
+DEFINE_TOKEN(WASHIBNGTON,                   EQS_T("워싱턴"))
+DEFINE_TOKEN(WELLINGTON,                    EQS_T("웰링톤"))
+DEFINE_TOKEN(GEORGETOWN,                    EQS_T("죠지타운"))
+DEFINE_TOKEN(CAIRO,                         EQS_T("카이로"))
+DEFINE_TOKEN(THAILAND,                      EQS_T("타이페이"))
+DEFINE_TOKEN(TEHRAN,                        EQS_T("테헤란"))
+DEFINE_TOKEN(PARIS,                         EQS_T("파리"))
+DEFINE_TOKEN(PHOENIX,                       EQS_T("피닉스"))
+DEFINE_TOKEN(HANNOVER,                      EQS_T("하노버"))
+DEFINE_TOKEN(HELSINKI,                      EQS_T("헬싱키"))
+DEFINE_TOKEN(HONOL,                         EQS_T("호놀룰루"))
+
+DEFINE_TOKEN(DAYLIGHT_SAVING,               EQS_T("서머타임(DST)"))
+DEFINE_TOKEN(NOT_APPLY,                     EQS_T("적용안함"))
+
+DEFINE_TOKEN(MARCH_MED,                     EQS_T("3월 중순"))
+DEFINE_TOKEN(MARCH_END,                     EQS_T("3월 말"))
+DEFINE_TOKEN(MAY_STRT,                      EQS_T("4월 초"))
+DEFINE_TOKEN(MAY_END,                       EQS_T("4월 말"))
+DEFINE_TOKEN(OCT_STRT,                      EQS_T("10월 초"))
+DEFINE_TOKEN(OCT_MED,                       EQS_T("10월 중순"))
+DEFINE_TOKEN(OCT_END,                       EQS_T("10월 말"))
+
+DEFINE_TOKEN(FEB_END,                       EQS_T("2월 말"))
+DEFINE_TOKEN(SEP_END,                       EQS_T("9월 말"))
+
+DEFINE_TOKEN(NO_KNOWN_TIME,                 EQS_T("시간정보가 확인되지 않습니다"))
+DEFINE_TOKEN(TIME_DIFF,                     EQS_T("시간차:%6s시간"))
+DEFINE_TOKEN(SELECT_COUNTRY,                EQS_T("지역선택"))
+DEFINE_TOKEN(TIME_INFO,                     EQS_T("시간정보"))
+DEFINE_TOKEN(SWATCH_RECORD,                 EQS_T("기록확인"))
+DEFINE_TOKEN(OVER_FLOW,                     EQS_T("계산오류입니다"))
+/*
+**----------------------------------------------------------------------------
+**  Etiquette
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(ETIQUETTE_MODE_ON,             EQS_T("에티켓모드가 설정되었습니다"))
+DEFINE_TOKEN(ETIQUETTE_MODE_OFF,            EQS_T("에티켓모드가 해제되었습니다"))
+
+/*
+**----------------------------------------------------------------------------
+**  Initialize
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(INIT_MENU,                     EQS_T("기본설정"))
+DEFINE_TOKEN(INIT_CONFIRM,                  EQS_T("초기값으로 설정할까요?"))
+DEFINE_TOKEN(INIT_PROCESS,                  EQS_T("초기값으로 설정합니다"))
+DEFINE_TOKEN(SYS_INIT,                      EQS_T("시스템을 초기화할까요?"))
+DEFINE_TOKEN(SYS_INIT_DONE,                 EQS_T("시스템이 초기화됐습니다"))
+/*
+**----------------------------------------------------------------------------
+**  Camera
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(CAMERA,                        EQS_T("카메라"))
+DEFINE_TOKEN(PHOTO_LIST,                    EQS_T("저장사진리스트"))
+DEFINE_TOKEN(PHOTO_VIEW,                    EQS_T("사진보기"))
+DEFINE_TOKEN(PHOTO_FILE_NAME,               EQS_T("사진파일이름입력"))
+DEFINE_TOKEN(NO_DATA,                       EQS_T("저장된 데이타가 없습니다"))
+DEFINE_TOKEN(DELETE_PHOTO,                  EQS_T("사진을 삭제할까요?"))
+DEFINE_TOKEN(DELETE_DONE_PHOTO,             EQS_T("사진이 삭제됐습니다"))
+DEFINE_TOKEN(NO_MORE_SAVE,                  EQS_T("더이상 저장할 수 없습니다"))
+DEFINE_TOKEN(FAIL_SAVE,                     EQS_T("데이터를 저장을 실패했습니다"))
+DEFINE_TOKEN(CAMERA_OFF,                    EQS_T("카메라가 연결되어 있지않습니다"))
+DEFINE_TOKEN(CAMERA_ON,                     EQS_T("카메라가 연결되었습니다"))
+DEFINE_TOKEN(CANT_OPEN_DATA,                EQS_T("데이타를 열 수 없습니다"))
+/*
+**----------------------------------------------------------------------------
+**  IMAGE
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(IMAGE,                         EQS_T("이미지"))
+DEFINE_TOKEN(IMAGE_LIST,                    EQS_T("저장이미지리스트"))
+DEFINE_TOKEN(DELETE_IMAGE,                  EQS_T("그림을 삭제할까요?"))
+DEFINE_TOKEN(DELETE_DONE_IMAGE,             EQS_T("그림이 삭제됐습니다"))
+
+#ifdef	FEATURE_WAVELET_ONLINE	//	khekim 01/02/13
+/*
+**----------------------------------------------------------------------------
+**  Wavelet
+**----------------------------------------------------------------------------
+*/
+DEFINE_TOKEN(CALL_DS_WAVE_ORIG,				EQS_T("Connecting to Wavelet Server"))
+DEFINE_TOKEN(CALL_DS_WAVE_EXIT,				EQS_T("Wavelet Closed"))
+#endif	//	#ifdef	FEATURE

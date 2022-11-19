@@ -1,0 +1,183 @@
+/*
+ * Copyright (C) Ericsson Mobile Communications AB, 2000.
+ * Licensed to AU-System AB.
+ * All rights reserved.
+ *
+ * This software is covered by the license agreement between
+ * the end user and AU-System AB, and may be used and copied
+ * only in accordance with the terms of the said agreement.
+ *
+ * Neither Ericsson Mobile Communications AB nor AU-System AB
+ * assumes any responsibility or liability for any errors or inaccuracies in
+ * this software, or any consequential, incidental or indirect damage arising
+ * out of the use of the Generic WAP Client software.
+ */
+
+#ifndef X_IFC_z_WAEPackage__WAEPackage
+#define X_IFC_z_WAEPackage__WAEPackage
+#define XMK_IFC_TIME 977233142
+
+/* *************** DECLARATIONS IN PACKAGE WAEPackage *************** */
+
+
+/*---------------------------- INCLUDE FILES ----------------------------*/
+#include "ctypes.ifc"
+
+/*------------------------------ SYNONYMS -------------------------------*/
+#define z_WAEPackage_3I_MAXNUMBEROFWMLUA SDL_INTEGER_LIT(5)
+#define MAXNUMBEROFWMLUA SDL_INTEGER_LIT(5)
+
+
+/*------------------------------- SORTS ---------------------------------*/
+
+/*****
+* NEWTYPE RequestType  (TYPE section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\waepackage.sun(WSPIFSignals),530(20,40),1)
+******/
+typedef struct z_WAEPackage_2X_RequestType_s {
+    SDL_Integer  ViewID;
+    SDL_Integer  UA_Type;
+    SDL_Integer  Scheme;
+    SDL_Integer  TID;
+    z_ctypes_4_VoidStar  RequestStruct;
+    SDL_Octet  Options;
+    SDL_Integer  Prio;
+} z_WAEPackage_2X_RequestType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_RequestType z_WAEPackage_2X_RequestType
+#else
+#define RequestType z_WAEPackage_2X_RequestType
+#endif
+
+/*****
+* NEWTYPE ResponseType  (TYPE section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\waepackage.sun(WSPIFSignals),530(20,40),11)
+******/
+typedef struct z_WAEPackage_2Y_ResponseType_s {
+    SDL_Integer  Scheme;
+    SDL_Integer  TID;
+    z_ctypes_4_VoidStar  HeaderHandle;
+    z_ctypes_4_VoidStar  ContentType;
+    z_ctypes_4_VoidStar  BodyData;
+    SDL_Integer  BodyDataLength;
+    SDL_Octet  Status;
+    z_ctypes_4_VoidStar  ExtParameters;
+    SDL_Boolean  MoreData;
+    SDL_Natural  TotalSize;
+} z_WAEPackage_2Y_ResponseType;
+#ifdef XPREFIX_NAMES_IN_IFC
+#define pTYPE_ResponseType z_WAEPackage_2Y_ResponseType
+#else
+#define ResponseType z_WAEPackage_2Y_ResponseType
+#endif
+
+/*****
+* NEWTYPE RequestType  (HEADING section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\waepackage.sun(WSPIFSignals),530(20,40),1)
+******/
+
+#define yAssF_z_WAEPackage_2X_RequestType(V,E,A)  V = E
+extern void yDef_z_WAEPackage_2X_RequestType
+  XPP(( z_WAEPackage_2X_RequestType * ));
+extern SDL_Boolean yEq_z_WAEPackage_2X_RequestType
+  XPP(( z_WAEPackage_2X_RequestType, z_WAEPackage_2X_RequestType ));
+#define yEqF_z_WAEPackage_2X_RequestType(Expr1,Expr2)  yEq_z_WAEPackage_2X_RequestType(Expr1,Expr2)
+#define yNEqF_z_WAEPackage_2X_RequestType(Expr1,Expr2)  ( ! yEq_z_WAEPackage_2X_RequestType(Expr1,Expr2) )
+extern z_WAEPackage_2X_RequestType yMake_z_WAEPackage_2X_RequestType
+  XPP(( SDL_Integer, SDL_Integer, SDL_Integer, SDL_Integer,
+  z_ctypes_4_VoidStar, SDL_Octet, SDL_Integer ));
+#ifndef ANY_z_WAEPackage_2X_RequestType
+#define ANY_z_WAEPackage_2X_RequestType  yMake_z_WAEPackage_2X_RequestType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_SDL_Integer, ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, \
+  ANY_SDL_Octet, ANY_SDL_Integer)
+#endif
+#define z_WAEPackage_2X3_copy(P)  P
+
+/*****
+* NEWTYPE ResponseType  (HEADING section)
+* <<PACKAGE WAEPackage>>
+* #SDTREF(SDL,D:\WIP\System\SystemConfigurations\base_push_wta_wtls_co_korea\sdl\packages\waepackage.sun(WSPIFSignals),530(20,40),11)
+******/
+
+#define yAssF_z_WAEPackage_2Y_ResponseType(V,E,A)  V = E
+extern void yDef_z_WAEPackage_2Y_ResponseType
+  XPP(( z_WAEPackage_2Y_ResponseType * ));
+extern SDL_Boolean yEq_z_WAEPackage_2Y_ResponseType
+  XPP(( z_WAEPackage_2Y_ResponseType, z_WAEPackage_2Y_ResponseType ));
+#define yEqF_z_WAEPackage_2Y_ResponseType(Expr1,Expr2)  yEq_z_WAEPackage_2Y_ResponseType(Expr1,Expr2)
+#define yNEqF_z_WAEPackage_2Y_ResponseType(Expr1,Expr2)  ( ! yEq_z_WAEPackage_2Y_ResponseType(Expr1,Expr2) )
+extern z_WAEPackage_2Y_ResponseType yMake_z_WAEPackage_2Y_ResponseType
+  XPP(( SDL_Integer, SDL_Integer, z_ctypes_4_VoidStar, z_ctypes_4_VoidStar,
+  z_ctypes_4_VoidStar, SDL_Integer, SDL_Octet, z_ctypes_4_VoidStar,
+  SDL_Boolean, SDL_Natural ));
+#ifndef ANY_z_WAEPackage_2Y_ResponseType
+#define ANY_z_WAEPackage_2Y_ResponseType  yMake_z_WAEPackage_2Y_ResponseType(ANY_SDL_Integer, \
+  ANY_SDL_Integer, ANY_z_ctypes_4_VoidStar, ANY_z_ctypes_4_VoidStar, \
+  ANY_z_ctypes_4_VoidStar, ANY_SDL_Integer, ANY_SDL_Octet, \
+  ANY_z_ctypes_4_VoidStar, ANY_SDL_Boolean, ANY_SDL_Natural)
+#endif
+#define z_WAEPackage_2Y3_copy(P)  P
+
+/*------------------------------ SYNONYMS -------------------------------*/
+extern SDL_Octet  z_WAEPackage_2Z_Get;
+#define Get  z_WAEPackage_2Z_Get
+
+extern SDL_Octet  z_WAEPackage_30_Post;
+#define Post  z_WAEPackage_30_Post
+
+extern SDL_Octet  z_WAEPackage_31_application_vnd_wapwmlc;
+#define application_vnd_wapwmlc  z_WAEPackage_31_application_vnd_wapwmlc
+
+extern SDL_Octet  z_WAEPackage_32_application_vnd_wapwbxml;
+#define application_vnd_wapwbxml  z_WAEPackage_32_application_vnd_wapwbxml
+
+extern SDL_Octet  z_WAEPackage_33_application_vnd_wapwmlscriptc;
+#define application_vnd_wapwmlscriptc  z_WAEPackage_33_application_vnd_wapwmlscriptc
+
+extern SDL_Octet  z_WAEPackage_34_application_vnd_wapchannelc;
+#define application_vnd_wapchannelc  z_WAEPackage_34_application_vnd_wapchannelc
+
+extern SDL_Octet  z_WAEPackage_35_Continued;
+#define Continued  z_WAEPackage_35_Continued
+
+extern SDL_Octet  z_WAEPackage_36_SwitchingProtocols;
+#define SwitchingProtocols  z_WAEPackage_36_SwitchingProtocols
+
+extern SDL_Octet  z_WAEPackage_37_RequestOK;
+#define RequestOK  z_WAEPackage_37_RequestOK
+
+extern SDL_Octet  z_WAEPackage_38_Created;
+#define Created  z_WAEPackage_38_Created
+
+extern SDL_Octet  z_WAEPackage_39_MultipleChoices;
+#define MultipleChoices  z_WAEPackage_39_MultipleChoices
+
+extern SDL_Octet  z_WAEPackage_3A_MovedPermanently;
+#define MovedPermanently  z_WAEPackage_3A_MovedPermanently
+
+extern SDL_Octet  z_WAEPackage_3B_MovedTemporarily;
+#define MovedTemporarily  z_WAEPackage_3B_MovedTemporarily
+
+extern SDL_Octet  z_WAEPackage_3C_SeeOther;
+#define SeeOther  z_WAEPackage_3C_SeeOther
+
+extern SDL_Octet  z_WAEPackage_3D_NotModified;
+#define NotModified  z_WAEPackage_3D_NotModified
+
+extern SDL_Octet  z_WAEPackage_3E_UseProxy;
+#define UseProxy  z_WAEPackage_3E_UseProxy
+
+extern SDL_Octet  z_WAEPackage_3F_Unauthorized;
+#define Unauthorized  z_WAEPackage_3F_Unauthorized
+
+extern SDL_Octet  z_WAEPackage_3G_NotFound;
+#define NotFound  z_WAEPackage_3G_NotFound
+
+extern SDL_Octet  z_WAEPackage_3H_ProxyAuthenticationRequired;
+#define ProxyAuthenticationRequired  z_WAEPackage_3H_ProxyAuthenticationRequired
+
+#endif
+   /* X_IFC_z_WAEPackage__WAEPackage */
